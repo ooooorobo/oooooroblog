@@ -1,11 +1,11 @@
 import {getPosts} from "../../utils/postUtil";
 import {NextApiRequest, NextApiResponse} from "next";
-import {Post} from "../../model/post";
+import {PostListElement} from "../../model/post";
 
-export default function handler(
+export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<Post[]>
+    res: NextApiResponse<PostListElement[]>
 ) {
-    const posts: Post[] = getPosts(0, 10);
+    const posts = await getPosts(0, 10);
     res.status(200).json(posts);
 }

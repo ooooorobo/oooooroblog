@@ -1,7 +1,12 @@
 export interface Post {
     slug: string;
     content: string;
-    data: PostMeta;
+    meta: PostMeta;
+}
+
+export interface PostListElement {
+    slug: string;
+    meta: PostMeta;
 }
 
 export interface PostMeta {
