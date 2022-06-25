@@ -28,6 +28,7 @@ const Title = styled.h1`
 const Description = styled.p`
   color: ${(props) => props.theme.colors.text.secondary};
   font-size: ${(props) => props.theme.fontSizes.s};
+  word-break: keep-all;
 `
 
 const Info = styled.span`

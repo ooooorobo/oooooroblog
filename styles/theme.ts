@@ -89,8 +89,8 @@ const defaultTheme: Omit<DefaultTheme, 'colors'> = {
         code: 1.6
     },
     media: {
-        mobile: (...args) => css`@media only screen and (max-width: 1024px) {${args}}`,
-        desktop: (...args) => css`@media only screen and (min-width: 1024px) {${args}}`,
+        mobile: (...args) => css`@media only screen and (max-width: 800px) {${args}}`,
+        desktop: (...args) => css`@media only screen and (min-width: 800px) {${args}}`,
     }
 }
 
