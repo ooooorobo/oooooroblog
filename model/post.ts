@@ -13,4 +13,5 @@ export interface PostMeta {
     title: string;
     description: string;
     tags: string[];
+    postedAt: string;
 }

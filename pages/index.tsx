@@ -1,10 +1,15 @@
 import type {NextPage} from 'next'
+import Link from "next/link"
 import {getPosts} from "../utils/postUtil";
 import {PostListElement} from "../model/post";
 
 const Home: NextPage<HomeProps> = ({posts}: HomeProps) => {
     return <div>
-      {posts.map(post => <a key={post.slug} href={`/posts/${post.slug}`}>{post.meta.title}</a>)}
+        {posts.map(post =>
+            <Link key={post.slug} href={`/posts/${post.slug}`}>
+                <a>{post.meta.title}</a>
+            </Link>
+        )}
     </div>
 }
 

@@ -1,8 +1,17 @@
-import {DefaultTheme} from "styled-components";
+import {DefaultTheme, css, CSSProp} from "styled-components";
 
 declare module 'styled-components' {
     export interface DefaultTheme {
-        fontSizes: string[];
+        fontSizes: {
+            tiny: string,
+            s: string,
+            m: string,
+            l: string,
+            xl: string,
+            xxl: string,
+            big: string,
+            huge: string
+        },
         fontWeights: {
             body: number;
             subtitle: number;
@@ -16,20 +25,30 @@ declare module 'styled-components' {
             code: number;
         }
         colors: ColorPreset;
+        media: {
+            mobile: (...args: string[]) => CSSProp;
+            desktop: (...args: string[]) => CSSProp;
+        }
     }
+}
+
+const primary = {
+    primary: '#5f71d6',
+    secondary: '#add65f',
 }
 
 const light: ColorPreset = {
     bg: {
         primary: '#ffffff',
-        secondary: '#f3f3f3',
+        secondary: '#eeeeee',
     },
     text: {
         primary: '#050505',
         secondary: '#353b35',
         tertiary: '#4b5656',
         placeholder: '#a29c9c',
-    }
+    },
+    ...primary
 }
 
 const dark: ColorPreset = {
@@ -42,19 +61,21 @@ const dark: ColorPreset = {
         secondary: '#8f948f',
         tertiary: '#484545',
         placeholder: '#a29c9c',
-    }
+    },
+    ...primary
 }
 
 const defaultTheme: Omit<DefaultTheme, 'colors'> = {
-    fontSizes: [
-        '14px',
-        '16px',
-        '18px',
-        '22px',
-        '26px',
-        '32px',
-        '40px'
-    ],
+    fontSizes: {
+        tiny: '12px',
+        s: '14px',
+        m: '16px',
+        l: '18px',
+        xl: '22px',
+        xxl: '26px',
+        big: '32px',
+        huge: '40px'
+    },
     fontWeights: {
         body: 400,
         subtitle: 500,
@@ -63,9 +84,13 @@ const defaultTheme: Omit<DefaultTheme, 'colors'> = {
         title: 800,
     },
     lineHeights: {
-        body: 1.5,
+        body: 1.7,
         title: 1.3,
         code: 1.6
+    },
+    media: {
+        mobile: (...args) => css`@media only screen and (max-width: 1024px) {${args}}`,
+        desktop: (...args) => css`@media only screen and (min-width: 1024px) {${args}}`,
     }
 }
 
@@ -82,5 +107,7 @@ interface ColorPreset {
         secondary: string;
         tertiary: string;
         placeholder: string;
-    }
+    },
+    primary: string;
+    secondary: string;
 }
