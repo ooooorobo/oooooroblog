@@ -2,8 +2,7 @@ import {createRef, useContext, useEffect} from "react";
 import {DarkModeContext} from "../../utils/context/DarkModeContext";
 import styled from "styled-components";
 
-const createUtterance = (themeName) => {
-    const wrapper = document.createElement('div')
+const createUtterance = (themeName: string) => {
     const comment = document.createElement('script')
     const config = {
         src: "https://utteranc.es/client.js",
@@ -16,8 +15,7 @@ const createUtterance = (themeName) => {
         async: "true"
     }
     Object.entries(config).forEach(([key, value]) => comment.setAttribute(key, value));
-    wrapper.appendChild(comment)
-    return wrapper;
+    return comment;
 }
 
 export default function Comment() {
