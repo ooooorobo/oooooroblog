@@ -4,17 +4,18 @@ import Meta from "./Meta";
 import Comment from "./Comment";
 import styled from "styled-components";
 import PostTitle from "./PostTitle";
+import WavyLine from "../WavyLine";
 
 export default function PostLayout({meta, children}: { meta: PostMeta; children: ReactElement }) {
     return <>
         <PostHeader>
             <Meta title={meta.title} description={meta.description} tags={meta.tags} postedAt={meta.postedAt} />
             <PostTitle meta={meta}/>
-            <Line />
+            <WavyLine size={8} />
         </PostHeader>
         <Article>
             {children}
-            <Line />
+            <WavyLine size={8} />
         </Article>
         <div>
             <Comment />
@@ -33,21 +34,3 @@ const Article = styled.article`
   margin: 0 auto 5rem auto;
   padding: 0 1rem;
 `;
-
-const Line = styled.div`
-  ${({theme}) => theme.media.desktop(`
-    text-align: center;
-  `)};
-  &:after {
-    overflow: hidden;
-    content: 'loaderloa';
-    
-    color: transparent;
-    position: relative;
-    font-size: 1rem;
-    
-    text-decoration-style: wavy !important;
-    text-decoration: ${({theme}) => theme.colors.primary};
-    text-decoration-line: underline;
-  }
-`

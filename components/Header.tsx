@@ -31,4 +31,10 @@ const Wrapper = styled.div`
   height: 3rem;
 
   margin: 0 auto;
+  
+  button {
+    background-color: transparent;
+    border: none;
+    color: ${({theme}) => theme.colors.text.primary};
+  }
 `

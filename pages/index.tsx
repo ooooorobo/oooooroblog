@@ -1,16 +1,17 @@
 import type {NextPage} from 'next'
-import Link from "next/link"
 import {getPosts} from "../utils/postUtil";
 import {PostListElement} from "../model/post";
+import Profile from "../components/main/Profile";
+import PostList from "../components/main/PostList";
+import styled from "styled-components";
+import WavyLine from "../components/WavyLine";
 
 const Home: NextPage<HomeProps> = ({posts}: HomeProps) => {
-    return <div>
-        {posts.map(post =>
-            <Link key={post.slug} href={`/posts/${post.slug}`}>
-                <a>{post.meta.title}</a>
-            </Link>
-        )}
-    </div>
+    return <Wrapper>
+        <Profile/>
+        <WavyLine size={10} />
+        <PostList posts={posts} />
+    </Wrapper>;
 }
 
 export default Home
@@ -23,3 +24,12 @@ export const getStaticProps = async () => {
 interface HomeProps {
     posts: PostListElement[];
 }
+
+const Wrapper = styled.div`
+  margin: 2.5rem auto;
+  max-width: 760px;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+`

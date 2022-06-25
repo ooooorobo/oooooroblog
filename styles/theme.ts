@@ -44,8 +44,8 @@ const light: ColorPreset = {
     },
     text: {
         primary: '#050505',
-        secondary: '#353b35',
-        tertiary: '#4b5656',
+        secondary: '#4b5656',
+        tertiary: '#8f948f',
         placeholder: '#a29c9c',
     },
     ...primary

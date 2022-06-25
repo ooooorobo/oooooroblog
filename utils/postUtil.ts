@@ -11,7 +11,7 @@ export async function getPosts(page: number, count: number): Promise<PostListEle
 
     const postMetaList = await Promise.all(
         dirFiles.map(async p => {
-            const m = await import(`../pages/posts/${p}`)
+            const m = await import(`../pages/posts/${encodeURIComponent(p)}`)
             return {
                 slug: p.replace('.mdx', ''),
                 meta: m.meta as PostMeta ?? null
