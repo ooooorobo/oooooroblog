@@ -4,7 +4,7 @@ import {PostMeta} from "../../model/post";
 const Meta = ({title, description, tags}: PostMeta) => {
     const browserTitle = `${title} - oooooroblog`
     return <Head>
-        <title key={'post'}>{browserTitle}</title>
+        <title>{browserTitle}</title>
         <meta key={'post'} name={'keywords'} content={tags.join(', ')} />
         <meta key={'post'} name={'description'} content={description} />
     </Head>;
