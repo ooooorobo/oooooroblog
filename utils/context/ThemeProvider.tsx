@@ -1,8 +1,10 @@
-import {ReactElement, useEffect, useState} from "react";
+import {ReactElement, useContext, useEffect, useState} from "react";
 import {ThemeProvider as _ThemeProvider} from "styled-components";
 import {darkTheme, lightTheme} from "../../styles/theme";
+import {DarkModeContext} from "./DarkModeContext";
 
-const ThemeProvider = ({isDarkMode, children}: {isDarkMode: boolean; children: ReactElement}) => {
+const ThemeProvider = ({children}: {children: ReactElement}) => {
+    const {isDarkMode} = useContext(DarkModeContext);
     const [themePreset, setThemePreset] = useState(isDarkMode ? darkTheme : lightTheme);
 
     useEffect(() => {

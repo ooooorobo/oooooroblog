@@ -1,12 +1,11 @@
 import Head from "next/head";
 import type {AppProps} from 'next/app'
 import GlobalStyle from "../styles/GlobalStyle";
-import ThemeProvider from "../utils/providers/ThemeProvider";
+import ThemeProvider from "../utils/context/ThemeProvider";
 import Header from "../components/Header";
-import {useDarkMode} from "../utils/hooks/useDarkMode";
+import DarkModeProvider from "../utils/context/DarkModeContext";
 
 function MyApp({Component, pageProps}: AppProps) {
-    const {isDarkMode, toggleDarkMode} = useDarkMode();
     return <>
             <Head>
                 <title>oooooroblog</title>
@@ -15,14 +14,16 @@ function MyApp({Component, pageProps}: AppProps) {
                 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
                 <link rel="manifest" href="/site.webmanifest"/>
             </Head>
-            <ThemeProvider isDarkMode={isDarkMode}>
+        <DarkModeProvider>
+            <ThemeProvider>
                 <>
                     <GlobalStyle />
-                    <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+                    <Header/>
                     <Component {...pageProps} />
 
                 </>
             </ThemeProvider>
+        </DarkModeProvider>
     </>
 }
 

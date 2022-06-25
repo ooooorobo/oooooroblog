@@ -1,7 +1,11 @@
 import styled from "styled-components";
 import Link from "next/link";
+import {useContext} from "react";
+import {DarkModeContext} from "../utils/context/DarkModeContext";
 
-export default function Header({isDarkMode, toggleDarkMode}: { isDarkMode: boolean; toggleDarkMode: () => void }) {
+export default function Header() {
+    const {isDarkMode, toggleDarkMode} = useContext(DarkModeContext);
+
     return <Background>
         <Wrapper>
         <Link href={"/"}><a>ooooorobo</a></Link>
