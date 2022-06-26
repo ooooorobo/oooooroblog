@@ -1,10 +1,16 @@
+import { useEffect } from "react";
 import Head from "next/head";
 import type { AppProps } from "next/app";
-import GlobalStyle from "@src/styles/GlobalStyle";
+import { MDXProvider } from "@mdx-js/react";
+
+// context
 import ThemeProvider from "@src/utils/context/ThemeProvider";
-import Header from "@src/components/Header";
 import DarkModeProvider from "@src/utils/context/DarkModeContext";
-import { useEffect } from "react";
+// components
+import Header from "@src/components/Header";
+import components from "@src/components/mdx/MDXComponents";
+// styles
+import GlobalStyle from "@src/styles/GlobalStyle";
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -62,7 +68,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           <>
             <GlobalStyle />
             <Header />
-            <Component {...pageProps} />
+            <MDXProvider components={components}>
+              <Component {...pageProps} />
+            </MDXProvider>
           </>
         </ThemeProvider>
       </DarkModeProvider>

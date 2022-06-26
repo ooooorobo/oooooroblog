@@ -28,6 +28,13 @@ const GlobalStyle = createGlobalStyle`
     line-height: ${(props) => props.theme.lineHeights.title};
     word-break: keep-all;
   }
+  
+  pre, code {
+    &, * {
+      font-family: 'Nanum Gothic Coding', monospace;
+      line-height: ${({ theme }) => theme.lineHeights.code};
+    }
+  }
 `;
 
 export default GlobalStyle;
