@@ -25,10 +25,8 @@ export default function PostLayout({
         <PostTitle meta={meta} />
         <WavyLine size={8} />
       </PostHeader>
-      <Article>
-        {children}
-        <WavyLine size={8} />
-      </Article>
+      <Article>{children}</Article>
+      <WavyLine size={8} />
       <div>
         <Comment />
       </div>

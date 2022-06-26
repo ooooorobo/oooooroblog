@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { PostMeta } from "@src/model/post";
 
-const Meta = ({ title, description, tags }: PostMeta) => {
+const Meta = ({ title, description, tags = [] }: Partial<PostMeta>) => {
   const browserTitle = `${title} - oooooroblog`;
   return (
     <Head>
