@@ -1,4 +1,4 @@
-import {createGlobalStyle} from "styled-components";
+import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -7,9 +7,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background-color: ${({theme}) => theme.colors.bg.primary};
-    color: ${({theme}) => theme.colors.text.primary};
-    line-height: ${({theme}) => theme.lineHeights.body};
+    background-color: ${({ theme }) => theme.colors.bg.primary};
+    color: ${({ theme }) => theme.colors.text.primary};
+    line-height: ${({ theme }) => theme.lineHeights.body};
 
     margin: 0;
     padding: 0;
@@ -17,7 +17,7 @@ const GlobalStyle = createGlobalStyle`
   
   a {
     color: inherit;
-    text-decoration: none;
+    text-decoration: none; 
   }
   
   p {
@@ -28,6 +28,6 @@ const GlobalStyle = createGlobalStyle`
     line-height: ${(props) => props.theme.lineHeights.title};
     word-break: keep-all;
   }
-`
+`;
 
 export default GlobalStyle;
