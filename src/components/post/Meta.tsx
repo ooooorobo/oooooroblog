@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { PostMeta } from "../../model/post";
+import { PostMeta } from "@src/model/post";
 
 const Meta = ({ title, description, tags }: PostMeta) => {
   const browserTitle = `${title} - oooooroblog`;

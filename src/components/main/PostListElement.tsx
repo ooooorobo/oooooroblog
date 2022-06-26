@@ -1,7 +1,7 @@
-import { PostListElement } from "../../model/post";
+import { PostListElement } from "@src/model/post";
 import Link from "next/link";
 import styled from "styled-components";
-import Tag from "../Tag";
+import Tag from "@src/components/Tag";
 
 interface PostListElementProps {
   post: PostListElement;

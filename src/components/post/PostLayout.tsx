@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
-import { PostMeta } from "../../model/post";
+import { PostMeta } from "@src/model/post";
 import Meta from "./Meta";
 import Comment from "./Comment";
 import styled from "styled-components";
 import PostTitle from "./PostTitle";
-import WavyLine from "../WavyLine";
+import WavyLine from "@src/components/WavyLine";
 
 export default function PostLayout({
   meta,

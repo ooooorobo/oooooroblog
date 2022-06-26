@@ -1,4 +1,4 @@
-import { PostListElement } from "../../model/post";
+import { PostListElement } from "@src/model/post";
 import PostListElementComponent from "./PostListElement";
 import styled from "styled-components";
 

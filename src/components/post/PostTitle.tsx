@@ -1,4 +1,4 @@
-import { PostMeta } from "../../model/post";
+import { PostMeta } from "@src/model/post";
 import styled from "styled-components";
 import Tag from "../Tag";
 

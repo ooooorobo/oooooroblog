@@ -1,9 +1,9 @@
 import Head from "next/head";
 import type { AppProps } from "next/app";
-import GlobalStyle from "../styles/GlobalStyle";
-import ThemeProvider from "../utils/context/ThemeProvider";
-import Header from "../components/Header";
-import DarkModeProvider from "../utils/context/DarkModeContext";
+import GlobalStyle from "@src/styles/GlobalStyle";
+import ThemeProvider from "@src/utils/context/ThemeProvider";
+import Header from "@src/components/Header";
+import DarkModeProvider from "@src/utils/context/DarkModeContext";
 import { useEffect } from "react";
 
 function MyApp({ Component, pageProps }: AppProps) {

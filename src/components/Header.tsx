@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Link from "next/link";
 import { useContext } from "react";
-import { DarkModeContext } from "../utils/context/DarkModeContext";
+import { DarkModeContext } from "@src/utils/context/DarkModeContext";
 
 export default function Header() {
   const { isDarkMode, toggleDarkMode } = useContext(DarkModeContext);

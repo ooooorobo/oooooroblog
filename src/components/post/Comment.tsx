@@ -1,5 +1,5 @@
 import { createRef, useContext, useEffect } from "react";
-import { DarkModeContext } from "../../utils/context/DarkModeContext";
+import { DarkModeContext } from "@src/utils/context/DarkModeContext";
 import styled from "styled-components";
 
 const createUtterance = (themeName: string) => {

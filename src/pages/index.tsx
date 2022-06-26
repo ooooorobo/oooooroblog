@@ -1,10 +1,10 @@
 import type { NextPage } from "next";
-import { getPosts } from "../utils/postUtil";
-import { PostListElement } from "../model/post";
-import Profile from "../components/main/Profile";
-import PostList from "../components/main/PostList";
 import styled from "styled-components";
-import WavyLine from "../components/WavyLine";
+import { getPosts } from "@src/utils/postUtil";
+import { PostListElement } from "@src/model/post";
+import Profile from "@src/components/main/Profile";
+import PostList from "@src/components/main/PostList";
+import WavyLine from "@src/components/WavyLine";
 
 const Home: NextPage<HomeProps> = ({ posts }: HomeProps) => {
   return (
