@@ -1,6 +1,5 @@
 import Image from "next/image";
 import styled from "styled-components";
-import Link from "next/link";
 
 export default function Profile() {
   return (
@@ -17,20 +16,15 @@ export default function Profile() {
         <h3>조예진</h3>
         <p>웹 프론트엔드 개발자</p>
         <IconWrapper>
-          <Link href={"https://github.com/ooooorobo"}>
-            <a>
-              <i className="bi bi-github"></i>
-            </a>
-          </Link>
-          <Link
-            href={
-              "https://www.linkedin.com/in/%EC%98%88%EC%A7%84-%EC%A1%B0-b741a3222/"
-            }
-          >
-            <a>
-              <i className="bi bi-linkedin"></i>
-            </a>
-          </Link>
+          <a href="https://github.com/ooooorobo">
+            <i className="bi bi-github"></i>
+          </a>
+          <a href="https://www.linkedin.com/in/%EC%98%88%EC%A7%84-%EC%A1%B0-b741a3222/">
+            <i className="bi bi-linkedin"></i>
+          </a>
+          <a href="mailto:orobos654@gmail.com" title="orobos654@gmail.com">
+            <i className="bi bi-envelope-fill"></i>
+          </a>
         </IconWrapper>
       </div>
     </Wrapper>
