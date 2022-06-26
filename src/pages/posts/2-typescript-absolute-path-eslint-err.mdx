@@ -1,0 +1,56 @@
+import PostLayout from "../../components/post/PostLayout"
+
+** 이 포스트에서는 Next.js를 사용합니다. CRA를 사용해 만든 프로젝트의 경우 craco 세팅이 추가로 필요합니다.
+## TypeScript에서 절대경로 사용하기
+
+ import 시 상대경로를 사용하면 프로젝트가 복잡해질수록 가독성이 떨어진다. 좀 더 단순하고 편리하게 파일의 경로를 나타내기 위해서 절대경로를 사용한다. Next.js에서 타입스크립트를 사용하는 경우 간단하게 절대경로를 설정할 수 있다.
+
+tsconfig.json 파일의 json 상단에 아래 내용을 추가한다.
+```js
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@src/*": ["./src/*"],
+    },
+```
+
+이제 절대경로를 사용해서 파일을 import 할 수 있다.
+```js
+// 설정 이전
+import theme from "../../../../styles/theme";
+
+// 설정 이후
+import theme from "@src/styles/theme";
+```
+
+
+## 문제
+
+그런데 eslint가 절대경로 부분에서 [import/no-unresolved] 에러를 낸다.
+![](https://images.velog.io/images/ooooorobo/post/dd8df93d-64e0-4ceb-94f1-438dcf3f104d/image.png)
+
+## 해결
+
+1. `npm install -D eslint-import-resolver-typescript`
+2. `.eslintrc.json` 혹은 eslint 규칙이 정의된 파일에 아래 내용을 추가한다.
+```js
+...
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
+```
+
+- [참고한 깃허브 이슈 코멘트](https://github.com/import-js/eslint-plugin-import/issues/1485#issuecomment-535351922)
+
+export const meta = {
+    index: 2,
+    title: 'TypeScript 프로젝트에서 Absolute Path 사용시 [import/no-unresolved] 에러',
+    description: 'import 시 상대경로를 사용하면 프로젝트가 복잡해질수록 가독성이 떨어진다. 좀 더 단순하고 편리하게 파일의 경로를 나타내기 위해서 절대경로를 사용한다.',
+    category: '',
+    series: '',
+    tags: ['ESLint', 'Next.js', 'TypeScript'], // # 포함하지 않는 string array
+    postedAt: '2021. 10. 26.',
+}
+export default ({ children }) => <PostLayout meta={meta}>{children}</PostLayout>

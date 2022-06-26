@@ -1,0 +1,59 @@
+import PostLayout from "../../components/post/PostLayout"
+
+1. 프리셋 라이브러리 설치: `npm i -D @storybook/preset-ant-design`
+
+2. 따로 antd 변수를 변경하지 않는다면 addons 배열에 `"@storybook/preset-ant-design"`만 추가하시면 됩니다.
+
+antd 변수를 변경하여 사용한다면 `.storybook/main.js` 파일의 addons에 아래 부분을 추가합니다. primary-color 값에는 프로젝트에서 사용하는 primary color 값을 넣으시면 됩니다.
+```js
+{
+  name: '@storybook/preset-ant-design',
+  options: {
+    lessOptions: {
+      modifyVars: {
+        'primary-color': '#000',
+      },
+    },
+  },
+}
+```
+
+
+
+아래는 main.js 파일 예시입니다.
+```js
+module.exports = {
+  "stories": [
+    "../src/**/*.stories.mdx",
+    "../src/**/*.stories.@(js|jsx|ts|tsx)"
+  ],
+  "addons": [
+    "@storybook/addon-links",
+    "@storybook/addon-essentials",
+    {
+      name: '@storybook/preset-ant-design',
+      options: {
+        lessOptions: {
+          modifyVars: {
+            'primary-color': '#fc1150',
+          },
+        },
+      },
+    },
+  ],
+  webpackFinal: async (config) => {
+    ...
+    return config;
+  }
+}
+```
+
+export const meta = {
+    title: 'Storybook에서 Ant Design 사용하기',    index: 8,
+    description: '스토리북에서 antd를 쓰고 싶다면 preset을 추가해 주어야 합니다.',
+    category: '',
+    series: '',
+    tags: ['Storybook','Antd'], // # 포함하지 않는 string array
+    postedAt: '2021. 11. 10.',
+}
+export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

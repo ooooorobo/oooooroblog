@@ -1,0 +1,13 @@
+import PostLayout from "../../components/post/PostLayout"
+
+// 여기에 내용 작성
+
+export const meta = {    index: 12,
+    title: 'React의 Diffing Algorithm',
+    description: 'React DOM은 새로 그리는 화면을 최소화하기 위해서 엘리먼트를 이전 엘리먼트와 비교해서 필요한 경우에만 DOM을 업데이트하며, Diffing Algorithm에 따라 변경 전, 후의 React 엘리먼트 트리를 비교하여 가장 효과적으로 UI를 갱신할 방법을 찾는다.',
+    category: '',
+    series: '',
+    tags: ['React'], // # 포함하지 않는 string array
+    postedAt: '2021. 12. 27.',
+}
+export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

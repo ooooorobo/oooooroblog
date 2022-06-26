@@ -1,0 +1,13 @@
+import PostLayout from "../../components/post/PostLayout"
+
+// 여기에 내용 작성
+
+export const meta = {
+    title: 'Lighthouse로 Next.js 프로젝트 성능 개선하기',    index: 9,
+    description: '라이트하우스는 웹앱 품질 측정도구이다. 웹앱의 성능, 접근성, SEO 등을 검사해주고, PWA 조건을 만족하는지도 검사해준다. 지금 진행하고 있는 프로젝트의 성능을 라이트하우스와 함께 개선해봤다.',
+    category: '',
+    series: '',
+    tags: ['Next.js'], // # 포함하지 않는 string array
+    postedAt: '2021. 12. 04.',
+}
+export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

@@ -1,0 +1,13 @@
+import PostLayout from "../../components/post/PostLayout"
+
+// 여기에 내용 작성
+
+export const meta = {    index: 13,
+    title: 'Next.js란?',
+    description: 'The React Framework for Production',
+    category: '',
+    series: '',
+    tags: ['Next.js'], // # 포함하지 않는 string array
+    postedAt: '2022. xx. xx',
+}
+export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

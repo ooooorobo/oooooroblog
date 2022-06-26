@@ -1,0 +1,13 @@
+import PostLayout from "../../components/post/PostLayout"
+
+// 여기에 내용 작성
+
+export const meta = {    index: 14,
+    title: 'JS00 - 자바스크립트란?',
+    description: 'HTML, CSS와 함께 웹을 구성하는 요소 중 하나, 웹 브라우저에서 동작하는 유일한 프로그래밍 언어',
+    category: '',
+    series: '',
+    tags: ['JavaScript'], // # 포함하지 않는 string array
+    postedAt: '2022. 01. 09.',
+}
+export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

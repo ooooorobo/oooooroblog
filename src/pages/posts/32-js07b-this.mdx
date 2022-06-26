@@ -1,0 +1,14 @@
+import PostLayout from "../../components/post/PostLayout"
+
+// 여기에 내용 작성
+
+export const meta = {
+    index: 0,
+    title: '',
+    description: '',
+    category: '',
+    series: '',
+    tags: [], // # 포함하지 않는 string array
+    postedAt: '2022. xx. xx',
+}
+export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

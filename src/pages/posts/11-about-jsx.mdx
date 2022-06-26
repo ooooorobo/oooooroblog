@@ -1,0 +1,13 @@
+import PostLayout from "../../components/post/PostLayout"
+
+// 여기에 내용 작성
+
+export const meta = {
+    index: 11,    title: 'JSX란?',
+    description: 'JSX는 JavaScript를 확장한 문법으로, React에서 엘리먼트의 UI가 어떻게 생겨야 할 지를 나타내기 위해 사용된다.',
+    category: '',
+    series: '',
+    tags: ['React','JSX','Babel'], // # 포함하지 않는 string array
+    postedAt: '2021. 12. 27.',
+}
+export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

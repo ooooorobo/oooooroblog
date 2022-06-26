@@ -1,0 +1,356 @@
+import PostLayout from "../../components/post/PostLayout"
+
+파이썬으로 알고리즘을 풀어보면서 자주 찾아보게 되었던 내용을 정리합니다.
+
+# 입력
+
+### 시간 단축 - `readline` 사용하기
+- 파이썬 기본 `input()`은 시간 초과의 주범입니다. `readline`을 `input`처럼 사용하면 입력을 읽는 데 걸리는 시간을 줄일 수 있습니다.
+- (참고) input은 사용자가 키를 하나씩 누를 때마다 데이터를 버퍼에 넣고, readline은 입력이 완료되면 한 번에 읽어와서 버퍼에 넣어 속도 차이가 발생한다고 합니다.
+
+```python
+import sys
+input = sys.stdin.readline
+```
+
+### 스페이스 단위로 나누어진 문자열 입력을 배열로 나눠 담기
+
+- `strip()` 처리를 해주지 않으면 빈 문자열도 배열에 담깁니다.
+
+```python
+arr = input().strip().split()
+```
+
+### 스페이스 단위로 나눠진 숫자 입력을 배열로 나눠 담기
+
+```python
+arr = list(map(int, input().split()))
+```
+
+### 스페이스와 엔터로 나누어진 보드판 입력 받기
+
+```python
+n = int(input()) 		# n개의 행으로 이루어진 경우
+arr = [input().strip().split() for _ in range(n)]
+```
+
+### 입력의 개수를 미리 알려주지 않을 경우
+
+```python
+# readline()을 input()으로 사용
+while True:
+	s = sys.stdin.readline().rstrip('\n')
+	if not s:
+		break
+
+# 혹은, 기본 input() 사용
+while True:
+    try:
+        a, b = input().split()
+        print(a + b)
+    except:
+        break
+```
+
+# 딕셔너리
+- JSON 같은 느낌입니다.
+- 관련된 문제: [프로그래머스] 위장
+```python
+dic = {"name": "value", "key_one": 2}
+dic["hi"] = 123
+print(dic["hi"])		# 123
+```
+
+# 배열
+
+- string을 list로 만들기: `list(s)`
+- list를 string으로 만들기: `"".join(arr)`
+- `""` 자리에 `" ", ","` 등의 문자(열)를 넣어서 구분자를 설정할 수 있습니다.
+- 정수 리스트를 string으로 만들기: `''.join(map(str, a))`
+- `join`은 string 값이나 배열에 대해서만 수행 가능하므로 map 처리를 해줍니다.
+
+
+- `remove`, `insert` 메소드 지양하기 - 시간복잡도가 O(N)인 연산이므로 자주 사용하면 시간 초과됩니다!!
+- list는 pop과 append를 활용해 스택처럼 쓸 수 있습니다.
+
+
+- 중복 요소 제거하기: 리스트를 `set()`으로 감싸서 set으로 만들기
+
+## `zip()`
+
+- 여러 개의 Iterable 객체를 인자로 받아서 각 객체가 가진 원소의 튜플을 순서대로 접근 가능한 iterator를 반환합니다.
+
+```python
+weight = [200, 300, 100]
+value = [22, 66, 42]
+for w, v in zip(weight, value):
+	print(w, v)
+
+# (200 22), (300 66), (100 42) 순서로 출력됨
+```
+
+## 큐
+
+```python
+from collections import deque
+
+queue = deque()
+
+queue.append(2) 	# 요소 추가
+queue.popleft()		# 가장 처음에 들어간 요소를 빼내기
+```
+
+## 힙
+
+```python
+import heapq
+
+heap = []
+
+heapq.heappush(heap, 3)		 # 요소 넣기
+heapq.heappop(heap)			# 가장 우선순위 높은 요소 빼내기
+```
+
+- 기본적으로 최소 힙을 만듭니다.
+- 튜플을 사용해서 우선순위를 바꿔줄 수 있습니다. 배열에 넣을 때 `(우선순위, 실제 값)` 튜플 형태로 넣어주면 됩니다.
+- 최대 힙을 만들고 싶다면 우선순위에 음수를 취한 값을 넣어주면 됩니다.
+
+## 정렬
+
+- `arr.sort()` ⇒ arr 자체가 정렬됨
+- `sorted(arr)` ⇒ arr은 정렬되지 않고, 정렬된 새 배열을 반환함
+- 튜플의 배열을 정렬할 때, key 옵션을 주어 튜플의 특정 요소를 기준으로 정렬할 수 있음
+```python
+arr = [(5, 1), (88, 4), (77, 1), (4, 3)]
+arr.sort(key=lambda x: (x[1], -x[0]))
+# arr ⇒ [(77, 1), (5, 1), (4, 3), (88, 4)]
+# > 1번 인덱스 요소를 오름차순으로 정렬하고,
+# > 1번 인덱스 요소가 같을 때는 0번 인덱스 요소의 내림차순으로 정렬
+```
+
+## 이진 탐색
+
+- 항상 정렬되어 있는 수열에서는 이진 탐색을 사용할 수 있습니다.
+- 이진탐색이 반환하는 값은 정렬된 배열에서 찾는 **숫자 x를 삽입할 위치**입니다. x가 배열에 이미 있으면 `bisect_left`기존 요소의 가장 왼쪽 값 인덱스, `bisect_right`는 기존 요소의 가장 오른쪽 값의 다음 인덱스를 반환합니다.
+
+```python
+from bisect import bisect_left, bisect_right
+
+arr = [2,5,5,5,7,9]
+
+print(bisect_left(arr, 2))		# 0
+print(bisect_left(arr, 5))		# 1
+print(bisect_right(arr, 5))		# 4
+print(bisect_right(arr, 9))		# 6
+```
+
+- 응용: 같은 숫자가 몇 개 있는지 구하기
+```python
+count = bisect_right(arr, 5) - bisect_left(arr, 5)
+# count == 3
+```
+
+# 문자/문자열 다루기
+
+- 문자를 ASCII로 바꾸기: `ord(c)`
+- ASCII에서 **A = 65, a = 97**
+- 문자의 타입 확인하기
+```python
+c.isalpha()		# 문자로만 되어 있는가? (대문자 or 소문자 or 한글 등의 문자만 인정, 공백이나 특수문자 인정하지 않음)
+c.isalnum()		# 문자 혹은 숫자로만 되어 있는가? (공백이나 특수문자 인정하지 않음)
+c.isdigit()		# 숫자로 되어 있는가? (거듭제곱 등의 기호까지 인정)
+c.numeric()		# 숫자처럼 생긴 글자인가? (제곱근, 분수, 거듭제곱까지 인정)
+c.islower()		# 소문자로만 이루어져 있는가?
+c.isupper()		# 대문자로만 이루어져 있는가?
+```
+- 문자 변환하기
+```python
+new_lower = c.lower()	# c를 소문자로 변경하여 반환, c는 바뀌지 않음
+new_upper = c.upper()	# c를 대문자로 변경하여 반환, c는 바뀌지 않음
+```
+- 문자열 시작과 끝의 공백 제거하기 - `s.strip()`
+
+# 숫자 다루기
+
+- 실수 a의 소수점 n자리까지 표기하기 - `"{0.nf}".format(a)`
+```python
+# 올림
+math.ceil(a)
+
+# 내림 / 음수일 경우 절대값 취하고 +1 (0에서 멀어짐)
+math.floor(a)
+
+# 내림 / 음수일 경우 절대값 취하고 -1 (0에 가까워짐)
+math.trunc(a)
+
+# 반올림
+math.round(a)
+```
+
+# 수학
+
+## 자릿수 더하기
+### 1. 재귀
+
+```python
+def sum_digit(n):
+    if n < 10:
+        return n;
+    return (n % 10) + sum_digit(n // 10)
+```
+
+### 2. 문자열 활용
+
+```python
+def sum_digit(n):
+    return sum(map(int, str(n)))
+```
+
+## 소수 구하기 - 에라토스테네스의 체
+
+N까지의 모든 정수가 각각 소수인지 아닌지 여부를 알고 싶을 때
+
+1. 2 ~ N 사이 범위가 담긴 배열을 만든다
+2. 해당 배열의 가장 작은 소수부터 시작하여 그 배수를 해당 배열에서 지운다.
+3. i 다음으로 작은 소수의 배수를 같은 방식으로 배열에서 지운다
+
+for 문을 도는 횟수를 줄이기 위해서 3번의 경우 n의 제곱근보다 약간 큰 수까지만 확인합니다.
+
+```python
+arr = [True] * (n + 1)
+arr[0] = False
+arr[1] = False
+
+for i in range(2, int(n ** 0.6)):
+    if arr[i] == True:
+        j = 2
+        while (i * j) <= n:
+            arr[i * j] = False
+            j += 1
+
+# arr에서 True 값을 가지고 있는 index는 소수입니다.
+```
+
+## 팩토리얼 구하기
+
+- 팩토리얼을 여러번 써야하는 상황이라면 미리 구해놓는 것이 좋습니다.
+```python
+f = [1] * 1001
+
+for i in range(2, x):
+    f[i] = f[i - 1] * i
+```
+
+## 최대공약수(GCD), 최소공배수(LCM)
+
+- **최대공약수** 구하는 방법
+1. a > b인 자연수에서, r = a % b일 때, `GCD(a, b) == GCD(b, r)`
+2. r이 0이 될 때 b의 값이 최대공약수가 된다.
+```python
+def gcd(a, b):
+    if b > a:
+        gcd(b, a)
+    if b == 0:
+        return a
+    return gcd(b, a % b)
+```
+
+- **최소공배수** = 두 자연수의 곱 / 최대공약수
+```python
+lcm = a * b / GCD(a, b)
+```
+
+## 순열, 조합
+```python
+import itertools
+
+# 순열
+itertools.permutations(arr, r)
+# n개 중에 r개를 나열하는 경우의 수 (순서 ㅇ)
+
+# 중복순열
+itertools.product(arr, repeat=r)
+# 중복 가능한 n개 중에 r개 나열
+
+# 조합 ->
+itertools.combination(arr, r)
+# n개 중에 r개 선택 (순서 X)
+```
+
+- 경우의 수만 계산해야 한다면
+- nPr = n! / (n-r)!
+- nCr = nPr / r!
+- 위의 팩토리얼 구하기를 활용
+- 순열, 조합은 직접 구현하는 것이 더 빠르게 돌아가는 경우가 많습니다..
+
+### 비트마스킹으로 선택 가능한 모든 경우 만들기
+
+- n개 중에서 0 ~ n개를 선택하는 모든 경우의 수를 확인하기
+
+```python
+for i in range(1 << n):
+	for j in range(n):
+            	# j가 선택되었을 경우
+		if i & (1 << j):
+			print(j, "is in the list")
+	print("")
+```
+
+# DFS 기본 형태
+```python
+visited = [False] * 9
+
+def dfs(v):
+    visited[v] = True
+    for i in graph[v]:
+        if not visited[i]:
+            dfs(i)
+```
+
+# BFS 기본 형태
+```python
+visited = [False] * 9
+
+def bfs(start):
+    queue = deque([start])
+    visited[start] = True
+
+    while queue:
+        v = queue.popleft()
+        for i in graph[v]:
+            if not visited[i]:
+                visited[i] = True
+                queue.append(i)
+```
+
+# 그 외
+
+- for 문 등 루프를 도는 횟수와 중첩을 최소화하는 것이 가장 좋습니다. 입력의 크기가 백만인데 중첩 반복문을 쓰면 백만의 제곱만큼 반복문을 돌아야 하는 경우가 생길 수 있고, 높은 확률로 시간 초과가 납니다.
+- 경우의 수 구하기 => DFS
+- 최단 거리 구하기 => BFS
+- 꼭 이게 정답은 아니고, 보통 이렇게 알고리즘을 사용하면 잘 풀립니다.
+- 재귀 깊이 제한 풀기 - `sys.setrecursionlimit(2500)`
+- pypy 사용할 경우에는 빼주어야 합니다. 메모리 초과가 발생합니다.
+- 특히 python3으로 DFS를 풀 때 설정해 주는게 좋습니다. (`런타임 에러 (RecursionError)` 방지) 설정하지 않아서 맞은 문제도 틀리는 경우가 많았습니다.
+- 보드판을 탐색할 때는, 이동 가능한 경우를 배열로 정의해 두면 편합니다.
+- 2차원 보드판에서 상, 하, 좌, 우 이동 가능할 때
+
+```python
+xd = [0, 0, 1, -1]
+yd = [1, -1, 0, 0]
+
+now_pos = (3, 4)
+for i in range(4):
+    x, y = now_pos
+    next_pos = (x + xd[i], y + yd[i])
+```
+
+export const meta = {
+    title: '파이썬 알고리즘 문제 풀이 치트시트',    index: 6,
+    description: '파이썬으로 알고리즘을 풀어보면서 자주 찾아보게 되었던 내용을 정리했습니다.',
+    category: '',
+    series: '',
+    tags: ['Python','알고리즘'], // # 포함하지 않는 string array
+    postedAt: '2021. 11. 04.',
+}
+export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>
