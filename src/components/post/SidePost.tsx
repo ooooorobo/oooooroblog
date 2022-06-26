@@ -2,6 +2,7 @@ import { SidePosts } from "@src/utils/postUtil";
 import Link from "next/link";
 import { PostListElement } from "@src/model/post";
 import styled from "styled-components";
+import SmallTitle from "@src/components/SmallTitle";
 
 const Post = ({ post }: { post: PostListElement }) => {
   return (
@@ -18,7 +19,7 @@ export default function SidePost({ sidePosts }: { sidePosts: SidePosts }) {
       <PostWrapper align={"left"}>
         {sidePosts.prev && (
           <>
-            <SideTitle>이전 포스트</SideTitle>
+            <SmallTitle>이전 포스트</SmallTitle>
             <Post post={sidePosts.prev} />
           </>
         )}
@@ -26,7 +27,7 @@ export default function SidePost({ sidePosts }: { sidePosts: SidePosts }) {
       <PostWrapper align={"right"}>
         {sidePosts.next && (
           <>
-            <SideTitle>다음 포스트</SideTitle>
+            <SmallTitle>다음 포스트</SmallTitle>
             <Post post={sidePosts.next} />
           </>
         )}
@@ -44,7 +45,7 @@ const Wrapper = styled.div`
   ${({ theme }) =>
     theme.media.mobile(`
     flex-direction: column;  
-    row-gap: 1rem;
+    row-gap: 1.8rem;
   `)}
 `;
 
@@ -55,12 +56,6 @@ const PostWrapper = styled.div<{ align: string }>`
     theme.media.mobile(`
     width: auto;  
   `)}
-`;
-
-const SideTitle = styled.div`
-  font-size: ${({ theme }) => theme.fontSizes.s};
-  color: ${({ theme }) => theme.colors.text.secondary};
-  margin-bottom: 0.25rem;
 `;
 
 const PostTitle = styled.strong`

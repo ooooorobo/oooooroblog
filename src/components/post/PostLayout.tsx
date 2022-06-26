@@ -7,6 +7,7 @@ import PostTitle from "./PostTitle";
 import WavyLine from "@src/components/WavyLine";
 import { SidePosts } from "@src/utils/postUtil";
 import SidePost from "@src/components/post/SidePost";
+import Profile from "@src/components/main/Profile";
 
 export default function PostLayout({
   meta,
@@ -36,10 +37,11 @@ export default function PostLayout({
         <PostTitle meta={meta} />
         <WavyLine size={8} />
       </PostHeader>
-      <Article>
-        {children}
+      <Article>{children}</Article>
+      <ProfileWrapper>
+        <Profile />
         <WavyLine size={8} />
-      </Article>
+      </ProfileWrapper>
       {sidePosts && <SidePost sidePosts={sidePosts} />}
       <div>
         <Comment />
@@ -56,6 +58,15 @@ const PostHeader = styled.div`
 
 const Article = styled.article`
   max-width: 760px;
-  margin: 0 auto 2rem auto;
+  margin: 0 auto 5rem 0;
   padding: 0 1rem;
+`;
+
+const ProfileWrapper = styled.div`
+  padding: 0 1rem;
+  max-width: 760px;
+  margin: 1.5rem auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
 `;
