@@ -11,6 +11,7 @@ const POST_COUNT = 10;
 
 const Home: NextPage<HomeProps> = ({ posts }: HomeProps) => {
   const [page, setPage] = useState(0);
+  const [hasNextPage, setHasNextPage] = useState(true);
   const [postList, setPostList] = useState<PostListElement[]>(posts);
 
   const onClickNextPage = useCallback(() => setPage((prev) => prev + 1), []);
@@ -19,7 +20,12 @@ const Home: NextPage<HomeProps> = ({ posts }: HomeProps) => {
     if (page > 0) {
       fetch(`/api/posts/${page}/${POST_COUNT}`)
         .then((res) => res.json())
-        .then((json) => setPostList((prev) => [...prev, ...json]));
+        .then((json) => {
+          if (json.length < POST_COUNT) {
+            setHasNextPage(false);
+          }
+          setPostList((prev) => [...prev, ...json]);
+        });
     }
   }, [page]);
 
@@ -28,7 +34,7 @@ const Home: NextPage<HomeProps> = ({ posts }: HomeProps) => {
       <Profile />
       <WavyLine size={10} />
       <PostList posts={postList} />
-      <button onClick={onClickNextPage}>다음</button>
+      {hasNextPage && <button onClick={onClickNextPage}>다음</button>}
     </Wrapper>
   );
 };
