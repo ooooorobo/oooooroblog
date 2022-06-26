@@ -58,7 +58,7 @@ const PostHeader = styled.div`
 
 const Article = styled.article`
   max-width: 760px;
-  margin: 0 auto 5rem 0;
+  margin: 0 auto 5rem auto;
   padding: 0 1rem;
 `;
 
