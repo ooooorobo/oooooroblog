@@ -12,6 +12,14 @@ export interface PostListElement {
 export interface PostMeta {
   title: string;
   description: string;
+  category: string;
+  series: string;
   tags: string[];
   postedAt: string;
 }
+
+export const CategoryType = {
+  DEVELOP: "개발",
+  REVIEW: "리뷰",
+  BOOK: "서평",
+};
