@@ -1,10 +1,12 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { PostMeta } from "@src/model/post";
 import Meta from "./Meta";
 import Comment from "./Comment";
 import styled from "styled-components";
 import PostTitle from "./PostTitle";
 import WavyLine from "@src/components/WavyLine";
+import { SidePosts } from "@src/utils/postUtil";
+import SidePost from "@src/components/post/SidePost";
 
 export default function PostLayout({
   meta,
@@ -13,6 +15,15 @@ export default function PostLayout({
   meta: PostMeta;
   children: ReactElement;
 }) {
+  const [sidePosts, setSidePosts] = useState<SidePosts>({
+    prev: undefined,
+    next: undefined,
+  });
+  useEffect(() => {
+    fetch(`/api/posts/sides/${meta.index}`)
+      .then((res) => res.json())
+      .then((json) => setSidePosts(json));
+  }, [meta]);
   return (
     <>
       <PostHeader>
@@ -25,8 +36,11 @@ export default function PostLayout({
         <PostTitle meta={meta} />
         <WavyLine size={8} />
       </PostHeader>
-      <Article>{children}</Article>
-      <WavyLine size={8} />
+      <Article>
+        {children}
+        <WavyLine size={8} />
+      </Article>
+      {sidePosts && <SidePost sidePosts={sidePosts} />}
       <div>
         <Comment />
       </div>
@@ -42,6 +56,6 @@ const PostHeader = styled.div`
 
 const Article = styled.article`
   max-width: 760px;
-  margin: 0 auto 5rem auto;
+  margin: 0 auto 2rem auto;
   padding: 0 1rem;
 `;

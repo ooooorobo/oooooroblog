@@ -10,6 +10,7 @@ export interface PostListElement {
 }
 
 export interface PostMeta {
+  index: number;
   title: string;
   description: string;
   category: string;

@@ -34,6 +34,7 @@ declare module "styled-components" {
 
 const primary = {
   primary: "#5f71d6",
+  primaryLight: "#798ce8",
   secondary: "#add65f",
 };
 
@@ -119,5 +120,6 @@ interface ColorPreset {
     placeholder: string;
   };
   primary: string;
+  primaryLight: string;
   secondary: string;
 }
