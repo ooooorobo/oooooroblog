@@ -3,8 +3,11 @@
 const nextConfig = {
   reactStrictMode: true,
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
-  presets: ["next/babel"],
-  plugins: [["styled-components", {"ssr": true}]]
+  compiler: {
+    styledComponents: {
+      ssr: true
+    }
+  }
 }
 
 const remarkFrontmatter = import('remark-frontmatter');
