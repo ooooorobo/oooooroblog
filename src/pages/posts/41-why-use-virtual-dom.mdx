@@ -2,12 +2,12 @@ import PostLayout from "../../components/post/PostLayout"
 
 // 여기에 내용 작성
 
-export const meta = {    index: 0,
-    title: '',
-    description: '',
+export const meta = {    index: 41,
+    title: 'Virtual DOM을 쓰면 왜 좋을까?',
+    description: '직접 DOM을 제어하지 않아도 되고, 직접 DOM을 제어하는 것보다 성능 상에서 나을 수 있다',
     category: '',
     series: '',
-    tags: [], // # 포함하지 않는 string array
-    postedAt: '2022. xx. xx',
+    tags: ['React'], // # 포함하지 않는 string array
+    postedAt: '2022. 04. 21',
 }
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

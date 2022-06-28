@@ -2,12 +2,12 @@ import PostLayout from "../../components/post/PostLayout"
 
 // 여기에 내용 작성
 
-export const meta = {    index: 0,
-    title: '',
-    description: '',
+export const meta = {    index: 20,
+    title: 'JS04 - 함수와 스코프',
+    description: '함수 (다양한 함수의 형태 / 일급 객체 / 함수가 가지는 프로퍼티) / 스코프 (렉시컬 스코프 / 함수 레벨 스코프)',
     category: '',
     series: '',
-    tags: [], // # 포함하지 않는 string array
-    postedAt: '2022. xx. xx',
+    tags: ['JavaScript'], // # 포함하지 않는 string array
+    postedAt: '2022. 01. 23',
 }
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>
