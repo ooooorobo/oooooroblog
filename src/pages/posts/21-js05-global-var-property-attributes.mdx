@@ -1,6 +1,186 @@
 import PostLayout from "../../components/post/PostLayout"
 
-// 여기에 내용 작성
+> 본 시리즈는 [모던 자바스크립트 Deep Dive](https://shopping.interpark.com/product/productInfo.do?prdNo=8860873922&gclid=Cj0KCQiA8vSOBhCkARIsAGdp6RTfL-5qEwmr40NR6B9YBGQ6guONHQBhK5HrT98QWi8ywi6hXhUqVo4aAssyEALw_wcB) 책을 참고하여 작성하고 있습니다.
+
+# 전역 변수의 문제점
+
+지역변수와 전역변수에는 생명 주기에 차이가 있다
+
+## **변수의 생명 주기**
+
+선언에 의해 생성 → 할당으로 값을 가짐 → 언젠가 소멸
+
+### **지역 변수의 생명 주기**
+
+함수가 호출되면 생성되고, 종료되면 소멸
+
+- 소멸되면 더이상 그 변수에 접근 불가
+- 보통 선언된 함수의 생명 주기와 일치
+- 함수보다 더 오래 생존하는 경우 → 누군가 해당 스코프 참조될 경우, 스코프가 해제되지 않음 (메모리 확보된 상태로 남는다)
+
+```jsx
+var x = 'global'
+
+function foo() {
+  console.log(x); // 지역 스코프 호이스팅 --> undefined 출력
+  var x = 'local';
+}
+```
+
+호이스팅은 스코프 단위로 동작한다.
+
+### 전역 변수의 생명주기
+
+코드가 로드되자마자 해석+실행됨
+
+- var 키워드 전역 변수 === 전역 객체의 프로퍼티
+  - 전역 변수 생명주기는 전역 객체 생명주기와 일치
+- 전역 객체 → 코드 실행 이전에 가장 먼저 생성되는 특수한 객체 (window - browser, global - node.js)
+- 전역 객체는 웹페이지를 닫기 전까지 유효
+
+## 전역 변수의 문제점
+
+- 암묵적 결합 인정 → 모든 코드가 참조하고 변경할 수 있다.
+  - 가독성 낮음, 상태 변경 가능성
+- 긴 생명 주기
+  - 메모리를 오래 소비
+  - 상태 변경 가능성 높음
+  - var는 중복 선언 허용 → 의도치 않은 재할당
+- 스코프 체인 상 종점에 존재
+  - 변수 검색 시 가장 마지막에 검색됨 → 검색 속도가 느리다
+- 네임스페이스 오염
+  - 다른 파일에 동일한 이름으로 명명되었을 경우 → 예상치 못한 결과
+
+## 전역 변수 사용 억제하기
+
+1. **즉시 실행 함수 사용**
+
+```jsx
+(function() {
+  var foo = 10;
+}());
+```
+
+1. **네임스페이스 객체 사용**
+
+```jsx
+var NAMESPACE = {};
+NAMESPACE.name = 'lee';
+```
+
+- 결국 네임스페이스 객체 자체가 전역 프로퍼티가 되므로 유용하지는 않다
+1. **모듈 패턴**
+ - (클래스 모방) 관련 있는 변수와 함수를 모아 즉시 실행 함수로 감싸고 하나의 모듈을 만들기
+
+ ```jsx
+ var Counter = (function() {
+   var num = 0;
+   return {
+     increase() { ++num };
+     decrease() { --num };
+   }
+ }());
+
+ Counter.num; // 0
+    ```
+
+ - num을 참조하는 함수인 increase와 decrease가 살아있기 때문에 num 변수는 소멸되지 않는다
+2. **ES6 모듈**
+- 파일 자체의 모듈 스코프 제공
+- var 키워드 변수는 젼역 변수가 아니고 window 객체의 프로퍼티가 아님
+
+```jsx
+<script type="module" src="index.mjs"></script>
+```
+
+- 참고: [https://poiemaweb.com/es6-module](https://poiemaweb.com/es6-module)
+
+# let, const 키워드와 블록레벨 스코프
+
+## var의 문제점
+
+- 변수 중복 선언 허용 (보통 다른 언어에선 허용되지 않는다)
+- 함수 레벨 스코프 (보통 다른 언어에선 블록 레벨 스코프이다)
+- 변수 호이스팅 (일반적으로 발생하지 않는다)
+
+## let, const 키워드
+
+- 같은 스코프 내 변수 중복 선언 금지
+- 블록 레벨 스코프
+- 변수 호이스팅이 발생하지만, 발생하지 않는 것처럼 동작
+- **let 키워드**: 재할당 가능
+- **const 키워드**: 재할당 금지
+  - 상수 표현에 사용됨
+  - 원시 값을 할당했을 경우, 변경 불가능
+  - 객체 값을 할당했을 경우, 값 변경이 가능. 재할당 금지 ≠ 불변
+  - 프로퍼티 값이 변경된다 하더라도 변수 값에 할당된 **참조 값은 변경되지 않음**
+
+```jsx
+const a = 1;
+a = 3; // error!
+
+const b = { name: "kee" };
+b.name = "lee"; // ok
+b.age = 23; // ok
+
+b = { address: "suwon" }; // error!
+```
+
+# 프로퍼티 어트리뷰트
+
+- 객체의 프로퍼티의 속성을 나타내는 값
+
+## 내부 슬롯과 내부 메서드
+
+- 의사 프로퍼티와 의사 메서드 → 자바스크립트 엔진의 구현 알고리즘을 설명하기 위한 것
+- 내부 로직이므로 직접 접근, 호출 불가
+- 일부 슬롯, 메서드에 대하여 간접 접근 수단을 제공
+
+## 프로퍼티 어트리뷰트와 프로퍼티 디스크립터 객체
+
+- 프로퍼티 생성할 때, 프로퍼티 상태를 나타내는 **프로퍼티 어트리뷰트**를 기본값으로 정의
+
+**프로퍼티 상태**
+
+- 값 value
+- 갱신 가능 여부 writable
+- 열거 가능 여부 enumerable
+- 재정의 가능 여부 configurable
+
+**프로퍼티 어트리뷰트** → 자바스크립트 엔진이 제공하는 내부 슬롯
+
+- [[Value]]: 프로퍼티 키를 통해 값에 접근할 경우 반환
+- [[Writable]]: 프로퍼티 값 반환 가능 여부 - boolean
+- [[Enumerable]]: 열거 가능 여부 - boolean
+- [[Configurable]]: 재정의 가능 여부 - boolean
+
+`Object.getOwnPropertyDescriptor` → 프로퍼티 디스크립터를 간접적으로 확인 가능하다
+
+**접근자 프로퍼티** → 데이터 프로퍼티의 값을 읽거나 저장 시 사용하는 접근자 함수로 구성
+
+- `[[Get]]`
+- `[[Set]]`
+
+```jsx
+const person = {
+  firstName: "name",
+  lastName: "kin",
+
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`
+  }
+
+  set fullName(name) {
+    const [firstName, lastName] = name.split(' ')
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+};
+
+person.fullName; // 'name kin'
+person.fullName = 'mane kim';
+person.firstName; // 'mane'
+```
 
 export const meta = {    index: 21,
     title: 'JS05 - 전역 변수의 문제점 & 프로퍼티 어트리뷰트',

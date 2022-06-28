@@ -1,6 +1,242 @@
 import PostLayout from "../../components/post/PostLayout"
 
-// 여기에 내용 작성
+> 본 시리즈는 [모던 자바스크립트 Deep Dive](https://shopping.interpark.com/product/productInfo.do?prdNo=8860873922&gclid=Cj0KCQiA8vSOBhCkARIsAGdp6RTfL-5qEwmr40NR6B9YBGQ6guONHQBhK5HrT98QWi8ywi6hXhUqVo4aAssyEALw_wcB) 책을 참고하여 작성하고 있습니다.
+
+# 에러 처리
+
+에러는 언제나 발생할 수 있고, 에러가 발생하지 않는 코드를 작성할 수는 없다. 에러를 적절히 처리해 주지 않으면 프로그램이 예기치 않게 종료될 수 있다.
+
+```jsx
+x() // Uncaught ReferenceError: x is not defined
+null.toString() // Uncaught TypeError: Cannot read property 'toString' of null
+3 @ 1 // Uncaught SyntaxError: Invalid or unexpected token
+```
+
+## 예외
+
+직접적으로 에러를 발생시키지는 않지만 예외(Exception)적인 상황이 있을 수 있다. 아래 예시처럼 DOM에서 button 요소를 찾을 수 없다면 `querySelector`는 에러를 발생시키지 않고 null을 반환한다. 그런데 항상 요소를 찾을 수 있을 것을 가정하고 코드를 작성하면 에러가 발생할 수 있다.
+
+![](https://images.velog.io/images/ooooorobo/post/8e5ee63d-71e3-4d49-bd1c-0774139db6dc/image.png)
+
+이러한 예외 상황을 처리하기 위해서 null이 될 수도 있는 값은 if문, 단축 평가(`||`), 옵셔널 체이닝(`.?`) 등의 처리를 해줄 수 있다.
+
+## `try ... catch ... finally`
+
+에러를 처리하는 코드를 미리 작성해서, 에러가 발생하면 에러 처리 코드를 실행하도록 에러를 처리하는 방법도 있다.
+
+```jsx
+try {
+  ...
+} catch (err) {
+  ...
+} finally {
+  ...
+}
+```
+
+- `try`: `try - catch` 문을 만나면 우선 `try` 문 안에 있는 코드를 실행한다.
+- `catch`: `try` 문을 실행하다가 에러가 발생하면 `catch` 문으로 이동하게 되고, `err` 변수에 발생한 에러 객체가 전달된다.
+- `finally`: 에러 발생 여부와 관계 없이 무조건 실행된다.
+
+`catch`, `finally` 문은 생략 가능하지만 `catch` 문이 없으면 의미가 없으므로 생략하지 않는다. `try .. catch .. finally` 문 안에서 에러가 발생하더라도 프로그램은 종료되지 않는다.
+
+## Error 객체
+
+Error 빌트인 생성자 함수로 에러 객체를 생성할 수 있다. 생성자 함수의 인수로 에러 메시지를 전달할 수 있다.
+
+```jsx
+const error = new Error('에러 발생 !!');
+console.dir(error)
+
+// error 객체
+{ message: "에러 발생 !!", stack: "Error: 에러 발생 !! at <anonymous>:1:15" }
+```
+
+### **`Error` 객체의 프로퍼티**
+
+- `message`: Error 생성자 함수에 인수로 전달한 에러 메시지, 에러를 설명함
+- `stack`: 에러를 발생시킨 콜 스택 호출 정보를 나타냄, 디버깅 목적
+
+### `throw` 문
+
+Error 객체를 생성하는 것만으로 에러가 발생하지는 않는다. 생성된 Error 객체를 throw 문과 함께 사용해서 에러 객체를 던져야 에러가 발생한다.
+
+```jsx
+throw error; // 에러 발생
+```
+
+![](https://images.velog.io/images/ooooorobo/post/1de4dd55-55b6-4413-a1d0-42861648225f/image.png)
+
+throw 문의 표현식에는 어떤 값이든 올 수 있지만 일반적으로 에러 객체를 지정한다.
+
+![](https://images.velog.io/images/ooooorobo/post/ffb3afc0-352c-47ed-a0c0-535c836bb5e4/image.png)
+
+## 에러의 전파
+
+에러는 호출자(caller) 방향으로 전파된다. 즉, 콜 스택(실행 컨텍스트 스택)의 아래 방향으로 전파된다.
+
+```jsx
+function foo() {
+  throw Error('foo에서 에러 발생')
+}
+function bar() {
+  foo();
+}
+function x() {
+  bar();
+}
+try {
+  x();
+} catch (e) {
+  console.error(e);
+}
+```
+
+![](https://images.velog.io/images/ooooorobo/post/fbdc2b61-b84b-4d63-aeea-30ebae1de607/image.png)
+
+![](https://images.velog.io/images/ooooorobo/post/c7d10149-bcc7-4aa4-92e5-51cd345d5a4c/image.png)
+
+`foo` 에서 `throw` 된 에러는 `bar → x → 전역`으로 전파되다가 전역의 `try` 문에서 `catch` 된다. `throw`된 에러는 캐치하지 않으면 호출자 방향으로 전파되고, 어디서도 이 에러를 캐치하지 않으면 프로그램은 강제 종료된다.
+
+비동기 함수인 setTimeout이나 프로미스 후속 처리 메서드에서 사용하는 **콜백 함수는 호출자가 없다**. 콜백 함수는 콜 스택이 비어 있을 때 이벤트 루프에 의해서 콜 스택의 최하단에 위치하게 되어 호출자가 존재하지 않는다. 따라서 에러가 전파되지 않아 `try ... catch` 문으로 콜백 함수의 에러를 캐치할 수 없다.
+
+# 모듈
+
+모듈은 일반적으로 어플리케이션을 구성하는 개별 요소로서 재사용 가능한 코드 조각을 말한다. 보통 기능을 기준으로 파일 단위로 분리되며, 모듈은 자신만의 모듈 스코프(파일 스코프)를 가진다
+
+모듈 스코프 안에 있는 모듈의 자산(변수, 함수, 객체 등)은 기본적으로 비공개되어 있다. 즉, 캡슐화되어 다른 모듈에서 접근 불가능하다.
+
+그러나 모듈은 어플리케이션이나 다른 모듈에 의해 재사용되어야 의미가 있다. 그래서 공개가 필요한 자산은 명시적으로 선택적 공개가 가능하다. 이를 `export`라 한다.
+
+공개된 자산의 일부 또는 전체를 다른 모듈의 스코프 내로 `import`하여 재사용할 수 있다. 공개된 모듈의 자산을 사용하는 모듈 사용자(module consumer)라고 한다.
+
+### 모듈의 장점
+
+- 코드의 단위를 명확히 분리할 수 있다
+- 재사용성이 좋아 개발 효율성과 유지보수성을 높일 수 있다
+
+## 자바스크립트의 모듈
+
+기존의 자바스크립트는 파일 스코프, import, export를 지원하지 않아 모듈이 성립하지 않았다. 파일을 분리하여 로드할 수는 있었지만 파일마다 독립적인 파일 스코프를 갖지 않는다.
+
+따라서 자바스크립트 파일을 분리하여 로드했더라도 결국 하나의 자바스크립트 파일 안에 있는 것처럼 동작하며, 하나의 전역을 공유한다. 그래서 전역 변수가 중복되는 등 문제가 발생할 수 있다.
+
+모듈 로더 라이브러리로 CommonJS와 AMD(Asynchronous Module Definition)이 제안되었고, Node.js에서는 사실상 표준인 CommonJS를 채택하여 기본적으로 CommonJS 사양을 따르고 있다.
+
+## ESM(ES6 모듈)
+
+ES6에서는 클라이언트 사이드 자바스크립트에서도 모듈 기능이 동작할 수 있도록 ESM을 도입했다. IE를 제외한 대부분의 브라우저에서 사용할 수 있다.
+
+```jsx
+<script src="app.mjs"></script>
+<script **type="module"** src="lib.mjs"></script>
+```
+
+이처럼 script 태그에 `type=”module”` 어트리뷰트를 추가하면 그렇게 로드된 자바스크립트 파일은 모듈로 동작한다. ESM의 파일 확장자는 구분을 위해 `.mjs`를 사용할 것을 권장한다. ESM은 기본적으로 `strict mode`가 적용된다.
+
+### ESM의 특징
+
+- 기본적으로 strict mode가 적용된다
+- 독자적인 모듈 스코프를 갖는다 (다른 파일과 전역을 공유하지 않는다)
+- 모듈 내에서 var 키워드로 선언한 변수는 전역 변수가 아니고 window 객체의 프로퍼티도 아니다
+- 모듈 내에서 선언한 식별자는 모듈 외부에서 참조할 수 없다
+
+### `export`
+
+```jsx
+// circle.mjs
+export const pi = Math.PI;
+function square(n) {
+  return n * n;
+}
+export function getCircleArea(radius) {
+  return square(radius) * pi;
+}
+```
+
+`export` 키워드로 모듈 내부에서 선언한 식별자를 외부에 공개할 수 있다. 변수, 함수, 클래스 등 모든 식별자를 export 할 수 있다.
+
+모듈에서 하나의 값만 export 한다면 `default` 키워드를 사용할 수 있다. 이 경우 이름 없이 하나의 값을 export 하며, `var, let, const` 키워드를 사용할 수 없다.
+
+```jsx
+export default 3;
+```
+
+### `import`
+
+- 모듈이 export한 식별자들을 하나의 이름으로 한 번에 import 할 수 있다.
+
+```jsx
+// app.mjs
+import * as circle from 'circle.mjs'
+
+const radius = 5;
+console.log(circle.getCircleArea(5));
+```
+
+- 모듈이 export한 식별자 이름으로 import 할 수 있다.
+- 모듈이 export한 식별자 이름을 변경해서 Import 할 수도 있다. (`as` 사용)
+
+```jsx
+// app.mjs
+import {pi as PI_VALUE, getCircleArea} from 'circle.mjs'
+
+console.log(pi) // X
+console.log(PI_VALUE) // O
+
+const radius = 5;
+console.log(getCircleArea(5));
+```
+
+- default 키워드로 export한 모듈은 {} 없이 임의의 이름으로 import 한다.
+
+```jsx
+import value from 'defaultExport.mjs';
+```
+
+# 바벨 & 웹팩 & 폴리필
+
+ES6이나 그 이상의 버전(ES6+), 그리고 제안 단계에 있는 사양(ES.NEXT)을 사용하려면 우선 브라우저가 해당 사양을 지원해야 한다.
+
+ES6의 경우 크롬, 사파리, 파이어폭스, 엣지 등의 에버그린 브라우저(웹 표준 준수를 위해 자동 업데이트 지원)에서는 98%의 지원율을 보이고 있지만, IE11의 경우 ES6 지원율이 11%이며, 매년 도입되는 ES6+ 버전이나 ES.NEXT는 지원율이 모두 다르다.
+
+ES6 모듈(ESM)이 지원되고 있지만, 별도의 모듈 로더를 사용하는 것이 일반적이다.
+
+- 구형 브라우저는 ESM을 지원하지 않는다.
+- ESM을 사용해도 트랜스파일링이나 번들링이 필요하다
+- ESM이 지원하지 않는 기능이 있다 (Bare Import 등)
+
+```jsx
+// 일반적인 import 방식
+import React from 'react';
+
+// bare import - 로드만 하고 변수에 할당하지 않음
+import 'react';
+```
+
+따라서 개발 환경 구축 시에 바벨, 웹팩과 같은 트랜스파일러, 모듈 번들러를 사용한다.
+
+- **Babel**: 트랜스파일러(transpiler), 최신 사양의 소스코드를 구형 브라우저에서도 동작하는 ES5 사양 소스코드로 변환(트랜스파일링)
+- **Webpack**: 모듈 번들러(module bundler), 의존성이 있는 자바스크립트, CSS, 이미지 등의 리소스를 하나(또는 여러 개) 파일로 번들링
+  - 의존성이 있는 모듈이 번들링되므로 별도의 모듈 로더가 필요하지 않다
+
+그런데 바벨을 사용해서 ES5 사양의 코드로 트랜스파일링해도 브라우저가 지원하지 않는 코드가 있을 수 있다. `Promise, Object.assign, Array.from` 등의 코드는 ES5 사양에 대체할 기능이 없어 트랜스파일링되지 못한다.
+
+```jsx
+// 트랜스파일링 전
+console.log(Object.assign({}, {x: 1}, {y: 2}))
+```
+
+```jsx
+// 트랜스파일링 후
+console.log(Object.assign({}, {
+  x: 1
+}, {
+  y: 2
+}));
+```
+
+이를 보충하기 위해 `@babel/polyfill`을 사용한다. 폴리필은 지원하지 않는 기능을 구현하는 코드이다.
 
 export const meta = {    index: 38,
     title: 'JS12 - 에러 처리 / 모듈 / 바벨 & 웹팩',

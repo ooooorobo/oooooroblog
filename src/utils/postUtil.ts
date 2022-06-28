@@ -10,7 +10,8 @@ const getAllPostNames = () => {
 
   return fs
     .readdirSync(postPath)
-    .sort((a, b) => parsePostIndex(a) - parsePostIndex(b));
+    .sort((a, b) => parsePostIndex(a) - parsePostIndex(b))
+    .reverse();
 };
 
 const getPostMeta = async (slug: string) => {

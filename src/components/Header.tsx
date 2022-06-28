@@ -10,7 +10,7 @@ export default function Header() {
     <Background>
       <Wrapper>
         <Link href={"/"}>
-          <a>ooooorobo (블로그 이사 오는 중)</a>
+          <a>ooooorobo</a>
         </Link>
         <button onClick={toggleDarkMode}>
           {isDarkMode ? (

@@ -1,6 +1,452 @@
 import PostLayout from "../../components/post/PostLayout"
 
-// 여기에 내용 작성
+# 비동기 프로그래밍
+
+자바스크립트에서 함수의 실행은 함수 실행 컨텍스트에 의해 관리된다. 함수 실행 컨텍스트가 생성되어 실행 컨텍스트 스택에 푸시되어야 함수가 실행된다. 실행 컨텍스트 스택에 의해 함수의 실행 순서가 관리된다.
+
+실행 컨텍스트 스택은 단 하나만 존재하고, 실행 중인 함수는 실행 컨텍스트의 최상위에 있는 함수 실행 컨텍스트 단 하나 뿐이다. 이처럼 자바스크립트는 한 번에 한 작업만 실행 가능한 싱글 스레드 방식으로 동작한다. 따라서 실행되고 있는 태스크(함수)가 시간이 오래 걸리는 태스크라면 해당 작업이 끝나기까지 기다리느라 블로킹(작업 중단)이 발생한다.
+
+```jsx
+function foo() { console.log("hi"); }
+function bar() { console.log("heello"); }
+function sleep(callback) {
+  const delayUntil = Date.now() + 10000;
+  while (Date.now() < delayUntil);
+  callback();
+}
+
+sleep(bar);
+foo();
+// 실행 순서 - sleep (10초 후) -> bar -> foo
+```
+
+이처럼 현재 실행 중인 태스크가 끝나기를 기다리는 방식을 동기(synchronous) 방식이라고 한다. 동기 방식은 태스크의 실행 순서가 보장되지만, 시간이 오래 걸리는 태스크가 있다면 그 이후 태스크가 블로킹되는 단점이 있다.
+
+```jsx
+function foo() { console.log("hi"); }
+function bar() { console.log("heello"); }
+
+setTimeout(foo, 3000); // 3초 뒤에 foo를 실행한다
+bar();
+
+// 실행 순서: setTimeout -> bar -> (3초 뒤) foo
+```
+
+`setTimeout`은 `sleep`과 유사하게 일정 시간 후에 인수로 받은 함수를 호출한다. 차이점은 일정 시간을 기다리는 동안에 `bar`가 실행된 것이다. 이처럼 태스크가 종료되지 않아도 다음 태스크를 곧바로 실행하는 방식을 **비동기(asynchronous) 처리**라고 한다. 이 경우 블로킹은 발생하지 않지만 실행 순서가 보장되지 않는다.
+
+비동기는 setTimeout, HTTP 요청 등의 경우에 비동기 처리 방식으로 동작한다.
+
+## 이벤트 루프와 싱글 스레드 큐
+
+앞서 자바스크립트가 싱글 스레드라고 했는데, 브라우저가 동작하는 것을 보면 많은 태스크가 동시에 처리되는 것처럼 보인다. 서버에 요청을 보내면서도 애니메이션 효과가 보이고, 클릭 이벤트를 처리하기도 한다. 이렇게 동시성을 구현할 수 있는 이유는 **자바스크립트 엔진은 싱글 스레드로 동작하지만 브라우저는 멀티 스레드로 동작하며 자바스크립트의 비동기 동작을 도와주기 때문**이다.
+
+자바스크립트의 동시성을 지원하기 위한 것이 **이벤트 루프**이다.
+
+![](https://images.velog.io/images/ooooorobo/post/1cdef373-ca4b-44ee-af51-2855deeb6d29/image.png)
+
+- 콜 스택: 실행 컨텍스트 스택의 실체. 함수가 실행될 때마다 실행 컨텍스트가 생성되어 여기에 푸시된다
+- 힙: 객체가 저장되는 메모리 공간
+- 태스크 큐: 비동기 함수의 콜백 함수나 이벤트 핸들러가 일시적으로 보관되는 영역
+- 이벤트 루프: 콜 스택에 현재 실행 중인 실행 컨텍스트가 있는지, 태스크 큐에 대기 중인 함수가 있는지 반복해서 확인한다.
+  - 만약 콜 스택이 비어있고 태스크 큐에 대기 중인 함수가 있다면, 태스크 큐에 대기 중인 함수를 순차적으로 콜 스택으로 이동시킨다. 콜 스택으로 이동한 함수는 실행된다.
+
+## Ajax
+
+Ajax — Asynchronous JavaScript and XML
+
+자바스크립트를 사용해 브라우저가 서버에게 비동기 방식으로 데이터를 요청하고, 서버가 응답한 데이터를 수신해 웹페이지를 동적으로 갱신하는 프로그래밍 방식이다. 브라우저의 Web API 중  XMLHttpRequest 객체를 기반으로 동작한다.
+
+기존 웹사이트는 전체가 렌더링된 HTML 페이지를 받아오는 SSR(Server-side Rendering) 방식으로 동작했다면, Ajax의 도입으로 웹 페이지 갱신에 필요한 데이터만 받아와 일부만 렌더링하는 CSR(Client-side Rendering) 방식을 사용하게 되었다.
+
+이를 통해 페이지 간에 빠르게 이동할 수 있게 되었고 데스크탑 어플리케이션처럼 빠른 성능을 낼 수 있게 되었다.
+
+- JSON: JavaScript Object Notation. 클라이언트와 서버 간에 HTTP 통신 시 데이터를 나타내는 텍스트 데이터 포맷. 대부분의 언어에서 사용 가능하다. 자바스크립트 객체 리터럴과 유사한 형태로 구성된다.
+- XMLHttpRequest 요청 전송
+
+```jsx
+// XMLHttpRequest 객체 생성
+const xhr = new XMLHttpRequest();
+
+// HTTP 요청 초기화
+xhr.open('GET', 'https://jsonplaceholder.typicode.com/todos/1');
+
+// HTTP 요청 헤더 설정
+xhr.setRequestHeader('content-type', 'application/json');
+
+// HTTP 요청 전송
+xhr.send();
+```
+
+- HTTP 응답 처리
+
+```jsx
+// XMLHttpRequest 객체 생성
+const xhr = new XMLHttpRequest();
+
+// HTTP 요청 초기화
+xhr.open('GET', 'https://jsonplaceholder.typicode.com/todos/1');
+
+// HTTP 요청 헤더 설정
+xhr.setRequestHeader('content-type', 'application/json');
+
+// HTTP 요청 전송
+xhr.send();
+
+xhr.onreadystatechange = () => {
+  // 서버 응답이 아직 완료되지 않은 경우
+  if (xhr.readyState !== XMLHttpRequest.DONE) return;
+  // 서버 응답 성공
+  if (xhr.status === 200) {
+    console.log(JSON.parse(xhr.response));
+  } else { // 에러가 발생한 경우
+    console.error('ERROR', xhr.status);
+  }
+};
+```
+
+## REST API
+
+[참고](https://docs.microsoft.com/ko-kr/azure/architecture/best-practices/api-design)
+
+## 콜백 패턴
+
+매 요청마다 위와 같이 xhr을 만들어 주는 것은 귀찮은 일이다. 그리고 비동기 처리가 포함된 함수는 비동기 처리가 완료되기 전에 종료되기 때문에, 비동기 처리로 얻은 값을 반환하거나 상위 스코프에 할당하는 등의 동작을 정상적으로 처리하기 어렵다.
+
+이를 보완하기 위해 비동기 처리를 위한 패턴 중 하나로 콜백 함수를 사용한다.
+
+```jsx
+let data;
+
+function get(url, callback) {
+
+  // XMLHttpRequest 객체 생성
+  const xhr = new XMLHttpRequest();
+
+  // HTTP 요청 초기화
+  xhr.open('GET', url);
+
+  // HTTP 요청 헤더 설정
+  xhr.setRequestHeader('content-type', 'application/json');
+
+  // HTTP 요청 전송
+  xhr.send();
+
+// 함수는 종료돼서 콜 스택에서 팝이 되어요
+// 함수가 return 없이 종료됐다 -> undefined 반환한다
+
+  xhr.onreadystatechange = () => {
+    // 서버 응답이 아직 완료되지 않은 경우
+    if (xhr.readyState !== XMLHttpRequest.DONE) return;
+    // 서버 응답 성공
+    if (xhr.status === 200) {
+      callback(JSON.parse(xhr.response));
+      // data = xhr.response -> 이렇게 해도 값이 할당되지 않는다
+      return JSON.parse(xhr.response); // --> 이렇게 하면 함수 자체는 undefined를 반환
+    } else { // 에러가 발생한 경우
+      console.error('ERROR', xhr.status);
+    }
+  };
+}
+try {
+get('https://jsonplaceholder.typicode.com/todos/1', (json) => console.log(json)); // undefined
+} catch (e) { ... }
+```
+
+예제에서 get 함수는 `onreadystatechange` 가 비동기로 동작하기 때문에 비동기 함수이다. 서버에서 요청에 대한 응답이 도착하면 xhr의 상태가 변경되고, `onreadystatechange` 에 등록된 이벤트 핸들러가 태스크 큐에 저장되어 콜 스택이 비는 것을 기다린다. 콜 스택이 비면 이벤트 루프가 이벤트 핸들러를 콜 스택으로 푸시하여 실행한다.
+
+### 단점 1) 콜백 헬
+
+콜백 함수는 비동기 함수의 처리를 위해 사용되었다. 그런데 콜백 함수 내에서 또 비동기 처리가 필요하면 콜백 함수의 콜백 함수가 필요하게 된다. 이처럼 콜백 함수 호출이 중첩되는 현상을 콜백 헬이라고 한다. 콜백 헬이 발생하면 복잡도가 높아져서 코드를 파악하기 어렵다.
+
+### 단점 2) 에러 처리의 한계
+
+에러 처리를 위해서 `try ... catch ... finally` 문을 사용한다. `try` 블럭 내에서 에러가 발생하면 `catch` 블럭의 로직을 실행한다. 이 때 에러는 호출자 방향으로 전파된다. 그런데 콜백 함수의 경우 콜백 함수를 호출한 것은 콜백 함수를 호출하는 비동기 함수(`get`)가 아니다. 따라서 콜백 함수 내에서 발생한 에러는 `catch` 블럭에 캐치되지 않는다.
+
+## Promise
+
+Promise는 ES6에서 도입된 표준 빌트인 객체이다. 따라서 브라우저 환경과 node.js 환경 모두에서 사용 가능하다. Promise는 비동기 처리를 위해서 사용된다.
+
+### 생성
+
+```jsx
+// 기본 형태
+const promise = new Promise((resolve, reject) => {
+  if (/* 비동기 처리가 성공하면 */) {
+    resolve('result');
+  } else {
+    reject('fail');
+  }
+});
+
+// 위의 get 함수처럼 만들기
+const get2 = url => {
+  return new Promise((resolve, reject) => {
+    // XMLHttpRequest 객체 생성
+    const xhr = new XMLHttpRequest();
+
+    // HTTP 요청 초기화
+    xhr.open('GET', url);
+
+    // HTTP 요청 헤더 설정
+    xhr.setRequestHeader('content-type', 'application/json');
+
+    // HTTP 요청 전송
+    xhr.send();
+
+    xhr.onload = () => {
+      // 서버 응답 성공
+      if (xhr.status === 200) {
+        resolve(JSON.parse(xhr.response));
+        // data = xhr.response -> 이렇게 해도 값이 할당되지 않는다
+        // return JSON.parse(xhr.response); --> 이렇게 하면 함수 자체는 undefined를 반환
+      } else { // 에러가 발생한 경우
+        reject(new Error(xhr.status));
+      }
+    };
+  });
+};
+
+const promiseGet = get('https://jsonplaceholder.typicode.com/todos/1');
+```
+
+### 상태
+
+| 상태 | 의미 | 조건 |
+| --- | --- | --- |
+| pending | 비동기 처리가 아직 수행되지 않음 | 프로미스 생성된 직후의 상태 |
+| fulfilled (settled) | 비동기 처리 수행 후 성공 | resolve 호출 |
+| rejected (settled) | 비동기 처리 수행 후 실패 | reject 호출 |
+
+프로미스는 내부 슬롯에 비동기 처리 상태 정보와 비동기 처리 결과값 정보를 저장한다.
+
+![](https://images.velog.io/images/ooooorobo/post/539f0712-3b95-491e-a842-458a01a19f6e/image.png)
+
+### 후속 처리 메서드
+
+프로미스의 비동기 처리 상태가 변화된 후 그 후속 처리를 하기 위한 메소드가 있다.
+
+- `Promise.prototype.then`
+  - 첫 번째 인수: fullfiled 상태가 되면 호출될 콜백 함수
+  - 두 번째 인수: rejected 상태가 되면 호출될 콜백 함수
+  - 이 인수로 콜백 함수에서 발생한 에러를 처리할 수 있다.
+  - 프로미스를 반환한다.
+
+  ```jsx
+  promise.then(
+    (data) => console.log(data),
+    (error) => console.error(error)
+  );
+    ```
+
+- `Promise.prototype.catch`
+  - 프로미스가 rejected 상태일 때 인수로 전달된 콜백 함수가 호출된다.
+  - 이 catch 메서드로 then 메서드 호출 이후 비동기 처리에서 발생한 에러와 then 메서드 내부에서 발생한 에러를 처리할 수 있다.
+  - 프로미스를 반환한다.
+- `Promise.prototype.finally`
+  - 성공, 실패 여부와 상관 없이 인수로 전달된 콜백 함수를 호출한다.
+  - 프로미스를 반환한다.
+
+```jsx
+const promiseGet =
+  get('https://jsonplaceholder.typicode.com/todos/1')
+    .then(data => console.log(data))
+    .catch(error => console.error(error))
+    .finally(() => console.log('done'));
+```
+
+### 프로미스 체이닝
+
+후속 처리 메서드는 언제나 프로미스를 반환하기 때문에 계속해서 후속 처리 메서드를 호출할 수 있다. 이를 프로미스 체이닝이라고 한다.
+
+이를 통해 콜백 헬의 중첩에서 벗어날 수 있다. 하지만 프로미스도 콜백 패턴을 사용하므로 콜백 헬이 완전히 해결되는 것은 아니다. 이는 async/await을 통해 해결된다.
+
+### 정적 메서드
+
+- Promise.resolve / Promise.reject
+  - 이미 있는 값을 래핑해서 프로미스를 생성한다. 인수로 전달받은 값을 resolve하거나 reject하는 프로미스가 생성된다.
+
+  ```jsx
+  const promise = new Promise.reject(new Error("hi"))promise.catch(e => console.error(e);
+    ```
+
+- Promise.all
+  - 여러 개의 비동기 처리를 병렬 처리한다. 이들은 서로 의존하지 않고 개별적으로 수행된다.
+  - 하나라도 rejected가 되면 즉시 종료하고 reject된 에러가 catch 메서드로 전달된다.
+  - 모두 fulfilled되면 resolve된 처리 결과를 배열에 저장해 그 값을 resolve하는 새로운 프로미스를 반환한다. 처리 순서는 보장된다.
+- Promise.race
+  - 여러 개의 비동기 처리를 받아 가장 먼저 fulfilled 상태가 된 프로미스를 resolve 하는 새로운 프로미스를 반환한다. 단, 하나라도 rejected 상태가 되면 그 에러를 reject하는 새로운 프로미스를 즉시 반환한다.
+- Promise.allSettled (ES11)
+  - 프로미스를 요소로 갖는 이터러블을 인수로 받아 모든 프로미스가 settled(fulfilled or rejected)될 때까지 기다렸다가 모든 처리 결과를 배열로 반환한다.
+
+### 마이크로태스크 큐
+
+프로미스의 후속 처리 메서드의 콜백 함수는 태스크 큐가 아니라 **마이크로태스크 큐**에 저장된다. 마이크로태스크 큐가 태스크 큐보다 **우선 순위가 높다**.
+
+### fetch
+
+XMLHttpRequest와 마찬가지로 HTTP 요청 전송 기능을 제공하는 Web API이다. xhr보다 사용법이 간단하고 프로미스를 지원한다.
+
+```jsx
+fetch('https://jsonplaceholder.typicode.com/todos/1')
+  .then(response => response.json())
+  .then(json => console.log(json));
+```
+
+fetch 함수는 HTTP 응답을 Response 객체로 만들어 Promise로 래핑한 후 반환한다. `Response.prototype`은 HTTP 응답을 처리하기 위한 다양한 메서드를 제공한다. `Response.prototype.json`은 HTTP 응답의 body 값을 json으로 역직렬화한다.
+
+## 제너레이터
+
+제너레이터는 ES6에 도입되었다. 제너레이터는 코드 블록의 실행을 일시 중지했다가 필요한 시점에 재개시킬 수 있는 특수한 함수이다.
+
+|  | 일반 함수 | 제너레이터 함수 |
+| --- | --- | --- |
+| 제어권 | 함수 본인 | 함수 호출자 + 함수 본인 |
+| 상태 공유 | 함수 본인만 | 함수 호출자 ↔ 함수 |
+| 함수 호출 시 | 함수 코드 일괄 실행 | 제너레이터 객체 반환, 함수 실행 X |
+
+제너레이터 함수는 `function*` 키워드로 선언하며, 하나 이상의 `yield` 표현식이 포함되어야 한다. `*`은 애스터리스크라고 부르고, `function` 키워드와 함수 이름 사이 어디에 있어도 되지만 일반적으로 `function` 바로 뒤에 붙인다.
+
+```tsx
+function* name <- 일반적으로 이 형식
+function * name
+function *name
+```
+
+- 제너레이터 함수는 화살표 함수로 정의할 수 없다.
+
+  ```tsx
+  *() => {} <-- 안됨
+    ```
+
+- 제너레이터 함수는 new 연산자와 함께 생성자 함수로 호출할 수 없다.
+- 함수 몸체에 하나 이상의 `yield` 표현식을 포함해야 한다.
+
+```jsx
+// 제너레이터 함수 선언문
+function* generatorFunc() {
+  yield 1;
+  yield 2;
+}
+const genFunc2 = function* () {
+  yield 1;
+  yield 2;
+}
+// 제너레이터 객체 생성
+const gen = generatorFunc();
+// 제너레이터 코드 실행
+console.log(gen.next()); // { value: 1, done: false }
+console.log(gen.next()); // { value: 2, done: false }
+console.log(gen.return('hi')); // { value: 'hi' , done: true }
+console.log(gen.throw('error')); // Uncaught error
+console.log(gen.next()) // { value: undefined, done: true }
+```
+
+제너레이터 함수가 호출되면 함수 코드가 실행되는 것이 아니라 **제너레이터 객체가 반환**된다. **제너레이터 객체는 이터러블이면서 이터레이터**인 객체이다. 즉, `[Symbol.iterator]` 메서드를 상속받는 이터러블이면서 `next` 메서드를 가지는 이터레이터이다.
+
+추가로 제너레이터 객체는 `return`, `throw` 메서드를 가진다. 각 메서드들은 호출되면 이터레이터 리절트 객체를 반환한다.
+
+- `next` → 호출 시 `yield` 표현식까지 코드 블록을 실행
+  - `{ value: yield 표현식 평가 결과, done: false }`
+  - 제너레이터 함수의 실행이 모두 완료되었으면 `{ value: undefined, done: true }` 반환
+- `return` → `{ value: 인수로 전달받은 값, done: true }` 이터레이터 리절트 객체 반환
+- `throw` → `{ value: undefined, done: true }` 이터레이터 리절트 객체 반환 + 인수로 전달된 에러 발생
+
+함수 호출자는 제너레이터 함수를 호출하면 제너레이터 객체를 반환받는다. 제너레이터 객체의 `next` 메서드를 호출하여 제너레이터 함수 코드 블록을 실행할 수 있다. 코드 블록은 `yield` 표현식까지만 실행된다. 이런 방식으로 함수 호출자는 제너레이터 함수의 제어권을 양도받을 수 있다.
+
+`yield` 키워드로 제너레이터 함수의 실행을 일시 중지하거나 `yield` 키워드 뒤의 평가 결과를 제너레이터 함수 호출자에 전달한다. 이 평가 결과는 이터레이터 리절트 객체를 통해 반환된다.
+
+제너레이터 객체의 `next` 메서드에는 인수를 전달할 수 있다.
+
+```jsx
+function* genFunc4() {
+  const x = yield 13;
+
+  let y = yield 15;
+  console.log(x);
+}
+const gen4 = genFunc4();
+gen4.next(432432); // 처음 호출하는 next 메서드에 인수를 전달하면 무시된다
+gen4.next(5); // 인수의 5가 genFunc2의 지역변수 x에 할당된다
+// 제너레이터 함수 코드 실행되어 5 출력됨
+```
+
+이와 같은 방식으로 제너레이터 함수는 함수 호출자와 상태를 주고받을 수 있다.
+
+### 제너레이터의 활용
+
+- 이터러블 구현
+
+제너레이터 함수가 반환하는 것은 이터레이터이자 이터러블인 제너레이터 객체이다. 이러한 특성을 활용해서 이터러블을 더 간단히 구현할 수 있다.
+
+위에서 구현했던 무한 수열을 다시 구현해보면,
+
+```jsx
+// 이터레이션 프로토콜 준수
+const sequence = (function () {
+  let count = 0;
+  return {
+    [Symbol.iterator]() { return this; }, // --> 이터러블임
+    next() { // --> 이터레이터임
+      return { value: ++count, done: false };
+    }
+  };
+})();
+```
+
+```jsx
+// 제너레이터 함수 활용
+const sequence = (function* () {
+  let count = 0;
+	while (true) {
+    yield ++count;
+  }
+}())
+```
+
+![](https://images.velog.io/images/ooooorobo/post/9e34b0a8-d590-4d7c-82a0-cae582a5e070/image.png)
+
+- redux-saga (상태 관리 라이브러리인 Redux의 미들웨어)
+  - [참고](https://redux-saga.js.org/) - 공식 사이트
+  - [참고](https://react.vlpt.us/redux-middleware/10-redux-saga.html)2
+- 비동기 처리
+
+# async / await
+
+ES8에서 `async/await`이 도입되어 비동기 처리를 동기처럼 처리할 수 있게 되었다. `async/await`은 프로미스를 기반으로 동작한다.
+
+```jsx
+async function get(url) {
+  try {
+    const response = await fetch(url)
+    const json = await response.json()
+    return json
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+get('https://jsonplaceholder.typicode.com/todos/1');
+```
+
+![](https://images.velog.io/images/ooooorobo/post/ba789d2e-0707-4025-8c8f-f192472398e5/image.png)
+
+예시 코드처럼, `async/await`에서는 `try...catch` 문을 사용해서 에러를 처리할 수 있다.
+
+async 함수 내에서 catch 문으로 에러를 처리하지 않으면 async 함수는 에러를 reject하는 프로미스를 반환한다. 반환된 프로미스에 `.catch` 후속 메서드로 에러를 캐치할 수도 있다.
+
+## async 함수
+
+async 키워드를 사용한 함수는 항상 프로미스를 반환한다. 반환된 프로미스는 반환값을 resolve하는 프로미스를 반환한다.
+
+- 클래스의 constructor 메서드는 async가 될 수 없다.
+
+## await 키워드
+
+await 키워드는 반드시 async 함수 내부에서 사용해야 한다. await 키워드는 프로미스가 settled(resolve or reject) 상태가 될 때까지 대기하다가 **프로미스가 resolve한 처리 결과를 반환**한다. 반드시 프로미스와 함께 사용해야 한다.
+
+코드를 실행하다가 await 키워드를 만나면 그 위치에서 실행을 일시 중지했다가, 프로미스가 settled 상태가 된 후에 실행을 재개한다. 그래서 await 키워드를 사용하면 비동기 처리를 순차적으로 실행되게 할 수 있다.
+
+모든 프로미스에 await 키워드를 사용하는 것은 좋지 않다. 병렬적으로 실행돼도 되는 프로미스는 `await Promise.all`(Promise 배열) 을 사용해서 병렬 처리하는 것이 좋다.
 
 export const meta = {    index: 37,
     title: 'JS10-2 비동기 프로그래밍',
