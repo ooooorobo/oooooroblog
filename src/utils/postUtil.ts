@@ -5,13 +5,14 @@ import { PostListElement, PostMeta } from "@src/model/post";
 const parsePostIndex = (name: string) =>
   Number(name.slice(0, name.indexOf("-")));
 
-const getAllPostNames = () => {
+const getAllPostNames = (reverse?: boolean) => {
   const postPath = path.join(process.cwd(), "src", "pages", "posts");
 
   return fs
     .readdirSync(postPath)
-    .sort((a, b) => parsePostIndex(a) - parsePostIndex(b))
-    .reverse();
+    .sort(
+      (a, b) => (parsePostIndex(a) - parsePostIndex(b)) * (reverse ? -1 : 1)
+    );
 };
 
 const getPostMeta = async (slug: string) => {
@@ -28,7 +29,7 @@ export async function getPosts(
 ): Promise<PostListElement[]> {
   const [start, end] = [page * count, (page + 1) * count];
 
-  const dirFiles = getAllPostNames().slice(start, end);
+  const dirFiles = getAllPostNames(true).slice(start, end);
 
   return Promise.all(dirFiles.map(async (p) => getPostMeta(p)));
 }
