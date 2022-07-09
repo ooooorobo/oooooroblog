@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import { getPosts } from "@src/utils/postUtil";
+import PostUtil from "@src/utils/postUtil";
 import { PostListElement } from "@src/model/post";
 import Profile from "@src/components/main/Profile";
 import PostList from "@src/components/main/PostList";
@@ -42,7 +42,10 @@ const Home: NextPage<HomeProps> = ({ posts }: HomeProps) => {
 export default Home;
 
 export const getStaticProps = async () => {
-  const posts: PostListElement[] = await getPosts(0, POST_COUNT);
+  const posts: PostListElement[] = await PostUtil.instance.getPosts(
+    0,
+    POST_COUNT
+  );
   return { props: { posts } };
 };
 
