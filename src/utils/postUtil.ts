@@ -44,6 +44,11 @@ export default class PostUtil {
     return postListElement;
   }
 
+  private async getAllPostMeta(): Promise<PostListElement[]> {
+    const dirFiles = this.getAllPostNames(true);
+    return this.getPostMetaList(dirFiles);
+  }
+
   private async getPostMetaList(names: string[]): Promise<PostListElement[]> {
     const result = await Promise.all(
       names.map(async (name) => this.getPostMeta(name))
@@ -59,9 +64,7 @@ export default class PostUtil {
 
   async getPostsByTag(page: number, count: number, tag: string): Promise<PostListElement[]> {
     const [start, end] = [page * count, (page + 1) * count];
-    const dirFiles = this.getAllPostNames(true).slice(start, end);
-    const postList = await this.getPostMetaList(dirFiles);
-    return postList.filter((p) => p.meta.tags.includes(tag));
+    return (await this.getAllPostMeta()).filter((p) => p.meta.tags.includes(tag)).slice(start, end);
   }
 
   async getSidePosts(index: number): Promise<SidePosts> {
@@ -77,6 +80,13 @@ export default class PostUtil {
           ? await this.getPostMeta(postNames[found + 1])
           : undefined,
     };
+  }
+
+  async getAllTags(): Promise<string[]> {
+    const allPosts = await this.getAllPostMeta();
+    const allTags: Set<string> = new Set<string>();
+    allPosts.forEach(post => post.meta.tags.forEach(tag => allTags.add(tag)));
+    return Array.from(allTags);
   }
 }
 
