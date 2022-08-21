@@ -8,6 +8,7 @@ import WavyLine from "@src/components/WavyLine";
 import { SidePosts } from "@src/utils/postUtil";
 import SidePost from "@src/components/post/SidePost";
 import Profile from "@src/components/main/Profile";
+import { NextSeo } from "next-seo";
 
 export default function PostLayout({
   meta,
@@ -27,6 +28,7 @@ export default function PostLayout({
   }, [meta]);
   return (
     <>
+      <NextSeo title={meta.title} description={meta.description} />
       <PostHeader>
         <Meta
           title={meta.title}
