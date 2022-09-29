@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { NextSeo } from "next-seo";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import styled from "styled-components";
@@ -19,6 +19,7 @@ import TagList from "@src/components/main/TagList";
 import Loading from "@src/components/common/Loading";
 
 const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
+  const observerEntry = useRef(null);
   const [selectedTag, setSelectedTag] = useState<string | undefined>(undefined);
 
   const { data, fetchNextPage, isLoading, hasNextPage } = useInfiniteQuery(
@@ -31,7 +32,6 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
     }
   );
 
-  const onClickNextPage = useCallback(() => fetchNextPage(), []);
   const onClickTag = useCallback(
     (tag: string | undefined) => {
       setSelectedTag(tag);
@@ -40,8 +40,15 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
   );
 
   useEffect(() => {
-    fetchNextPage();
-  }, [selectedTag]);
+    if (!observerEntry.current || !hasNextPage) return;
+    const observer = new IntersectionObserver(() => {
+      fetchNextPage();
+    });
+    observer.observe(observerEntry.current);
+    return () => {
+      observer.unobserve(observerEntry.current!);
+    };
+  }, [observerEntry, hasNextPage]);
 
   return (
     <Wrapper>
@@ -58,7 +65,7 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
         {data &&
           data.pages.map((posts, i) => <PostList key={i} posts={posts} />)}
       </div>
-      {hasNextPage && <button onClick={onClickNextPage}>다음</button>}
+      <div ref={observerEntry} />
     </Wrapper>
   );
 };
