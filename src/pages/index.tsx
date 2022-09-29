@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import PostUtil from "@src/utils/postUtil";
 import { PostListElement } from "@src/model/post";
@@ -8,10 +8,12 @@ import PostList from "@src/components/main/PostList";
 import WavyLine from "@src/components/WavyLine";
 import TagList from "@src/components/main/TagList";
 import { NextSeo } from "next-seo";
+import Loading from "@src/components/common/Loading";
 
 const POST_COUNT = 10;
 
 const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
+  const isLoading = useRef(false);
   const [page, setPage] = useState(0);
   const [selectedTag, setSelectedTag] = useState<string | undefined>(undefined);
   const [hasNextPage, setHasNextPage] = useState(true);
@@ -29,6 +31,7 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
   );
 
   useEffect(() => {
+    isLoading.current = true;
     fetch(
       `/api/posts/${page}/${POST_COUNT}${selectedTag ? `/${selectedTag}` : ""}`
     )
@@ -38,6 +41,7 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
           setHasNextPage(false);
         }
         setPostList((prev) => [...prev, ...json]);
+        isLoading.current = false;
       });
   }, [page, selectedTag]);
 
@@ -51,7 +55,7 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
         onClickTag={onClickTag}
         selectedTag={selectedTag}
       />
-      <PostList posts={postList} />
+      {isLoading.current ? <Loading /> : <PostList posts={postList} />}
       {hasNextPage && <button onClick={onClickNextPage}>다음</button>}
     </Wrapper>
   );
