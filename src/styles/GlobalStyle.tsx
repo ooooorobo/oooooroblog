@@ -5,6 +5,10 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     font-family: 'IBM Plex Sans KR', sans-serif;
   }
+  
+  html {
+    height: auto;
+  }
 
   body {
     background-color: ${({ theme }) => theme.colors.bg.primary};
@@ -13,6 +17,9 @@ const GlobalStyle = createGlobalStyle`
 
     margin: 0;
     padding: 0;
+
+    height: auto;
+    overflow: auto;
   }
   
   a {

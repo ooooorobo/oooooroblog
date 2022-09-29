@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import type { AppProps } from "next/app";
 import { MDXProvider } from "@mdx-js/react";
@@ -14,7 +14,7 @@ import components from "@src/components/mdx/MDXComponents";
 import GlobalStyle from "@src/styles/GlobalStyle";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const queryClient = new QueryClient();
+  const [queryClient] = useState(() => new QueryClient());
   useEffect(() => {
     console.log(
       `

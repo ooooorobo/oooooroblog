@@ -1,12 +1,11 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+  swcMinify: true,
   reactStrictMode: true,
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
   compiler: {
-    styledComponents: {
-      ssr: true,
-    },
+    styledComponents: true,
   },
 };
 

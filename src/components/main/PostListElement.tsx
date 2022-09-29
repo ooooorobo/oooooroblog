@@ -5,10 +5,12 @@ import Tag from "@src/components/Tag";
 
 interface PostListElementProps {
   post: PostListElement;
+  onClickPost: () => void;
 }
 
 export default function PostListElementComponent({
   post,
+  onClickPost,
 }: PostListElementProps) {
   return (
     <Wrapper>
@@ -18,7 +20,7 @@ export default function PostListElementComponent({
         ))}
       </div>
       <Link href={`/posts/${post.slug}`}>
-        <a>
+        <a onClick={onClickPost}>
           <Title>{post.meta.title}</Title>
           <Description>{post.meta.description}</Description>
           <Info>{post.meta.postedAt}</Info>

@@ -1,7 +1,11 @@
 import type { NextPage } from "next";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { NextSeo } from "next-seo";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import {
+  dehydrate,
+  QueryClient,
+  useInfiniteQuery,
+} from "@tanstack/react-query";
 import styled from "styled-components";
 
 // libs
@@ -10,6 +14,9 @@ import { PostListElement } from "@src/model/post";
 import { QueryKey } from "@src/constants/queryKey";
 import { POST_COUNT } from "@src/constants/constants";
 import { fetchPostList } from "@src/query/post";
+import { useLocalStorage } from "@src/utils/hooks/useLocalStorage";
+import { StorageKey } from "@src/constants/storageKey";
+import { isWindow } from "@src/utils/windowUtil";
 
 // components
 import Profile from "@src/components/main/Profile";
@@ -19,8 +26,10 @@ import TagList from "@src/components/main/TagList";
 import Loading from "@src/components/common/Loading";
 
 const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
-  const observerEntry = useRef(null);
+  const observerEntry = useRef<HTMLDivElement>(null);
+
   const [selectedTag, setSelectedTag] = useState<string | undefined>(undefined);
+  const [scrollY, setScrollY] = useLocalStorage(StorageKey.MAIN_SCROLL_Y, 0);
 
   const { data, fetchNextPage, isLoading, hasNextPage } = useInfiniteQuery(
     [`${QueryKey.POST_LIST}${selectedTag}`],
@@ -39,19 +48,47 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
     [selectedTag]
   );
 
+  const onClickPost = useCallback(() => {
+    setScrollY(window.scrollY);
+  }, [setScrollY]);
+
+  useEffect(() => {
+    if (!isWindow()) return;
+
+    // todo: 함수 분리
+    (async () => {
+      const scrollToDestination = async () => {
+        while (window.scrollY + 50 < scrollY) {
+          await new Promise((resolve) =>
+            setTimeout(() => {
+              window.scrollTo({
+                top: Math.min(document.body.scrollHeight, scrollY),
+              });
+              resolve(10);
+            }, 20)
+          );
+        }
+      };
+      const timer = new Promise((resolve) => {
+        setTimeout(resolve, 500, true);
+      });
+
+      await Promise.race([scrollToDestination(), timer]);
+
+      setScrollY(0);
+    })();
+  }, []);
+
   useEffect(() => {
     if (!observerEntry.current || !hasNextPage) return;
     const observer = new IntersectionObserver(() => {
       fetchNextPage();
     });
     observer.observe(observerEntry.current);
-    return () => {
-      observer.unobserve(observerEntry.current!);
-    };
   }, [observerEntry, hasNextPage]);
 
   return (
-    <Wrapper>
+    <Wrapper minHeight={scrollY}>
       <NextSeo title={"oooooroblog"} />
       <Profile />
       <WavyLine size={10} />
@@ -60,11 +97,13 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
         onClickTag={onClickTag}
         selectedTag={selectedTag}
       />
-      {isLoading && <Loading />}
       <div>
         {data &&
-          data.pages.map((posts, i) => <PostList key={i} posts={posts} />)}
+          data.pages.map((posts, i) => (
+            <PostList key={i} posts={posts} onClickPost={onClickPost} />
+          ))}
       </div>
+      {isLoading && <Loading />}
       <div ref={observerEntry} />
     </Wrapper>
   );
@@ -73,12 +112,13 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
 export default Home;
 
 export const getStaticProps = async () => {
-  const posts: PostListElement[] = await PostUtil.instance.getPosts(
-    0,
-    POST_COUNT
+  const queryClient = new QueryClient();
+  await queryClient.prefetchInfiniteQuery(
+    [QueryKey.POST_LIST],
+    ({ pageParam }) => fetchPostList({ page: pageParam, postCount: POST_COUNT })
   );
   const tags: string[] = await PostUtil.instance.getAllTags();
-  return { props: { posts, tags } };
+  return { props: { dehydrateState: dehydrate(queryClient), tags } };
 };
 
 interface HomeProps {
@@ -86,7 +126,7 @@ interface HomeProps {
   tags: string[];
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ minHeight: number }>`
   margin: 2.5rem auto;
   max-width: 760px;
   padding: 0 1rem;
