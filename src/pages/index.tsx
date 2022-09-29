@@ -7,6 +7,7 @@ import {
   useInfiniteQuery,
 } from "@tanstack/react-query";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 // libs
 import PostUtil from "@src/utils/postUtil";
@@ -27,8 +28,13 @@ import Loading from "@src/components/common/Loading";
 
 const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
   const observerEntry = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
-  const [selectedTag, setSelectedTag] = useState<string | undefined>(undefined);
+  const [selectedTag, setSelectedTag] = useState<string | undefined>(() =>
+    isWindow()
+      ? window.location.search.split("tag=")?.[1]?.split("&")?.[0]
+      : undefined
+  );
   const [scrollY, setScrollY] = useLocalStorage(StorageKey.MAIN_SCROLL_Y, 0);
 
   const { data, fetchNextPage, isLoading, hasNextPage } = useInfiniteQuery(
@@ -44,6 +50,11 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
   const onClickTag = useCallback(
     (tag: string | undefined) => {
       setSelectedTag(tag);
+      router.push(
+        router.pathname,
+        { pathname: router.basePath, query: { tag } },
+        { shallow: true }
+      );
     },
     [selectedTag]
   );
