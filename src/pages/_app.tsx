@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Head from "next/head";
 import type { AppProps } from "next/app";
 import { MDXProvider } from "@mdx-js/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // context
 import ThemeProvider from "@src/utils/context/ThemeProvider";
@@ -13,6 +14,7 @@ import components from "@src/components/mdx/MDXComponents";
 import GlobalStyle from "@src/styles/GlobalStyle";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const queryClient = new QueryClient();
   useEffect(() => {
     console.log(
       `
@@ -63,17 +65,19 @@ function MyApp({ Component, pageProps }: AppProps) {
         />
         <link rel="manifest" href="/site.webmanifest" />
       </Head>
-      <DarkModeProvider>
-        <ThemeProvider>
-          <>
-            <GlobalStyle />
-            <Header />
-            <MDXProvider components={components}>
-              <Component {...pageProps} />
-            </MDXProvider>
-          </>
-        </ThemeProvider>
-      </DarkModeProvider>
+      <QueryClientProvider client={queryClient}>
+        <DarkModeProvider>
+          <ThemeProvider>
+            <>
+              <GlobalStyle />
+              <Header />
+              <MDXProvider components={components}>
+                <Component {...pageProps} />
+              </MDXProvider>
+            </>
+          </ThemeProvider>
+        </DarkModeProvider>
+      </QueryClientProvider>
     </>
   );
 }

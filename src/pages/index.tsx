@@ -1,49 +1,48 @@
 import type { NextPage } from "next";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { NextSeo } from "next-seo";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import styled from "styled-components";
+
+// libs
 import PostUtil from "@src/utils/postUtil";
 import { PostListElement } from "@src/model/post";
+import { QueryKey } from "@src/constants/queryKey";
+import { POST_COUNT } from "@src/constants/constants";
+import { fetchPostList } from "@src/query/post";
+
+// components
 import Profile from "@src/components/main/Profile";
 import PostList from "@src/components/main/PostList";
 import WavyLine from "@src/components/WavyLine";
 import TagList from "@src/components/main/TagList";
-import { NextSeo } from "next-seo";
 import Loading from "@src/components/common/Loading";
 
-const POST_COUNT = 10;
-
 const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
-  const isLoading = useRef(false);
-  const [page, setPage] = useState(0);
   const [selectedTag, setSelectedTag] = useState<string | undefined>(undefined);
-  const [hasNextPage, setHasNextPage] = useState(true);
-  const [postList, setPostList] = useState<PostListElement[]>([]);
 
-  const onClickNextPage = useCallback(() => setPage((prev) => prev + 1), []);
+  const { data, fetchNextPage, isLoading, hasNextPage } = useInfiniteQuery(
+    [QueryKey.POST_LIST],
+    ({ pageParam }) =>
+      fetchPostList({ page: pageParam, postCount: POST_COUNT, selectedTag }),
+    {
+      getNextPageParam: (lastPage, allPages) =>
+        lastPage.length === POST_COUNT ? allPages.length : undefined,
+    }
+  );
+
+  const onClickNextPage = useCallback(() => fetchNextPage(), []);
+  // todo: tag 처리 추가
   const onClickTag = useCallback(
     (tag: string | undefined) => {
-      setPostList([]);
-      setPage(0);
       setSelectedTag(tag);
-      setHasNextPage(true);
     },
     [selectedTag]
   );
 
   useEffect(() => {
-    isLoading.current = true;
-    fetch(
-      `/api/posts/${page}/${POST_COUNT}${selectedTag ? `/${selectedTag}` : ""}`
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.length < POST_COUNT) {
-          setHasNextPage(false);
-        }
-        setPostList((prev) => [...prev, ...json]);
-        isLoading.current = false;
-      });
-  }, [page, selectedTag]);
+    fetchNextPage();
+  }, [selectedTag]);
 
   return (
     <Wrapper>
@@ -55,7 +54,11 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
         onClickTag={onClickTag}
         selectedTag={selectedTag}
       />
-      {isLoading.current ? <Loading /> : <PostList posts={postList} />}
+      {isLoading && <Loading />}
+      <div>
+        {data &&
+          data.pages.map((posts, i) => <PostList key={i} posts={posts} />)}
+      </div>
       {hasNextPage && <button onClick={onClickNextPage}>다음</button>}
     </Wrapper>
   );

@@ -11,7 +11,7 @@ export default function PostListElementComponent({
   post,
 }: PostListElementProps) {
   return (
-    <>
+    <Wrapper>
       <div>
         {post.meta.tags.map((tag) => (
           <Tag key={tag} name={tag} />
@@ -24,9 +24,15 @@ export default function PostListElementComponent({
           <Info>{post.meta.postedAt}</Info>
         </a>
       </Link>
-    </>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  border-top: 1px solid ${({ theme }) => theme.colors.text.secondary};
+  padding-top: 1rem;
+  margin-top: 1rem;
+`;
 
 const Title = styled.h2`
   margin: 0.5rem 0;
