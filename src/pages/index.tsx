@@ -22,7 +22,7 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
   const [selectedTag, setSelectedTag] = useState<string | undefined>(undefined);
 
   const { data, fetchNextPage, isLoading, hasNextPage } = useInfiniteQuery(
-    [QueryKey.POST_LIST],
+    [`${QueryKey.POST_LIST}${selectedTag}`],
     ({ pageParam }) =>
       fetchPostList({ page: pageParam, postCount: POST_COUNT, selectedTag }),
     {
@@ -32,7 +32,6 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
   );
 
   const onClickNextPage = useCallback(() => fetchNextPage(), []);
-  // todo: tag 처리 추가
   const onClickTag = useCallback(
     (tag: string | undefined) => {
       setSelectedTag(tag);
