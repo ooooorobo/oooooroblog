@@ -49,7 +49,8 @@ const Wrapper = styled.div<{ showed: boolean }>`
     }
   }
 
-  animation: ${({ showed }) => (showed ? "fadeIn 1s" : "")};
+  visibility: ${({ showed = false }) => (showed ? "visible" : "hidden")};
+  animation: ${({ showed = false }) => (showed ? "fadeIn 1s" : "")};
   border-top: 1px solid ${({ theme }) => theme.colors.text.secondary};
   padding-top: 1rem;
   margin-top: 1rem;
