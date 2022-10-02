@@ -92,9 +92,12 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
 
   useEffect(() => {
     if (!observerEntry.current || !hasNextPage) return;
-    const observer = new IntersectionObserver(() => {
-      fetchNextPage();
-    });
+    const observer = new IntersectionObserver(
+      () => {
+        fetchNextPage();
+      },
+      { threshold: 0 }
+    );
     observer.observe(observerEntry.current);
   }, [observerEntry, hasNextPage]);
 
@@ -122,9 +125,14 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
           data.pages.map((posts, i) => (
             <PostList key={i} posts={posts} onClickPost={onClickPost} />
           ))}
+        <div ref={observerEntry} />
       </div>
       {isLoading && <Loading />}
-      <div ref={observerEntry} />
+      {!hasNextPage && (
+        <LastMessage>
+          안녕하세요! 👆 이 글이 이 블로그의 마지막 글입니다 :)
+        </LastMessage>
+      )}
     </Wrapper>
   );
 };
@@ -153,4 +161,10 @@ const Wrapper = styled.div<{ minHeight: number }>`
   display: flex;
   flex-direction: column;
   row-gap: 2rem;
+`;
+
+const LastMessage = styled.p`
+  margin-top: 60px;
+  text-align: center;
+  font-size: ${({ theme }) => theme.fontSizes.s};
 `;

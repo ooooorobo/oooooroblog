@@ -1,11 +1,12 @@
 import { RefObject, useRef } from "react";
 import Link from "next/link";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import useIntersectionObserver from "@src/utils/hooks/useIntersectionObserver";
 
 import { PostListElement } from "@src/model/post";
 import Tag from "@src/components/Tag";
+import { FadeIn } from "@src/styles/animation";
 
 interface PostListElementProps {
   post: PostListElement;
@@ -38,19 +39,13 @@ export default function PostListElementComponent({
 }
 
 const Wrapper = styled.div<{ showed: boolean }>`
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-      transform: translate3d(0, 10%, 0);
-    }
-    to {
-      opacity: 1;
-      transform: translateZ(0);
-    }
-  }
-
   visibility: ${({ showed = false }) => (showed ? "visible" : "hidden")};
-  animation: ${({ showed = false }) => (showed ? "fadeIn 1s" : "")};
+  animation: ${({ showed = false }) =>
+    showed
+      ? css`
+          ${FadeIn("20%")} 1s
+        `
+      : ""};
   border-top: 1px solid ${({ theme }) => theme.colors.text.secondary};
   padding-top: 1rem;
   margin-top: 1rem;

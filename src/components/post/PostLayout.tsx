@@ -12,6 +12,7 @@ import PostTitle from "./PostTitle";
 import WavyLine from "@src/components/WavyLine";
 import SidePost from "@src/components/post/SidePost";
 import Profile from "@src/components/main/Profile";
+import { FadeIn } from "@src/styles/animation";
 
 export default function PostLayout({
   meta,
@@ -66,18 +67,7 @@ export default function PostLayout({
 }
 
 const PostHeader = styled.div`
-  @keyframes fadeInUpTitle {
-    0% {
-      opacity: 0;
-      transform: translate3d(0, 40%, 0);
-    }
-    to {
-      opacity: 1;
-      transform: translateZ(0);
-    }
-  }
-
-  animation: fadeInUpTitle 0.6s;
+  animation: ${FadeIn("40%")} 0.8s;
 
   padding: 0 1rem;
   margin-top: 10rem;
@@ -85,21 +75,7 @@ const PostHeader = styled.div`
 `;
 
 const Article = styled.article`
-  @keyframes fadeInUpArticle {
-    0% {
-      opacity: 0;
-      transform: translate3d(0, 5%, 0);
-    }
-    25% {
-      opacity: 0;
-      transform: translate3d(0, 5%, 0);
-    }
-    to {
-      opacity: 1;
-      transform: translateZ(0);
-    }
-  }
-  animation: fadeInUpArticle 1s;
+  animation: ${FadeIn("40%")} 1s;
 
   max-width: 760px;
   margin: 0 auto 5rem auto;
