@@ -65,6 +65,14 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
 
   useEffect(() => {
     if (!isWindow()) return;
+    if (
+      !["http://localhost:3000/", "https://www.oooooroblog.com/"].includes(
+        document.referrer
+      )
+    ) {
+      setScrollY(0);
+      return;
+    }
 
     // todo: 함수 분리
     (async () => {
@@ -128,7 +136,7 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
         <div ref={observerEntry} />
       </div>
       {isLoading && <Loading />}
-      {!hasNextPage && (
+      {!isLoading && !hasNextPage && (
         <LastMessage>
           안녕하세요! 👆 이 글이 이 블로그의 마지막 글입니다 :)
         </LastMessage>
