@@ -39,6 +39,7 @@ const Pre = styled.pre`
   margin: 1em 0;
   padding: 0.5em;
   overflow: auto;
+  font-size: ${({ theme }) => theme.fontSizes.s};
 `;
 
 const Line = styled.div`

@@ -5,6 +5,7 @@ export default styled.a`
   text-decoration-line: underline;
   text-decoration-style: dashed;
   text-underline-offset: 0.25rem;
+  word-break: break-all;
 
   &:hover {
     color: ${({ theme }) => theme.colors.primaryLight};
