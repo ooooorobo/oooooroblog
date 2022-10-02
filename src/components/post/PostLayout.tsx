@@ -67,7 +67,7 @@ export default function PostLayout({
 }
 
 const PostHeader = styled.div`
-  animation: ${FadeIn("40%")} 0.8s;
+  animation: ${FadeIn("0%")} 1.4s;
 
   padding: 0 1rem;
   margin-top: 10rem;
@@ -75,7 +75,7 @@ const PostHeader = styled.div`
 `;
 
 const Article = styled.article`
-  animation: ${FadeIn("40%")} 1s;
+  animation: ${FadeIn("0%")} 1.4s;
 
   max-width: 760px;
   margin: 0 auto 5rem auto;
