@@ -1,6 +1,10 @@
-import { PostListElement } from "@src/model/post";
+import { RefObject, useRef } from "react";
 import Link from "next/link";
 import styled from "styled-components";
+
+import useIntersectionObserver from "@src/utils/hooks/useIntersectionObserver";
+
+import { PostListElement } from "@src/model/post";
 import Tag from "@src/components/Tag";
 
 interface PostListElementProps {
@@ -12,8 +16,11 @@ export default function PostListElementComponent({
   post,
   onClickPost,
 }: PostListElementProps) {
+  const ref: RefObject<HTMLDivElement> = useRef(null);
+  const entry = useIntersectionObserver(ref);
+
   return (
-    <Wrapper>
+    <Wrapper showed={Boolean(entry?.isIntersecting)} ref={ref}>
       <div>
         {post.meta.tags.map((tag) => (
           <Tag key={tag} name={tag} />
@@ -30,7 +37,7 @@ export default function PostListElementComponent({
   );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ showed: boolean }>`
   @keyframes fadeIn {
     0% {
       opacity: 0;
@@ -42,7 +49,7 @@ const Wrapper = styled.div`
     }
   }
 
-  animation: fadeIn 1s;
+  animation: ${({ showed }) => (showed ? "fadeIn 1s" : "")};
   border-top: 1px solid ${({ theme }) => theme.colors.text.secondary};
   padding-top: 1rem;
   margin-top: 1rem;
