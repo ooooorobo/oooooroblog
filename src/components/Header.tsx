@@ -9,7 +9,7 @@ export default function Header() {
   return (
     <Background>
       <Wrapper>
-        <Link href={"/"}>
+        <Link href={"/"} passHref>
           <a>ooooorobo</a>
         </Link>
         <button onClick={toggleDarkMode}>

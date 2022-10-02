@@ -6,7 +6,7 @@ import SmallTitle from "@src/components/SmallTitle";
 
 const Post = ({ post }: { post: PostListElement }) => {
   return (
-    <Link href={`/posts/${post.slug}`}>
+    <Link href={`/posts/${post.slug}`} passHref>
       <a>
         <PostTitle>{post.meta.title}</PostTitle>
       </a>
