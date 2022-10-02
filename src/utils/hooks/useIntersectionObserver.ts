@@ -5,7 +5,6 @@ export default function useIntersectionObserver(
   elementRef: RefObject<Element>
 ) {
   const [entry, setEntry] = useState<IntersectionObserverEntry>();
-  const [isIntersected, setIntersected] = useState(false);
 
   const frozen = entry?.isIntersecting;
 
@@ -20,7 +19,7 @@ export default function useIntersectionObserver(
     observer.observe(elementRef.current);
 
     return () => observer.disconnect();
-  });
+  }, [elementRef, frozen]);
 
   return entry;
 }
