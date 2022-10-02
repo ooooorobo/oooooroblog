@@ -1,14 +1,17 @@
 import { ReactElement, useEffect, useState } from "react";
+import { NextSeo } from "next-seo";
+import { useRouter } from "next/router";
+import styled from "styled-components";
+
+import { SidePosts } from "@src/utils/postUtil";
 import { PostMeta } from "@src/model/post";
+
 import Meta from "./Meta";
 import Comment from "./Comment";
-import styled from "styled-components";
 import PostTitle from "./PostTitle";
 import WavyLine from "@src/components/WavyLine";
-import { SidePosts } from "@src/utils/postUtil";
 import SidePost from "@src/components/post/SidePost";
 import Profile from "@src/components/main/Profile";
-import { NextSeo } from "next-seo";
 
 export default function PostLayout({
   meta,
@@ -17,6 +20,7 @@ export default function PostLayout({
   meta: PostMeta;
   children: ReactElement;
 }) {
+  const router = useRouter();
   const [sidePosts, setSidePosts] = useState<SidePosts>({
     prev: undefined,
     next: undefined,
@@ -28,7 +32,16 @@ export default function PostLayout({
   }, [meta]);
   return (
     <>
-      <NextSeo title={meta.title} description={meta.description} />
+      <NextSeo
+        title={meta.title}
+        description={meta.description}
+        openGraph={{
+          type: "website",
+          title: meta.title,
+          description: meta.description,
+          url: `https://www.oooooroblog.com${router.pathname}`,
+        }}
+      />
       <PostHeader>
         <Meta
           title={meta.title}

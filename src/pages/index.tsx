@@ -100,7 +100,16 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
 
   return (
     <Wrapper minHeight={scrollY}>
-      <NextSeo title={"oooooroblog"} />
+      <NextSeo
+        title={"oooooroblog"}
+        description={"웹 프론트엔드 개발자 조예진"}
+        openGraph={{
+          type: "website",
+          url: "https://www.oooooroblog.com",
+          title: "oooooroblog",
+          description: "웹 프론트엔드 개발자 조예진",
+        }}
+      />
       <Profile />
       <WavyLine size={10} />
       <TagList
