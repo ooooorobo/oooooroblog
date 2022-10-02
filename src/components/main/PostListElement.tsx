@@ -19,7 +19,7 @@ export default function PostListElementComponent({
           <Tag key={tag} name={tag} />
         ))}
       </div>
-      <Link href={`/posts/${post.slug}`} passHref>
+      <Link href={`/posts/${post.slug}`}>
         <a onClick={onClickPost}>
           <Title>{post.meta.title}</Title>
           <Description>{post.meta.description}</Description>
@@ -31,6 +31,18 @@ export default function PostListElementComponent({
 }
 
 const Wrapper = styled.div`
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 10%, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translateZ(0);
+    }
+  }
+
+  animation: fadeIn 1s;
   border-top: 1px solid ${({ theme }) => theme.colors.text.secondary};
   padding-top: 1rem;
   margin-top: 1rem;
