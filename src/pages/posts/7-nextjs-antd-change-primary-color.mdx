@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 아래는 Next.js 프로젝트 기본 세팅이 되어있는 상태에서 진행합니다.
 # 1. 필요한 라이브러리 설치
@@ -107,13 +108,14 @@ const nextConfig = {
 
 야호!!
 
-export const meta = {
+export const meta = PostUtil.createPostMeta({
     index: 7,
     title: 'Next.js에서 Ant Design primary color 변경하기',
     description: 'antd 컬러를 우리 프로젝트 컬러로 바꿔주기',
     category: '',
     series: '',
     tags: ['Less','Antd','Next.js'], // # 포함하지 않는 string array
+    keywords: [],
     postedAt: '2021. 11. 09.',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

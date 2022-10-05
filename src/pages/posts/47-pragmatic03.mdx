@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 - 2022\. 05. 19. (목)
 - 3장. 기본적인 도구
@@ -33,12 +34,13 @@ import PostLayout from "../../components/post/PostLayout"
 펄을 사용하면 텍스트 처리, 프로그램 상호작용, 네트워크 커뮤니케이션, 웹페이지 작동 등을 처리하는 프로그램을 짧은 코드로 작성할 수 있다. 펄 공부해보기!!
 
 
-export const meta = {    index: 47,
+export const meta = PostUtil.createPostMeta({
+    index: 47,
     title: 'Pragmatic#03 기본적인 도구',
     description: '',
     category: '',
     series: '',
     tags: ['노마드북클럽'], // # 포함하지 않는 string array
     postedAt: '2022. 05. 19',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 >
 # TCP?
@@ -148,12 +149,13 @@ Finite State Machine
 ![스크린샷_2021-09-08_오후_8 19 50](https://user-images.githubusercontent.com/40057032/133558809-01cd14d6-5407-4d91-8363-8e325a708dc6.png)
 
 
-export const meta = {    index: 26,
+export const meta = PostUtil.createPostMeta({
+    index: 26,
     title: 'TCP 3 way handshake & 4 way handshake',
     description: 'TCP - 전송 제어 프로토콜(Transmission Control Protocol) → 인터넷 상에서 데이터를 메시지 형태로 보내기 위해 IP와 함께 사용하는 프로토콜',
     category: '',
     series: '',
     tags: ['Network'], // # 포함하지 않는 string array
     postedAt: '2022. 02. 13.',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

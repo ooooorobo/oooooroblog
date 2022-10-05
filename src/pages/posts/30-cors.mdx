@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 # CORS: 교차 출처 리소스 공유 (Cross-Origin Resource Sharing)
 
@@ -196,12 +197,13 @@ import PostLayout from "../../components/post/PostLayout"
     - [https://react.vlpt.us/redux-middleware/09-cors-and-proxy.html](https://react.vlpt.us/redux-middleware/09-cors-and-proxy.html)
 
 
-export const meta = {    index: 30,
+export const meta = PostUtil.createPostMeta({
+    index: 30,
     title: 'CORS',
     description: 'CORS 정책 / 동작 방식 / HTTP 요청-응답 흐름 / CORS 해결 방법',
     category: '',
     series: '',
     tags: ['Network','CORS'], // # 포함하지 않는 string array
     postedAt: '2022. 02. 13',
-}
+})
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

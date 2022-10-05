@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 > 본 시리즈는 [모던 자바스크립트 Deep Dive](https://shopping.interpark.com/product/productInfo.do?prdNo=8860873922&gclid=Cj0KCQiA8vSOBhCkARIsAGdp6RTfL-5qEwmr40NR6B9YBGQ6guONHQBhK5HrT98QWi8ywi6hXhUqVo4aAssyEALw_wcB) 책을 참고하여 작성하고 있습니다.
 
@@ -57,12 +58,12 @@ console.log(1234);
 
 특히 var 키워드로 선언된 전역 변수와 함수 선언문으로 정의된 전역 함수는 전역 객체의 프로퍼티와 메서드가 된다.
 
- ```jsx
+```jsx
  // 이 단계에서 실행되는 코드
  const x;
 
  function foo(a) { }
-    ```
+```
 
 ![](https://images.velog.io/images/ooooorobo/post/3411304b-0f16-42ee-bec1-cbb989648a51/image.png)
 
@@ -77,7 +78,7 @@ console.log(1234);
  foo(123); // 함수 내부로 진입
  -----------
  console.log(1234); // 메소드 내부로 진입
-    ```
+```
 
 ![](https://images.velog.io/images/ooooorobo/post/61aa5d8c-e6e8-4272-bf05-82239f05241f/image.png)
 
@@ -92,7 +93,7 @@ console.log(1234);
  function foo(a) {
    const x;
  }
-    ```
+```
 
 ![](https://images.velog.io/images/ooooorobo/post/d782e219-425f-4ef9-b953-cf5ddbf348c5/image.png)
 
@@ -105,7 +106,7 @@ console.log(1234);
    x = 3;
    console.log(a);
  }
-    ```
+```
 
 x에 값을 할당한 후, `console.log` 메서드를 호출한다. 메서드를 호출하기 위해서는 console 객체가 무엇인지를 알아야 한다. 따라서 스코프 체인을 통해 검색을 수행한다.
 
@@ -251,12 +252,13 @@ let, const로 선언한 변수는 블록 레벨 스코프를 가진다. 블록 �
 
 ![](https://images.velog.io/images/ooooorobo/post/d71cdcb9-e445-444d-866d-6e24f5bca10f/image.png)
 
-export const meta = {    index:33,
+export const meta = PostUtil.createPostMeta({
+    index:33,
     title: 'JS08-1 실행 컨텍스트',
     description: '실행 컨텍스트란?',
     category: '',
     series: '',
     tags: ['JavaScript'], // # 포함하지 않는 string array
     postedAt: '2022. 03. 12',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 🤵 JSX는 순수 자바스크립트 문법이 아닙니다. 그런데 어떻게 브라우저 상에서 동작이 가능할까요?
 👩 ...
@@ -45,12 +46,12 @@ ReactDOM.render(element, document.getElementById('root'));
 
 바벨 컴파일은 [여기](https://babeljs.io/repl/#?browsers=defaults%2C%20not%20ie%2011%2C%20not%20ie_mob%2011&build=&builtIns=false&corejs=3.6&spec=false&loose=false&code_lz=MYewdgzgLgBApgGzgWzmWBeGAeAJgSwDcZgEBDCCAOTNQwCIALfegPgAlEEQYB1EAE4Jc2APQFCrANwAoAEpwywKABEA8gFkAdALS44AgBSIUaKABoYuEMACuqdFoDmcKAFEkDqACEAngElcQwByARAQKGCASiipIA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=react&prettier=false&targets=&version=7.16.6&externalPlugins=&assumptions=%7B%7D)에서 테스트해 볼 수 있다.
 
-export const meta = {
+export const meta = PostUtil.createPostMeta({
     index: 11,    title: 'JSX란?',
     description: 'JSX는 JavaScript를 확장한 문법으로, React에서 엘리먼트의 UI가 어떻게 생겨야 할 지를 나타내기 위해 사용된다.',
     category: '',
     series: '',
     tags: ['React','JSX','Babel'], // # 포함하지 않는 string array
     postedAt: '2021. 12. 27.',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

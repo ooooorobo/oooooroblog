@@ -5,7 +5,10 @@ import { PostListElement, PostMeta } from "@src/model/post";
 export default class PostUtil {
   private static _INSTANCE: PostUtil;
 
-  private postMetaMap: Map<string, PostListElement> = new Map<string, PostListElement>();
+  private postMetaMap: Map<string, PostListElement> = new Map<
+    string,
+    PostListElement
+  >();
 
   private constructor() {
     //
@@ -56,18 +59,27 @@ export default class PostUtil {
     return result.filter((x) => x !== undefined) as PostListElement[];
   }
 
-  async getPosts(page: number, count: number): Promise<PostListElement[]> {
+  public async getPosts(
+    page: number,
+    count: number
+  ): Promise<PostListElement[]> {
     const [start, end] = [page * count, (page + 1) * count];
     const dirFiles = this.getAllPostNames(true).slice(start, end);
     return this.getPostMetaList(dirFiles);
   }
 
-  async getPostsByTag(page: number, count: number, tag: string): Promise<PostListElement[]> {
+  public async getPostsByTag(
+    page: number,
+    count: number,
+    tag: string
+  ): Promise<PostListElement[]> {
     const [start, end] = [page * count, (page + 1) * count];
-    return (await this.getAllPostMeta()).filter((p) => p.meta.tags.includes(tag)).slice(start, end);
+    return (await this.getAllPostMeta())
+      .filter((p) => p.meta.tags.includes(tag))
+      .slice(start, end);
   }
 
-  async getSidePosts(index: number): Promise<SidePosts> {
+  public async getSidePosts(index: number): Promise<SidePosts> {
     const postNames = this.getAllPostNames();
     const found: number = postNames.findIndex(
       (post) => this.parsePostIndex(post) === index
@@ -82,11 +94,27 @@ export default class PostUtil {
     };
   }
 
-  async getAllTags(): Promise<string[]> {
+  public async getAllTags(): Promise<string[]> {
     const allPosts = await this.getAllPostMeta();
     const allTags: Set<string> = new Set<string>();
-    allPosts.forEach(post => post.meta.tags.forEach(tag => allTags.add(tag)));
+    allPosts.forEach((post) =>
+      post.meta.tags.forEach((tag) => allTags.add(tag))
+    );
     return Array.from(allTags);
+  }
+
+  public static createPostMeta(meta: Partial<PostMeta>): PostMeta {
+    return {
+      index: 0,
+      title: "",
+      description: "",
+      category: "",
+      series: "",
+      tags: [],
+      keywords: [],
+      postedAt: "",
+      ...meta,
+    };
   }
 }
 

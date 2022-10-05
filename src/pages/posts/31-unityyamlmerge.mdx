@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 아래 내용은 Windows 기준으로 작성되었습니다.
 
@@ -181,12 +182,13 @@ UnityYAMLMerge가 처리하지 못한 충돌은 Meld에서 직접 처리해야 �
 - 프로젝트 내에 새로운 파일이 추가되었을 경우
   - 문제 없이 추가된다.
 
-export const meta = {
-    title: 'SourceTree에서 Unity 씬, 프리팹 병합을 위한 UnityYAMLMerge 설정',    index: 31,
+export const meta = PostUtil.createPostMeta({
+    index: 31,
+    title: 'SourceTree에서 Unity 씬, 프리팹 병합을 위한 UnityYAMLMerge 설정',
     description: 'UnityYAMLMerge로 유니티 씬을 편하게 머지하기',
     category: '',
     series: '',
     tags: ['Unity'], // # 포함하지 않는 string array
     postedAt: '2022. 02. 13',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

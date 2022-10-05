@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 파이썬으로 알고리즘을 풀어보면서 자주 찾아보게 되었던 내용을 정리합니다.
 
@@ -345,12 +346,13 @@ for i in range(4):
     next_pos = (x + xd[i], y + yd[i])
 ```
 
-export const meta = {
+export const meta = PostUtil.createPostMeta({
     title: '파이썬 알고리즘 문제 풀이 치트시트',    index: 6,
     description: '파이썬으로 알고리즘을 풀어보면서 자주 찾아보게 되었던 내용을 정리했습니다.',
     category: '',
     series: '',
     tags: ['Python','알고리즘'], // # 포함하지 않는 string array
+    keywords: [],
     postedAt: '2021. 11. 04.',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

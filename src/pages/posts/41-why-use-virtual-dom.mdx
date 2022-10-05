@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 
 - 직접 DOM을 제어하지 않아도 된다
@@ -54,12 +55,13 @@ list.appendChild(frag);
 - [React 적용 가이드 - React 작동 방법](https://d2.naver.com/helloworld/9297403)
 - [DocumentFragment - MDN](https://developer.mozilla.org/ko/docs/Web/API/DocumentFragment)
 
-export const meta = {    index: 41,
+export const meta = PostUtil.createPostMeta({
+    index: 41,
     title: 'Virtual DOM을 쓰면 왜 좋을까?',
     description: '직접 DOM을 제어하지 않아도 되고, 직접 DOM을 제어하는 것보다 성능 상에서 나을 수 있다',
     category: '',
     series: '',
     tags: ['React'], // # 포함하지 않는 string array
     postedAt: '2022. 04. 21',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

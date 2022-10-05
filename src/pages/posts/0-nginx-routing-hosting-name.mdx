@@ -1,5 +1,6 @@
 import PostLayout from "../../components/post/PostLayout"
 import { CategoryType } from "../../model/post"
+import PostUtil from "../../utils/postUtil"
 
 ## 문제 상황
 
@@ -89,13 +90,14 @@ server {
 
 2. 저장 후 `sudo systemctl restart nginx` 커맨드로 Nginx를 다시 실행한다.
 
-export const meta = {
+export const meta = PostUtil.createPostMeta({
     index: 0,
     title: 'Nginx 라우팅 시 request의 host 이름이 localhost가 될 때',
     description: 'Nginx 라우팅을 했을 때, request의 host 이름을 라우팅된 호스트 이름이 아니라 원래의 이름을 알고 싶다면',
     category: CategoryType.DEVELOP,
     series: '',
     tags: ['Nginx'], // # 포함하지 않는 string array
+    keywords: [],
     postedAt: '2021. 10. 26',
-}
+})
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

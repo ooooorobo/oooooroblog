@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 프로젝트를 시작하기 전에 기본 원칙을 정하는 것이 좋다. 요구사항을 정하거나 제약조건을 관리하고, 적당한 정도의 준비 기간을 가져야 한다. 이런 이슈를 정리해야만 성공적으로 프로젝트를 시작할 수 있다.
 
@@ -109,12 +110,13 @@ G. 해결되지 않은 문제**
 
 예전엔 다이어그램 그리는 법을 외워서라도 익혀야 하지 않을까 생각했는데 (하지만 안 외웠다) 지금 생각해 보면 다이어그램을 그리는 방법을 아는 것이 의미가 있는 것은 아닌 것 같다. 진짜로 의미가 있는 것은 어떤 상황에 어떤 다이어그램을 통해 표현하면 보여주고자 하는 내용을 잘 정리해서 표현할 수 있는가를 아는 것이다.
 
-export const meta = {    index: 51,
+export const meta = PostUtil.createPostMeta({
+    index: 51,
     title: 'Pragmatic#07 프로젝트 전에',
     description: '프로젝트를 시작하기 전에 기본 원칙을 정하는 것이 좋다. 요구사항을 정하거나 제약조건을 관리하고, 적당한 정도의 준비 기간을 가져야 한다. 이런 이슈를 정리해야만 성공적으로 프로젝트를 시작할 수 있다.',
     category: '',
     series: '',
     tags: ['노마드북클럽'], // # 포함하지 않는 string array
     postedAt: '2022. 05. 27',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

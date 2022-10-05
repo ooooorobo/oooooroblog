@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 > 본 시리즈는 [모던 자바스크립트 Deep Dive](https://shopping.interpark.com/product/productInfo.do?prdNo=8860873922&gclid=Cj0KCQiA8vSOBhCkARIsAGdp6RTfL-5qEwmr40NR6B9YBGQ6guONHQBhK5HrT98QWi8ywi6hXhUqVo4aAssyEALw_wcB) 책을 참고하여 작성하고 있습니다.
 
@@ -163,12 +164,13 @@ console.log(x + y); // ?
   - 쿼리 스트링 → URL 뒤에 입력 데이터를 함께 전달하는 방식.
   - `https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=%EB%82%B4%EC%9D%BC+%EB%82%A0%EC%94%A8` ← 이 주소에서, `?` 뒤에 오는 문자열
 
-export const meta = {    index: 24,
+export const meta = PostUtil.createPostMeta({
+    index: 24,
     title: 'JS07-1 strict mode & 빌트인 객체',
     description: 'strict mode / 빌트인 객체 / 전역 객체',
     category: '',
     series: '',
     tags: ['JavaScript'], // # 포함하지 않는 string array
     postedAt: '2022. 02. 13',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

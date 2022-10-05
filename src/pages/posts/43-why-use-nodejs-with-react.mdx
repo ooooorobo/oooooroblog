@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 
 저번에 스터디를 하다가 누가 물어봤는데 제대로 답변을 못했던 질문이다. React를 쓰는데 왜 Node.js를 먼저 설치해야 할까?
@@ -76,12 +77,13 @@ Babel 외에도 코드를 번들링하기 위해 Webpack을 사용하거나 SCSS
 
 
 
-export const meta = {    index: 43,
+export const meta = PostUtil.createPostMeta({
+    index: 43,
     title: 'React를 쓰는데 왜 Node.js가 필요하지?',
     description: '프로젝트가 커지고 복잡해지다 보면 순수 React만으로는 부족해지는 순간이 온다.',
     category: '',
     series: '',
     tags: ['React','Node.js'], // # 포함하지 않는 string array
     postedAt: '2022. 05. 02',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

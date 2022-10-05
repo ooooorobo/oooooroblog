@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 > 본 시리즈는 [모던 자바스크립트 Deep Dive](https://shopping.interpark.com/product/productInfo.do?prdNo=8860873922&gclid=Cj0KCQiA8vSOBhCkARIsAGdp6RTfL-5qEwmr40NR6B9YBGQ6guONHQBhK5HrT98QWi8ywi6hXhUqVo4aAssyEALw_wcB) 책을 참고하여 작성하고 있습니다.
 
@@ -182,12 +183,13 @@ person.fullName = 'mane kim';
 person.firstName; // 'mane'
 ```
 
-export const meta = {    index: 21,
+export const meta = PostUtil.createPostMeta({
+    index: 21,
     title: 'JS05 - 전역 변수의 문제점 & 프로퍼티 어트리뷰트',
     description: '전역 변수의 문제점 & 프로퍼티 어트리뷰트',
     category: '',
     series: '',
     tags: ['JavaScript'], // # 포함하지 않는 string array
     postedAt: '2022. 01. 29',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

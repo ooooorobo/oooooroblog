@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 - 2022\. 05. 15 (일)
 - 2장. 실용주의 접근법
@@ -36,12 +37,13 @@ import PostLayout from "../../components/post/PostLayout"
 
 > 프로토타입을 통해 조사할 대상은 무엇인가? 위험을 수반하는 모든 것이다. 또한 이전에 해본 적이 없는 것, 최종 시스템에 매우 중요한 것 등이 프로토타입의 대상이 된다. 증명되지 않았거나, 실험적이거나, 의심이 가는 것, 심적으로 편하지 않은 것 모두가 프로토타이핑의 대상이 될 수 있다. p105
 
-export const meta = {
-    title: 'Pragmatic#02 실용주의 접근법',    index: 46,
+export const meta = PostUtil.createPostMeta({
+    index: 46,
+    title: 'Pragmatic#02 실용주의 접근법',
     description: '요구사항이 바뀌더라도 쉽게 대응할 수 있는 시스템을 만들어야 한다. 그러기 위해서 반복을 만들지 말고, 직교하는 시스템을 만들어라.',
     category: '',
     series: '',
     tags: ['노마드북클럽'], // # 포함하지 않는 string array
     postedAt: '2022. 05. 15',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

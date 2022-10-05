@@ -16,6 +16,7 @@ export interface PostMeta {
   category: string;
   series: string;
   tags: string[];
+  keywords: string[];
   postedAt: string;
 }
 

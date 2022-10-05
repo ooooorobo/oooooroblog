@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 # DNS?
 
@@ -130,12 +131,12 @@ import PostLayout from "../../components/post/PostLayout"
 - https://ssudalim.tistory.com/4
 
 
-export const meta = {
+export const meta = PostUtil.createPostMeta({
     title: 'DNS',
     description: 'Domain Name System: IP를 이름으로 바꿔주는 서비스 + 프로토콜',    index: 28,
     category: '',
     series: '',
     tags: ['Network'], // # 포함하지 않는 string array
     postedAt: '2022. 02. 13',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

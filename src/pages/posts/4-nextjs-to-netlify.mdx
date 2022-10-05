@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 Netlify 등의 서비스에 Next.js 프로젝트를 배포하려면 프로젝트 빌드 후 export를 해주어야 한다. export는 정적 페이지를 내보내기 위한 커맨드이다. 정적 페이지로만 이루어져 있다면 `next build && next export`를 해주는 것만으로도 간단히 Netlify에 페이지를 배포할 수 있다.
 
@@ -61,13 +62,14 @@ yarn add @netlify/plugin-nextjs
 - [netlify-plugin-nextjs 깃허브](https://github.com/netlify/netlify-plugin-nextjs/tree/v3#readme)
 - 원래는 플러그인이 아니라 next-on-netlify라는 npm 패키지가 있었고, 이때는 next.js의 서버를 serverless로 바꾸어 빌드해서 배포했다고 한다. 이 방법을 쓰면 next-on-netlify 실행 중에 `Error: Cannot find module 'next/dist/next-server/server/config'` 에러가 발생하기도 했고, 플러그인을 사용하는 편이 더 간단해서 플러그인을 사용했다. 더 자세한 내용은 [NextJS on Netlify with SSR](https://medium.com/@finn.woelm/how-to-deploy-nextjs-on-netlify-with-server-side-rendering-9e8c06a06e77)
 
-export const meta = {
+export const meta = PostUtil.createPostMeta({
     index: 4,
     title: 'getServerSideProps를 사용하는 Next.js 프로젝트를 Netlify에 배포하기',
     description: 'SSR을 사용하는 Next.js 프로젝트를 Netlify에 배포하는 플러그인',
     category: '',
     series: '',
     tags: ['SSR', 'Netlify','Next.js'], // # 포함하지 않는 string array
+    keywords: [],
     postedAt: '2021. 10. 27',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

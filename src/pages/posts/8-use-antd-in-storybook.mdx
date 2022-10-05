@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 1. 프리셋 라이브러리 설치: `npm i -D @storybook/preset-ant-design`
 
@@ -48,12 +49,13 @@ module.exports = {
 }
 ```
 
-export const meta = {
+export const meta = PostUtil.createPostMeta({
     title: 'Storybook에서 Ant Design 사용하기',    index: 8,
     description: '스토리북에서 antd를 쓰고 싶다면 preset을 추가해 주어야 합니다.',
     category: '',
     series: '',
     tags: ['Storybook','Antd'], // # 포함하지 않는 string array
+    keywords: [],
     postedAt: '2021. 11. 10.',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

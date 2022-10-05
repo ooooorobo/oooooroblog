@@ -1,4 +1,5 @@
-import PostLayout from "../../components/post/PostLayout"
+import PostLayout from "../../components/post/PostLayout";
+import PostUtil from "../../utils/postUtil";
 
 ![](https://velog.velcdn.com/images/ooooorobo/post/46c41eda-1c8e-44fa-b7e9-dda81043b5f8/image.png)
 
@@ -38,12 +39,13 @@ import PostLayout from "../../components/post/PostLayout"
 이미 개발된 프레임워크를 고를 때에는 프레임워크의 인기보다는 프로젝트와의 적합성을 따져 보는 게 좋다. 그러려면 프레임워크 간의 차이를 알아야 하는데, 사실 뷰, 앵귤러, 리액트 간의 차이가 뭘지.. 잘 모르겠다. 이때까지 리액트만 써보기도 했고.. 그래서 같은 프로젝트를 네 가지 프레임워크로 구현해 보는 프로젝트를 진행해 보려고 한다. (뷰, 앵귤러, 리액트, 스벨트)
 
 
-export const meta = {    index: 42,
+export const meta = PostUtil.createPostMeta({
+    index: 42,
     title: '좋은 프레임워크는 어떤 프레임워크인가? - <프레임워크 없는 프론트엔드 개발>',
     description: '자바스크립트 웹 프레임워크 없이 웹 프론트엔드 애플리케이션을 개발하는 방법에 대해 알아보는 책이다. 렌더링, 이벤트 관리, HTTP 요청, 라우팅, 상태 관리 등을 프레임워크 없이 직접 구현해본다.',
     category: '',
     series: '',
     tags: ['JavaScript','서평'], // # 포함하지 않는 string array
     postedAt: '2022. 04. 29',
-}
+});
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>
