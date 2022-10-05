@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import PostUtil from "@src/utils/postUtil";
+import PostService from "../../../../../service/postService";
 import { PostListElement } from "@src/model/post";
 
 export default async function handler(
@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse<PostListElement[]>
 ) {
   const { page = 0, count = 10 } = req.query;
-  const posts = await PostUtil.instance.getPosts(
+  const posts = await PostService.instance.getPosts(
     Number(page) || 0,
     Number(count) || 10
   );

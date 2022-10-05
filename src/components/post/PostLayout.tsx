@@ -3,7 +3,7 @@ import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 
-import { SidePosts } from "@src/utils/postUtil";
+import { SidePosts } from "../../service/postService";
 import { PostMeta } from "@src/model/post";
 
 import Meta from "./Meta";

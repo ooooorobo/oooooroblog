@@ -43,6 +43,8 @@ export default function Comment() {
 }
 
 const Wrapper = styled.div<{ isDarkMode: boolean }>`
+  min-height: 300px;
+
   .light {
     display: ${({ isDarkMode }) => (isDarkMode ? "none" : "block")};
   }

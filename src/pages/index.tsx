@@ -10,7 +10,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 
 // libs
-import PostUtil from "@src/utils/postUtil";
+import PostService from "../service/postService";
 import { PostListElement } from "@src/model/post";
 import { QueryKey } from "@src/constants/queryKey";
 import { POST_COUNT } from "@src/constants/constants";
@@ -153,7 +153,7 @@ export const getStaticProps = async () => {
     [QueryKey.POST_LIST],
     ({ pageParam }) => fetchPostList({ page: pageParam, postCount: POST_COUNT })
   );
-  const tags: string[] = await PostUtil.instance.getAllTags();
+  const tags: string[] = await PostService.instance.getAllTags();
   return { props: { dehydrateState: dehydrate(queryClient), tags } };
 };
 

@@ -1,4 +1,4 @@
-import { SidePosts } from "@src/utils/postUtil";
+import { SidePosts } from "../../service/postService";
 import Link from "next/link";
 import { PostListElement } from "@src/model/post";
 import styled from "styled-components";
