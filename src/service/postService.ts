@@ -102,6 +102,12 @@ export default class PostService {
     );
     return Array.from(allTags);
   }
+
+  public async getAllPostSlugs(): Promise<string[]> {
+    const allPosts = await this.getAllPostMeta();
+    const allSlugs = allPosts.map(meta => meta.slug);
+    return allSlugs;
+  }
 }
 
 export interface SidePosts {
