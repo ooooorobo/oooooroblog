@@ -1,0 +1,185 @@
+import PostUtil from "../../utils/postUtil";
+import PostLayout from "../../components/post/PostLayout";
+import Caption from "../../components/mdx/Caption";
+import WavyLine from "../../components/WavyLine"
+
+# MDX란?
+
+**MDX**는 마크다운 컨텐츠에 JSX 문법을 사용할 수 있는 문법입니다.
+
+**JSX**는 React에서 사용되는 문법으로, HTML과 유사한 문법을 사용해 React Element를 생성할 수 있습니다. (사실, React Element를 생성하는 문법적 설탕입니다.)
+
+다시 말해, MDX는 마크다운 컨텐츠 안에 React Element를 삽입할 수 있도록 해줍니다. 뿐만 아니라 자바스크립트 문법도 사용할 수 있기 때문에, 매우 유연하고 활용성이 좋습니다.
+
+MDX에서는 ESM에서 제공하는 `import`, `export` 문법도 지원합니다. 그래서 외부의 컴포넌트를 mdx 안에서 재사용할 수도 있고, mdx가 어떤 값을 export하게 할 수도 있고, mdx로 작성된 글을 어떤 리액트 컴포넌트에 감싸서 export할 수도 있습니다.
+
+그런데 이런 특징 때문에, 가끔 자바스크립트와 관련된 글을 작성할 때 불편한 점이 있기도 합니다.
+
+위에서 mdx는 `import`, `export` 문법을 지원한다고 했는데, 그렇기 때문에 줄의 맨 앞에 `import`나 `export`가 있으면 그 뒤에 오는 것을 *정말로 import 혹은 export 하려고 합니다.*
+
+![mdx import error](/image/54-mdx-import-err.png)
+
+이 경우, 줄의 맨 앞에 `import`나 `export`가 오지만 않으면 되기 때문에, `import`나 `export` 앞에 공백을 하나 붙여주면 해결됩니다.
+
+mdx 형식으로 바로 글을 쓸 때는 이런 에러가 발생한 부분을 바로 확인할 수 있지만, 다른 마크다운 에디터에서 글을 작성한 후 글을 mdx 파일에 붙여 넣을 때는 에러의 원인을 찾기 어려울 때가 있어 불편한 점이 있습니다.
+
+그렇지만, 일반 마크다운 형식보다 훨씬 활용성이 좋기 때문에 본 블로그는 mdx를 활용해 포스트를 작성하고 있습니다.
+
+이 포스트와 이어지는 시리즈에서는 Next.js로 만든 사이트에서 mdx를 활용하는 방법에 대해 소개합니다. 이번 포스트에서는 Next.js 사이트 기본 설정과 mdx 기본 설정을 소개합니다.
+
+> 이번 글에서 생성한 프로젝트의 데모는 [이 레포지토리](https://github.com/ooooorobo/mdx-demo/tree/1f7c59ee02b3a38f718db5eb9ccf100b4daf12d0)에서 확인할 수 있습니다.
+
+# Next.js와 mdx 함께 설정하기
+
+우선 원하는 패키지 관리자를 사용해 Next.js 프로젝트를 생성합니다. TypeScript 기반으로 생성하시려면, `--ts` 플래그를 추가합니다.
+
+```
+npx create-next-app@latest
+# or
+yarn create next-app
+# or
+pnpm create next-app
+```
+
+![mdx import error](/image/54-next-initial-setting.png)
+
+사용하지 않을 파일과 코드를 정리해줬습니다.
+
+<WavyLine size={4}/>
+
+## 패키지 설치
+
+mdx를 사용하기 위해서는 패키지 몇 개를 설치해야 합니다.
+
+```
+npm install @next/mdx @mdx-js/loader @mdx-js/react
+```
+
+- `@mdx-js/loader`: MDX를 지원하는 webpack loader입니다. Next.js는 webpack을 사용하는데, webpack은 자바스크립트 이외의 파일을 읽으려면 loader가 필요합니다.
+
+![webpack load된 mdx 파일](/image/54-mdx-webpack.png)
+
+<Caption>원래 .mdx였던 파일이 빌드 이후에는 js 파일이 되었습니다</Caption>
+
+- `@mdx-js/react`
+
+MDX에서는 마크다운 문법으로 작성된 내용이 HTML로 변환될 때, HTML 태그를 특정 컴포넌트로 대체할 수 있습니다.
+
+대체할 컴포넌트는 mdx 컴포넌트에 `components` prop으로 전달할 수 있습니다.
+
+```jsx
+import Post from "0-nginx-routing-hosting-name.mdx";
+
+// 이렇게 하면, 이 포스트에서 blockquote의 글자색은 빨간색이 된다.
+<Post components={{blockquote: ({children}) => <blockquote style={{color: 'red'}}>{children}</blockquote>}} />
+```
+
+그러나 MDX 컴포넌트에 바로 `components` prop을 전달하기 어려운 경우가 있습니다. Next.js 처럼 file-system 라우팅을 사용해서 mdx 파일 그 자체가 페이지가 되는 경우입니다.
+
+이 경우에는 `@mdx-js/react` 패키지를 사용해서 MDX Provider를 제공할 수 있습니다. MDX Provider로 감싸진 MDX 컴포넌트는 자동으로 `components` prop을 전달받습니다.
+
+<WavyLine size={4}/>
+
+## 웹팩 설정하기
+
+우선 테스트를 위해 `test.mdx` 파일을 `pages/` 하위에 하나 생성해 주겠습니다. 내용은 아래와 같습니다.
+```jsx
+# 안녕!
+
+테스트 mdx 파일입니다.
+
+<button onClick={() => alert('된다!')}>JSX 문법도 잘 동작할까요?</button>
+```
+
+`http://localhost:3000/test` 경로로 들어가 보면, 아래와 같은 에러가 발생합니다.
+
+![webpack load된 mdx 파일](/image/54-mdx-err-no-webpack.png)
+
+webpack loader를 설정해 주지 않았기 때문에, webpack이 mdx 파일을 제대로 처리하지 못했습니다.
+
+webpack이 mdx를 잘 처리해 줄 수 있도록 webpack 설정을 추가해 주어야 합니다. Next.js에서는 next.config.js를 수정해서 webpack 설정을 편하게 수정할 수 있습니다.
+
+```js
+// next.config.js
+
+/** @type {import('next').NextConfig} */
+// 여기에는 일반적인 Next.js 설정을 넣습니다.
+const nextConfig = {
+  reactStrictMode: true,
+  pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
+};
+
+// 여기서는 mdx 로더 설정을 위한 HOC를 만듭니다.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const withMdx = require("@next/mdx")({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+});
+
+// mdx 로더 HOC로 일반 Next.js 설정을 감쌉니다.
+module.exports = withMdx(nextConfig);
+```
+
+![webpack load된 mdx 파일](/image/54-mdx-working.png)
+
+웹팩 로더를 추가해 주면, 이제 mdx 파일을 정상적으로 확인할 수 있습니다.
+
+<WavyLine size={4}/>
+
+## 마크다운 컴포넌트 커스텀하기
+
+커스텀할 수 있는 컴포넌트의 목록은 [공식 문서](https://mdxjs.com/table-of-components/)에서 확인할 수 있습니다.
+
+컴포넌트 중에서, `blockquote`를 꾸며보도록 하겠습니다. 루트 폴더에 components 디렉토리를 만들고, BlockQuote 컴포넌트를 만들었습니다.
+
+```tsx
+// ~/components/Blockquote.tsx
+import {ComponentProps} from "react";
+
+export default function BlockQuote({children}: ComponentProps<any>) {
+    return <blockquote style={{borderLeft: '5px solid #5f71d6', padding: '4px 10px'}}>{children}</blockquote>
+};
+```
+
+<blockquote style={{borderLeft: '5px solid #5f71d6', padding: '4px 10px'}}>위에서 정의한 컴포넌트는 실제로 이렇게 생겼습니다!</blockquote>
+
+이 컴포넌트를 pages 하위에 있는 mdx 파일에 넘겨주기 위해서, `pages/_app.tsx`에 Provider를 추가해 주겠습니다. Provider를 사용하기 위해 @mdx-js/react가 필요합니다.
+
+```tsx
+import type { AppProps } from 'next/app'
+import { MDXProvider } from '@mdx-js/react'
+import BlockQuote from "../components/Blockquote";
+
+function MyApp({ Component, pageProps }: AppProps) {
+  const mdxComponents = {
+    blockquote: BlockQuote
+  }
+  return (
+    <MDXProvider components={mdxComponents}>
+      <Component {...pageProps} />
+    </MDXProvider>
+  );
+}
+export default MyApp
+```
+
+test.mdx에 blockquote를 추가해 보면, 아까 만든 BlockQuote 컴포넌트의 스타일이 적용되는 것을 확인할 수 있습니다.
+
+![custom component style이 적용된 blockquote](/image/54-mdx-blockquote.png)
+
+
+
+
+export const meta = PostUtil.createPostMeta({
+    index: 54,
+    title: "Next.js에서 mdx 사용하기 (1): 기본 설정",
+    description: "Next.js로 정적 사이트 블로그를 만들고, 글은 mdx로 유연하게 작성할 수 있다.",
+    category: '',
+    series: "Next.js에서 mdx 사용하기",
+    tags: ["JavaScript", "Next.js", "mdx"], // # 포함하지 않는 string array
+    postedAt: '2022. 10. 12.',
+});
+export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>

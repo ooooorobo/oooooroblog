@@ -18,16 +18,20 @@ export default function CodeBlock(props: any) {
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <Pre className={className} style={style}>
-          {tokens.map((line, i) => (
-            <Line key={i} {...getLineProps({ line, key: i })}>
-              <LineNo>{i + 1}</LineNo>
-              <LineContent>
-                {line.map((token, key) => (
-                  <span key={key} {...getTokenProps({ token, key })} />
-                ))}
-              </LineContent>
-            </Line>
-          ))}
+          {tokens.map(
+            (line, i) =>
+              // 마지막 줄은 무조건 \n만 있음
+              i < tokens.length - 1 && (
+                <Line key={i} {...getLineProps({ line, key: i })}>
+                  <LineNo>{i + 1}</LineNo>
+                  <LineContent>
+                    {line.map((token, key) => (
+                      <span key={key} {...getTokenProps({ token, key })} />
+                    ))}
+                  </LineContent>
+                </Line>
+              )
+          )}
         </Pre>
       )}
     </Highlight>
