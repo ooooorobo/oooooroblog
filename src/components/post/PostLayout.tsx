@@ -36,6 +36,7 @@ export default function PostLayout({
       <NextSeo
         title={meta.title}
         description={meta.description}
+        canonical={`https://www.oooooroblog.com${router.pathname}`}
         openGraph={{
           type: "website",
           title: meta.title,

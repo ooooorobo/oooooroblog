@@ -114,6 +114,7 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
       <NextSeo
         title={"oooooroblog"}
         description={"웹 프론트엔드 개발자 조예진"}
+        canonical={"https://www.oooooroblog.com"}
         openGraph={{
           type: "website",
           url: "https://www.oooooroblog.com",
