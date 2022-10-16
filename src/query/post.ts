@@ -1,4 +1,5 @@
 import { PostListElement } from "@src/model/post";
+import { SERVER_URL } from "@src/constants/environments";
 
 interface FetchPostListParam {
   page: number;
@@ -12,7 +13,9 @@ export async function fetchPostList({
   selectedTag,
 }: FetchPostListParam): Promise<PostListElement[]> {
   const res = await fetch(
-    `/api/posts/${page}/${postCount}${selectedTag ? `/${selectedTag}` : ""}`
+    `${SERVER_URL}/api/posts/${page}/${postCount}${
+      selectedTag ? `/${selectedTag}` : ""
+    }`
   );
   return res.json();
 }

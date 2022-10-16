@@ -1,11 +1,7 @@
 import type { NextPage } from "next";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { NextSeo } from "next-seo";
-import {
-  dehydrate,
-  QueryClient,
-  useInfiniteQuery,
-} from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 
@@ -26,7 +22,7 @@ import WavyLine from "@src/components/WavyLine";
 import TagList from "@src/components/main/TagList";
 import Loading from "@src/components/common/Loading";
 
-const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
+const Home: NextPage<HomeProps> = ({ tags, posts }: HomeProps) => {
   const observerEntry = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -130,10 +126,9 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
         selectedTag={selectedTag}
       />
       <div>
-        {data &&
-          data.pages.map((posts, i) => (
-            <PostList key={i} posts={posts} onClickPost={onClickPost} />
-          ))}
+        {(data ? data.pages : [posts]).map((posts, i) => (
+          <PostList key={i} posts={posts} onClickPost={onClickPost} />
+        ))}
         <div ref={observerEntry} />
       </div>
       {isLoading && <Loading />}
@@ -149,13 +144,12 @@ const Home: NextPage<HomeProps> = ({ tags }: HomeProps) => {
 export default Home;
 
 export const getStaticProps = async () => {
-  const queryClient = new QueryClient();
-  await queryClient.prefetchInfiniteQuery(
-    [QueryKey.POST_LIST],
-    ({ pageParam }) => fetchPostList({ page: pageParam, postCount: POST_COUNT })
-  );
+  const posts: PostListElement[] = await fetchPostList({
+    page: 0,
+    postCount: POST_COUNT,
+  });
   const tags: string[] = await PostService.instance.getAllTags();
-  return { props: { dehydrateState: dehydrate(queryClient), tags } };
+  return { props: { tags, posts } };
 };
 
 interface HomeProps {
