@@ -86,7 +86,7 @@ const defaultTheme: Omit<DefaultTheme, "colors"> = {
   },
   lineHeights: {
     body: 1.7,
-    title: 1.3,
+    title: 2,
     code: 1.6,
   },
   media: {

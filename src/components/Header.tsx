@@ -9,16 +9,23 @@ export default function Header() {
   return (
     <Background>
       <Wrapper>
-        <Link href={"/"}>
-          <a>ooooorobo</a>
-        </Link>
-        <button onClick={toggleDarkMode}>
-          {isDarkMode ? (
-            <i className="bi bi-moon-fill" />
-          ) : (
-            <i className="bi bi-sun-fill" />
-          )}
-        </button>
+        <div>
+          <Link href={"/"}>
+            <a>ooooorobo</a>
+          </Link>
+        </div>
+        <div>
+          <Link href={"/about"}>
+            <a>About</a>
+          </Link>
+          <button onClick={toggleDarkMode}>
+            {isDarkMode ? (
+              <i className="bi bi-moon-fill" />
+            ) : (
+              <i className="bi bi-sun-fill" />
+            )}
+          </button>
+        </div>
       </Wrapper>
     </Background>
   );
@@ -44,5 +51,6 @@ const Wrapper = styled.div`
     background-color: transparent;
     border: none;
     color: ${({ theme }) => theme.colors.text.primary};
+    padding-left: 15px;
   }
 `;

@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
-const WavyLine = styled.div<{ size: number }>`
+const WavyLine = styled.div<{ size: number; top?: string; height?: string }>`
   ${({ theme }) =>
     theme.media.desktop(`
     text-align: center;
   `)};
-  height: 20px;
+  height: ${({ height = "20px" }) => height};
   &:after {
     overflow: hidden;
     content: ${({ size }) => {
@@ -18,7 +18,7 @@ const WavyLine = styled.div<{ size: number }>`
 
     color: transparent;
     position: relative;
-    top: -10px;
+    top: ${({ top = "-10px" }) => top};
     font-size: 1rem;
 
     text-decoration-style: wavy !important;

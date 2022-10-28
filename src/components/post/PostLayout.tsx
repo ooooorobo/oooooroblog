@@ -75,7 +75,7 @@ const PostHeader = styled.div`
   margin-bottom: 3rem;
 `;
 
-const Article = styled.article`
+export const Article = styled.article`
   animation: ${FadeIn("0%")} 1.4s;
 
   max-width: 760px;

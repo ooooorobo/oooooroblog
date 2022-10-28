@@ -40,6 +40,10 @@ const GlobalStyle = createGlobalStyle`
     word-break: keep-all;
   }
   
+  h1 {
+    font-size: 2rem;
+  }
+  
   pre, code {
     &, * {
       font-family: 'Nanum Gothic Coding', monospace;
