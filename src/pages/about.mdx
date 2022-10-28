@@ -2,6 +2,7 @@ import {Article} from "../components/post/PostLayout";
 import ContactIconList from "../components/common/ContactIconList";
 import WavyLine from "../components/WavyLine";
 import ProjectDetail from "../components/about/ProjectDetail";
+import {NextSeo} from "next-seo";
 
 <div style={{paddingTop: '100px'}}/>
 
@@ -128,4 +129,7 @@ Git의 시각적 분석을 위한 VSCode Extension 개발
 - 소프트웨어및컴퓨터공학 전공 <small>(4.05 / 4.5)</small>
 - 디지털미디어 전공 (복수전공)
 
-export default ({children}) => <Article>{children}</Article>
+export default ({children}) => <Article>
+    <NextSeo title={'조예진 | Resume'} description={'웹 프론트엔드 개발자 조예진입니다.'} openGraph={{title: '조예진 | Resume', description: '웹 프론트엔드 개발자 조예진입니다.'}} />
+    {children}
+</Article>
