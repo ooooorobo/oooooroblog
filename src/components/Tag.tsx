@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 interface TagProps {
   name: string;
-  showHash: boolean;
+  showHash?: boolean;
 }
 
 export default function Tag({ name, showHash = true }: TagProps) {
