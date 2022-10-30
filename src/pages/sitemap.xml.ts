@@ -17,6 +17,11 @@ function generateSiteMap(posts: string[]) {
             <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
                 <url>
                     <loc>${domain}</loc>
+                    <lastmod>${genDate}</lastmod> 
+                </url>                
+                <url>
+                    <loc>${domain}/about</loc>
+                    <lastmod>${genDate}</lastmod> 
                 </url>
                 ${posts
                   .map((page) => {
