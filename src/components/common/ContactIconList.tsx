@@ -1,13 +1,6 @@
 import styled from "styled-components";
-import Link from "next/link";
 
-interface ContactIconListProps {
-  showResume?: boolean;
-}
-
-export default function ContactIconList({
-  showResume = false,
-}: ContactIconListProps) {
+export default function ContactIconList() {
   return (
     <IconWrapper>
       <a href="https://github.com/ooooorobo">
@@ -19,11 +12,6 @@ export default function ContactIconList({
       <a href="mailto:orobos654@gmail.com" title="orobos654@gmail.com">
         <i className="bi bi-envelope-fill" />
       </a>
-      {showResume && (
-        <Link href={"/about"}>
-          <a>이력서</a>
-        </Link>
-      )}
     </IconWrapper>
   );
 }
