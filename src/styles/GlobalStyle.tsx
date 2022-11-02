@@ -12,6 +12,7 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     background-color: ${({ theme }) => theme.colors.bg.primary};
+    transition: all 0.35s ease-in-out;
     color: ${({ theme }) => theme.colors.text.primary};
     line-height: ${({ theme }) => theme.lineHeights.body};
 
