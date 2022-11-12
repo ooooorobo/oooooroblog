@@ -59,18 +59,25 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css"
           />
-          <script async src="https://www.googletagmanager.com/gtag/js?id=G-W8WNQ2WC88" />
-          <script
-              dangerouslySetInnerHTML={{
-                __html: `
+          {process.env.NODE_ENV === "production" && (
+            <>
+              <script
+                async
+                src="https://www.googletagmanager.com/gtag/js?id=G-W8WNQ2WC88"
+              />
+              <script
+                dangerouslySetInnerHTML={{
+                  __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
             
               gtag('config', 'G-W8WNQ2WC88');
           `,
-              }}
-          />
+                }}
+              />
+            </>
+          )}
         </Head>
         <body>
           <Main />
