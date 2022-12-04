@@ -61,14 +61,6 @@ const Home: NextPage<HomeProps> = ({ tags, posts }: HomeProps) => {
 
   useEffect(() => {
     if (!isWindow()) return;
-    if (
-      !["http://localhost:3000/", "https://www.oooooroblog.com/"].includes(
-        document.referrer
-      )
-    ) {
-      setScrollY(0);
-      return;
-    }
 
     // todo: 함수 분리
     (async () => {
