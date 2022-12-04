@@ -34,17 +34,12 @@ import {NextSeo} from "next-seo";
 
 웹 기반 그래픽 에디터 툴 미리캔버스에서, 자사 서비스 ‘[비즈하우스](https://www.bizhows.com/)’와의 연동을 위한 에디터 스펙을 설계하고 개발했습니다. 두 서비스 간의 의존성을 최소화하되 확장성을 높이는 방향으로 설계하고 있습니다.
 
-- **주요 업무:** 미리캔버스와 비즈하우스를 연동하는 인쇄물 제작 기능 개선
-    - 비즈하우스에서 인쇄물을 제작하기 위해 필요한 연동 스펙 설계 및 개발, 유지보수
-    - 인쇄물 제작 가이드 적용 시 에디터 클리핑 방식 개선
-    - 메모리 누수 프로파일링 및 개선
-    - 인쇄물 가이드 검사 시 불필요하고 과다하게 연산되는 로직을 개선하여 메모리 사용량 감소
+- **주요 업무:** 미리캔버스와 비즈하우스를 연동하는 인쇄물 제작 기능 개선 및 에디터 제약 개발
 - 관리자용 요소 대량 등록 기능 추가
-    - 해당 기능으로 신규 요소 50만 개 이상 등록, 한 명의 관리자가 신규 기여자 20명 이상을 관리할 수 있게 되었음
+    - 해당 기능으로 신규 요소 1백만 개 이상 등록
     - 해당 기능에서 사용된 파일 검사 로직을 모듈화하여 자사 신규 도메인에 제공
-- webpack을 이용해 공통 의존성을 추출해내는 코드 스플리팅을 적용했으며, 이를 통해 빌드 시간을 70%, 빌드 결과물의 용량을 40%로 절감하여 빌드 성능 최적화
-- 반복적인 업무를 처리하기 위한 코드 생성기 개발
-- TypeScript, React, styled-component, Webpack, Jest
+- webpack을 이용해 공통 의존성을 추출해내는 코드 스플리팅을 적용, 이를 통해 빌드 시간을 70%, 빌드 결과물의 용량을 40%로 절감하여 빌드 성능 최적화
+- TypeScript, React, styled-component, Webpack
 
 <WavyLine size="10" top={'20px'} height={'80px'}/>
 
@@ -116,7 +111,7 @@ Git의 시각적 분석을 위한 VSCode Extension 개발
                    title: 'Nginx로 서브도메인을 EC2의 특정 포트 어플리케이션으로 연결하기',
                    link: 'https://www.oooooroblog.com/posts/1-nginx-subdomain-to-ec2-port'
                }]}
-               techs={['Next.js', 'quill', 'context-API', 'django', 'AWS(EC2, RDS, S3)']}/>
+               techs={['Next.js', 'quill', 'django', 'AWS(EC2, RDS, S3)']}/>
 
 <WavyLine size="10" top={'20px'} height={'80px'}/>
 
@@ -128,6 +123,36 @@ Git의 시각적 분석을 위한 VSCode Extension 개발
 
 - 소프트웨어및컴퓨터공학 전공 <small>(4.05 / 4.5)</small>
 - 디지털미디어 전공 (복수전공)
+
+# 기타
+
+저의 TMI를 소개합니다 😎
+
+### 2018
+- 모바일 게임 &#60;Tasty Pizza> 구글 플레이스토어 출시
+
+### 2019
+- 2019-2학기 파란학기제, 시리어스 게임 제작 프로젝트 참여, 훌륭한 뱃사공상 수상(대상)
+- 미디어학과 게임제작 소학회 ‘브레인스톰’ 회장
+- 대학생연합 게임제작동아리 ‘브릿지’ 7기 회원
+- 미디어학과 &#60;컴퓨터프로그래밍> 과목 튜터
+- 제38대 아주대학교 총학생회 ‘다움’ 소통발전국원
+
+### 2020
+- 아주대학교 총학생회 공식 홈페이지 개발TF팀장
+- 제39대 아주대학교 총학생회 ‘아워’ 소통발전차장
+
+### 2021
+- 제 7회 LINC+ 창업아이디어 경진대회, 비교과부문 &#60;Cake> 프로젝트 참여, 장려상 수상
+- 아주대학교 VHEX Lab, &#60;청소년 공감유형 진단·교육용 VR 콘텐츠 개발> 프로젝트 참여 ([링크](https://www.ajou.ac.kr/kr/ajou/news.do?mode=view&articleNo=111005&article.offset=0&articleLimit=12))
+    - Google Cloud Speech를 활용해 Speech-to-Text 기능 구현
+    - 인증 및 계정 관련 API 구현
+- 미디어학과 &#60;Immersive Media Programming> 과목 TA
+- 제40대 아주대학교 총학생회 비상대책위원회 소통발전국장
+
+### 2022
+- 2022 오픈소스 컨트리뷰션 아카데미, &#60;Githru: Git의 시각적 분석을 위한 VSCode Extension> 프로젝트 멘티 Masters 수료, 정보통신산업진흥원장상 수상(우수상)
+
 
 export default ({children}) => <Article>
     <NextSeo title={'조예진 | Resume'} description={'웹 프론트엔드 개발자 조예진입니다.'} openGraph={{title: '조예진 | Resume', description: '웹 프론트엔드 개발자 조예진입니다.'}} />
