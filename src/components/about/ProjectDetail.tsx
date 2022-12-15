@@ -2,11 +2,12 @@ import styled from "styled-components";
 import Tag from "@src/components/Tag";
 import Link from "next/link";
 import LinkStyle from "@src/components/mdx/Link";
+import { ReactNode } from "react";
 
 interface ProjectDetailProps {
   period: string;
   teamInfo: string[];
-  works: string[];
+  works: (string | ReactNode)[];
   posts: PostInfo[];
   techs: string[];
 }
@@ -55,7 +56,7 @@ export default function ProjectDetail({
       </Row>
       <Row>
         <Subtitle>
-          <h3>관련 포스트</h3>
+          <h3>관련 링크</h3>
         </Subtitle>
         <ul>
           {posts.map((info, idx) => (
@@ -96,7 +97,7 @@ const Row = styled.div`
 `;
 
 const Subtitle = styled.div`
-  min-width: 120px;
+  min-width: 80px;
 `;
 
 const ContentWrapper = styled.div`
