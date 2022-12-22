@@ -178,12 +178,28 @@ bind 메서드는 this로 사용할 객체만 전달하여 그 함수에 this를
 
 ### 정리
 
-| 함수 호출 방식 | this 바인딩 |
-| --- | --- |
-| 일반 함수 | 전역 객체 |
-| 메서드 호출 | 메서드를 호출한 객체 |
-| 생성자 함수 호출 | 미래에 생성될 인스턴스 객체 |
-| Function.prototype.apply/call/bind | 첫 번째 인수로 전달한 객체 |
+<table>
+    <tr>
+        <td>함수 호출 방식</td>
+        <td>this 바인딩</td>
+    </tr>
+    <tr>
+        <td>일반 함수</td>
+        <td>전역 객체</td>
+    </tr>
+    <tr>
+        <td>메서드 호출</td>
+        <td>메서드를 호출한 객체</td>
+    </tr>
+    <tr>
+        <td>생성자 함수 호출</td>
+        <td>미래에 생성될 인스턴스 객체</td>
+    </tr>
+    <tr>
+        <td>Function.prototype.apply/call/bind</td>
+        <td>첫 번째 인수로 전달한 객체</td>
+    </tr>
+</table>
 
 export const meta = PostUtil.createPostMeta({
     index: 32,

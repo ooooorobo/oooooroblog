@@ -2,8 +2,11 @@ import PostLayout from "../../components/post/PostLayout";
 import PostUtil from "../../utils/postUtil";
 
 🤵 State와 Ref의 차이가 무엇인가요?
+
 🙎 ???
+
 🤵 이런 상황에서 ref의 값이 변경된다면 다시 렌더링이 될까요?
+
 ```jsx
 function MyComponent() {
   const ref = useRef(3)
@@ -59,8 +62,12 @@ render 메서드를 통해 생성된 DOM 노드 혹은 React 엘리먼트에 접
 **`useRef()`로 만들어지는 ref 객체는 순수 자바스크립트 객체이다.** 그러나 일반 객체와 다른 점은, **ref 객체는 렌더링이 되어도 항상 동일한 ref 객체를 반환한다.**
 `useRef()`은 그 내용이 변경될 때 변경된 사실을 알리지 않는다. 즉, **`ref.current` 프로퍼티가 변경되었다고 해서 리렌더링이 일어나지 않는다.** 그래서 질문의 상황에서는 렌더링이 다시 일어나지 않는다는 것이 정답이다.
 
-!codesandbox[useref-test-dofn8?fontsize=14&hidenavigation=1&theme=dark]
-
+<iframe src="https://codesandbox.io/embed/useref-test-dofn8?fontsize=14&hidenavigation=1&theme=dark"
+        style={{"width":"100%", height:'500px', border:0, borderRadius: '4px', overflow:'hidden'}}
+        title="useRef-test"
+        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
 버튼 클릭을 해도 리렌더링이 되지 않기 때문에 숫자가 늘어나지 않지만, 콘솔에는 변경된 `ref.current` 값이 계속 출력되고 있다.
 
 export const meta = PostUtil.createPostMeta({

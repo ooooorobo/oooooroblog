@@ -6,7 +6,6 @@ import PostUtil from "../../utils/postUtil";
 
 - OSI TCP/IP 7계층 중 4번째 레이어 Transport 계층에 속하는 프로토콜
 - 전송 제어 프로토콜(Transmission Control Protocol)
-
     → 인터넷 상에서 데이터를 메시지 형태로 보내기 위해 IP와 함께 사용하는 프로토콜
 
 **패킷**: 데이터를 여러 개의 조각으로 나누어 전송할 때 그 조각
@@ -25,7 +24,7 @@ import PostUtil from "../../utils/postUtil";
 - Packet Switching 방식
     - *Circuit Switching vs Datagram Packet Switching*
 
-        **Circuit Switching**
+**Circuit Switching**
 
 <img width="492" alt="스크린샷_2021-09-09_오후_5 04 25" src="https://user-images.githubusercontent.com/40057032/133558556-35ef1245-22d2-42f8-a614-80e66ca75154.png"/>
 
@@ -34,7 +33,7 @@ import PostUtil from "../../utils/postUtil";
         - 회선 전체를 독점하므로 끼어들 수 없고, 속도 성능 일정
         - 전화 등의 실시간 통신에 사용
 
-        **Datagram Packet Switching**
+**Datagram Packet Switching**
 
 <img width="542" alt="스크린샷_2021-09-09_오후_5 04 48" src="https://user-images.githubusercontent.com/40057032/133558562-d4822f2a-29d1-4e86-a450-bc4b28f85848.png"/>
 
@@ -130,14 +129,14 @@ Finite State Machine
 # TCP State
 
 - [https://coding-factory.tistory.com/614](https://coding-factory.tistory.com/614)
-- **LISTEN :**서버의 데몬이 떠서 접속 요청을 기다리는 상태
-- **SYN-SENT :**로컬의 클라이언트 어플리케이션이 원격 호스트에 연결을 요청한 상태
-- **SYN_RECEIVED :**서버가 원격 클라이언트로부터 접속 요구를 받아 클라이언트에게 응답을 하였지만 아직 클라이언트에게 확인 메시지는 받지 않은 상태
-- **ESTABLISHED :**3 way-handshaking 이 완료된 후 서로 연결된 상태
-- **FIN-WAIT1, CLOSE-WAIT, FIN-WAIT2 :**서버에서 연결을 종료하기 위해 클라이언트에게 종결을 요청하고 회신을 받아 종료하는 과정의 상태
-- **TIME-WAIT :**연결은 종료되었지만 분실되었을지 모를 느린 세그먼트를 위해 당분간 소켓을 열어두고 있는 상태
-- **CLOSING :**흔하지 않지만 주로 확인 메시지가 전송도중 분실된 상태
-- **CLOSED :**완전히 종료
+- **LISTEN** :서버의 데몬이 떠서 접속 요청을 기다리는 상태
+- **SYN-SENT** :로컬의 클라이언트 어플리케이션이 원격 호스트에 연결을 요청한 상태
+- **SYN_RECEIVED** :서버가 원격 클라이언트로부터 접속 요구를 받아 클라이언트에게 응답을 하였지만 아직 클라이언트에게 확인 메시지는 받지 않은 상태
+- **ESTABLISHED** :3 way-handshaking 이 완료된 후 서로 연결된 상태
+- **FIN-WAIT1, CLOSE-WAIT, FIN-WAIT2** :서버에서 연결을 종료하기 위해 클라이언트에게 종결을 요청하고 회신을 받아 종료하는 과정의 상태
+- **TIME-WAIT** :연결은 종료되었지만 분실되었을지 모를 느린 세그먼트를 위해 당분간 소켓을 열어두고 있는 상태
+- **CLOSING** :흔하지 않지만 주로 확인 메시지가 전송도중 분실된 상태
+- **CLOSED** :완전히 종료
 
 # TCP 헤더
 
