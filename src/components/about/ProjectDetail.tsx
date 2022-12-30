@@ -6,7 +6,6 @@ import { ReactNode } from "react";
 
 interface ProjectDetailProps {
   period: string;
-  teamInfo: string[];
   works: (string | ReactNode)[];
   posts: PostInfo[];
   techs: string[];
@@ -19,7 +18,6 @@ interface PostInfo {
 
 export default function ProjectDetail({
   period,
-  teamInfo,
   works,
   posts,
   techs,
@@ -36,16 +34,6 @@ export default function ProjectDetail({
       </Row>
       <Row>
         <Subtitle>
-          <h3>팀 구성</h3>
-        </Subtitle>
-        <ul>
-          {teamInfo.map((info, idx) => (
-            <li key={idx}>{info}</li>
-          ))}
-        </ul>
-      </Row>
-      <Row>
-        <Subtitle>
           <h3>주요 작업</h3>
         </Subtitle>
         <ul>
@@ -54,20 +42,22 @@ export default function ProjectDetail({
           ))}
         </ul>
       </Row>
-      <Row>
-        <Subtitle>
-          <h3>관련 링크</h3>
-        </Subtitle>
-        <ul>
-          {posts.map((info, idx) => (
-            <li key={idx}>
-              <Link href={info.link} passHref={true}>
-                <LinkStyle>{info.title}</LinkStyle>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Row>
+      {posts?.length && (
+        <Row>
+          <Subtitle>
+            <h3>관련 링크</h3>
+          </Subtitle>
+          <ul>
+            {posts.map((info, idx) => (
+              <li key={idx}>
+                <Link href={info.link} passHref={true}>
+                  <LinkStyle>{info.title}</LinkStyle>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Row>
+      )}
       <Row>
         <Subtitle>
           <h3>사용 기술</h3>

@@ -1,9 +1,174 @@
 import {Article} from "../components/post/PostLayout";
+import ContactIconList from "../components/common/ContactIconList";
+import WavyLine from "../components/WavyLine";
+import ProjectDetail from "../components/about/ProjectDetail";
+import {NextSeo} from "next-seo";
+import Link from "../components/mdx/Link";
 
 <div style={{paddingTop: '100px'}}/>
 
-🚧 재정비중입니다..
+# 👋 안녕하세요!
+
+웹 프론트엔드 개발자 **조예진**입니다.
+
+<div style={{position: 'relative', height: '50px'}}>
+    <ContactIconList/>
+</div>
+
+<WavyLine size="20" top={'20px'} height={'80px'}/>
+
+
+# 경력
+
+## 🐊 미리디 - [미리캔버스](https://www.miricanvas.com/)
+
+미리캔버스는 웹 기반 그래픽 에디터 서비스입니다.
+
+<ProjectDetail period={'2022. 01 ~'}
+               works={[
+                   '주요 업무: 인쇄물 제작용 디자인을 위한 에디터 특수 기능 구현',
+                   '웹 프로덕션 빌드 최적화를 통한 배포 비용 절감',
+                   '디자인 요소 대규모 등록 시스템 개발',
+                   '레거시 시스템 웹 포팅',
+               ]}
+               techs={['TypeScript', 'React', 'styled-component', 'Webpack']}/>
+
+
+<WavyLine size="10" top={'20px'} height={'80px'}/>
+
+# 오픈소스
+
+## Githru VSCode Extension
+
+Git의 시각적 분석을 위한 VSCode Extension 개발 프로젝트입니다.
+
+<ProjectDetail period={'2022. 07 ~'}
+               works={[
+                   <span><Link href={'https://ieeexplore.ieee.org/abstract/document/9222261'}>논문</Link> 분석 및 Git 메타데이터 분석 알고리즘 작성</span>,
+                   <span><Link href={'https://github.com/githru/githru-vscode-ext/issues/172'}>Git 메타데이터 분석 알고리즘에 대한 문서화</Link></span>,
+                   '디자인 요소 대규모 등록 시스템 개발',
+                   '레거시 시스템 웹 포팅',
+               ]}
+               posts={[{
+                 title: 'Visual Studio Marketplace',
+                 link: 'https://marketplace.visualstudio.com/items?itemName=githru.githru-vscode-ext',
+               },{
+                 title: 'Github Repository',
+                 link: 'https://github.com/githru/githru-vscode-ext',
+               },
+                   {
+                   title: '[PR] feat(engine): Implement STEM',
+                   link: 'https://github.com/githru/githru-vscode-ext/pull/91'
+               }, {
+                   title: '[PR] feat(engine): build stem & CSM based on passed branch name',
+                   link: 'https://github.com/githru/githru-vscode-ext/pull/198'
+               }]}
+               techs={['TypeScript']}/>
+
+<WavyLine size="10" top={'20px'} height={'80px'}/>
+
+# 프로젝트
+
+## 🍰 Cake!
+
+Cake는 같은 학교 학생들과 직접 만나 서로의 재능을 교환할 수 있도록 돕는 재능 공유 플랫폼입니다. 기획과 설계, 개발에 모두 참여했으며, 요구사항과 도메인을 분석한 내용을 토대로 기술 설계 문서를 작성했습니다.
+
+<ProjectDetail period={'2021.10 ~ 2021.12'}
+               works={['서비스 요구사항과 도메인을 분석하여 기술 설계 문서 작성',
+                   '아토믹 디자인 패턴에 따른 컴포넌트 개발',
+                   '스토리북을 활용해 디자이너와의 협업 및 시각적 테스팅']}
+               posts={[{
+                   title: '기술 설계 문서',
+                   link: 'https://docs.google.com/document/d/15EEdAm05md8PaBFjUEky3PJozWJyxrYEZ_oCcNg83Bk/edit'
+               }, {
+                   title: 'Storybook',
+                   link: 'https://wanted-fork-fork.github.io/cake-FE/?path=/story/atoms-category--category'
+               }, {
+                   title: 'Github Repository',
+                   link: 'https://github.com/wanted-fork-fork/cake-FE'
+               }]}
+               techs={['Next.js', 'styled-component', 'mobX', 'Cypress', 'StoryBook']}/>
+
+<WavyLine size="5"/>
+
+## 🧑‍🎓 [아주총 - 아주대학교 총학생회 홈페이지](https://ajouchong.com/)
+
+총학생회의 사업과 관련된 소식을 제공하는 홈페이지입니다.
+
+<ProjectDetail period={'2019.01 ~ 2021.11'}
+               works={[
+                   '1,800여 명의 회원 확보, 2년 간 운영 및 유지보수',
+                   '웹 전반 개발 및 백엔드 API 구현, 홈페이지 내 모든 컨텐츠를 관리 가능한 백오피스 개발'
+               ]}
+               techs={['Next.js', 'django', 'AWS(EC2, RDS, S3)']}/>
+
+<WavyLine size="10" top={'20px'} height={'80px'}/>
+
+# **커뮤니티**
+
+### **테크니컬 세미나**
+
+- *2022.11 ~*
+- [웹팩으로 코드 스플리팅 해보기](https://www.miricanvas.com/v/11n9rw7)
+- [리액트 상태관리 라이브러리 얕게 훑어보기](https://www.miricanvas.com/v/11l7cwd)
+
+### **리팩터링 스터디**
+
+- *2022.11 ~*
+- [리팩터링 2판](https://product.kyobobook.co.kr/detail/S000001810241) 책을 읽고, 책에서 소개하는 기법을 실제 코드에 적용해 보는 스터디입니다.
+- [GitHub Repository](https://github.com/githru-study/book-refactoring)
+
+### **자바스크립트 스터디**
+
+- *2022.01 ~ 2022.03*
+- [모던 자바스크립트 Deep Dive](https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=251552545) 책의 내용을 공유하는 방식으로 운영한 스터디입니다.
+
+<WavyLine size="10" top={'20px'} height={'80px'}/>
+
+# 기타
+
+## 학력
+
+### 아주대학교
+
+2018.03 ~ 2022. 02
+
+- 소프트웨어및컴퓨터공학 전공 <small>(4.05 / 4.5)</small>
+- 디지털미디어 전공 (복수전공)
+
+<WavyLine size="4" />
+
+## 활동
+
+### 2023
+- 연합 IT 개발동아리 [NEXTERS](https://teamnexters.com/about) 22기, 웹 프론트엔드 개발자
+
+### 2022
+- 2022 오픈소스 컨트리뷰션 아카데미, &#60;Githru: Git의 시각적 분석을 위한 VSCode Extension> 프로젝트 멘티 Masters 수료, 정보통신산업진흥원장상 수상(우수상)
+
+### 2021
+- 제 7회 LINC+ 창업아이디어 경진대회, 비교과부문 &#60;Cake> 프로젝트 참여, 장려상 수상
+- 아주대학교 VHEX Lab, &#60;청소년 공감유형 진단·교육용 VR 콘텐츠 개발> 프로젝트 참여 ([링크](https://www.ajou.ac.kr/kr/ajou/news.do?mode=view&articleNo=111005&article.offset=0&articleLimit=12))
+- Google Cloud Speech를 활용해 Speech-to-Text 기능 구현
+- 인증 및 계정 관련 API 구현
+- 미디어학과 &#60;Immersive Media Programming> 과목 TA
+- 제40대 아주대학교 총학생회 비상대책위원회 소통발전국장
+
+### 2020
+- 아주대학교 총학생회 공식 홈페이지 개발TF팀장
+- 제39대 아주대학교 총학생회 ‘아워’ 소통발전차장
+
+### 2019
+- 2019-2학기 파란학기제, &#60;소방관의 화재 구출 작전을 소재로 한 모바일 게임 개발> 프로젝트 참여, 훌륭한 뱃사공상(대상) 수상 ([링크](https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=greatajou&logNo=221833365858))
+- 미디어학과 게임제작 소학회 ‘브레인스톰’ 회장
+- 대학생연합 게임제작동아리 ‘브릿지’ 7기, 게임 클라이언트 개발자
+- 미디어학과 &#60;컴퓨터프로그래밍> 과목 튜터
+- 제38대 아주대학교 총학생회 ‘다움’ 소통발전국원
+
+### 2018
+- 모바일 게임 &#60;Tasty Pizza> 구글 플레이스토어 출시
 
 export default ({children}) => <Article>
+    <NextSeo title={'조예진 | Resume'} description={'웹 프론트엔드 개발자 조예진입니다.'} openGraph={{title: '조예진 | Resume', description: '웹 프론트엔드 개발자 조예진입니다.'}} />
     {children}
 </Article>
