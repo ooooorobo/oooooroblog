@@ -39,6 +39,7 @@ const GlobalStyle = createGlobalStyle`
   h1, h2, h3, h4, h5, h6 {
     line-height: ${(props) => props.theme.lineHeights.title};
     word-break: keep-all;
+    margin-top: 40px;
   }
   
   h1 {
