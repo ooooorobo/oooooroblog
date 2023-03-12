@@ -124,7 +124,7 @@ const Home: NextPage<HomeProps> = ({ tags, posts }: HomeProps) => {
         <div ref={observerEntry} />
       </div>
       {isLoading && <Loading />}
-      {!isLoading && !hasNextPage && (
+      {!isLoading && !hasNextPage && !selectedTag && (
         <LastMessage>
           안녕하세요! 👆 이 글이 이 블로그의 마지막 글입니다 :)
         </LastMessage>

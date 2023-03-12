@@ -22,6 +22,9 @@ export default function PostTitle({ meta }: PostTitleProps) {
 }
 
 const Wrapper = styled.div`
+  max-width: 760px;
+  margin: auto;
+
   ${({ theme }) =>
     theme.media.desktop(` 
     text-align: center;
