@@ -10,7 +10,11 @@ const components: MDXComponents = {
   pre: CodeBlock,
   code: (props) => <InlineCode>{props.children}</InlineCode>,
   a: Link,
-  img: (props) => <Img src={props.src} />,
+  img: (props) => (
+    <a href={props.src}>
+      <Img src={props.src} />
+    </a>
+  ),
 };
 
 const Img = styled.img`
@@ -18,6 +22,7 @@ const Img = styled.img`
   height: auto;
   display: block;
   margin: 0 auto;
+  cursor: pointer;
 `;
 
 export default components;
