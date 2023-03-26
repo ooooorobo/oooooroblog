@@ -1,55 +1,27 @@
-import { createRef, useContext, useEffect } from "react";
-import { DarkModeContext } from "@src/utils/context/DarkModeContext";
-import styled from "styled-components";
+import Script from "next/script";
 
-const createUtterance = (themeName: string) => {
-  const comment = document.createElement("script");
-  const config = {
-    src: "https://utteranc.es/client.js",
-    id: "utterance",
-    repo: "ooooorobo/ooooorobo.github.io",
-    "issue-term": "pathname",
-    label: "utterances",
-    theme: themeName,
-    crossOrigin: "anonymous",
-    async: "true",
-  };
-  Object.entries(config).forEach(([key, value]) =>
-    comment.setAttribute(key, value)
-  );
-  return comment;
-};
-
+/**
+ * Giscus comment
+ * 스타일은 {@link GlobalStyle}
+ */
 export default function Comment() {
-  const { isDarkMode } = useContext(DarkModeContext);
-  const lightRef = createRef<HTMLDivElement>();
-  const darkRef = createRef<HTMLDivElement>();
-
-  useEffect(() => {
-    if (!lightRef.current?.firstChild && !darkRef.current?.firstChild) {
-      const light = createUtterance("github-light");
-      const dark = createUtterance("github-dark");
-      lightRef.current?.appendChild(light);
-      darkRef.current?.appendChild(dark);
-    }
-  }, []);
-
   return (
-    <Wrapper isDarkMode={isDarkMode}>
-      <div className={"dark"} ref={darkRef} />
-      <div className={"light"} ref={lightRef} />
-    </Wrapper>
+    <Script
+      src="https://giscus.app/client.js"
+      data-repo="ooooorobo/ooooorobo.github.io"
+      data-repo-id="R_kgDOHhuadg"
+      data-category="Comments"
+      data-category-id="DIC_kwDOHhuads4CVJrG"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="top"
+      data-theme="dark_dimmed"
+      data-lang="ko"
+      data-loading="lazy"
+      crossOrigin="anonymous"
+      async
+    ></Script>
   );
 }
-
-const Wrapper = styled.div<{ isDarkMode: boolean }>`
-  min-height: 300px;
-
-  .light {
-    display: ${({ isDarkMode }) => (isDarkMode ? "none" : "block")};
-  }
-
-  .dark {
-    display: ${({ isDarkMode }) => (isDarkMode ? "block" : "none")};
-  }
-`;
