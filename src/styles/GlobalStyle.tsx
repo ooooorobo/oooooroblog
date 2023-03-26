@@ -1,6 +1,12 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
+  @media screen and (max-device-width: 480px){
+    body{
+      -webkit-text-size-adjust: none;
+    }
+  }
+  
   * {
     box-sizing: border-box;
     font-family: 'IBM Plex Sans KR', sans-serif;
