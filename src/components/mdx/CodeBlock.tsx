@@ -48,6 +48,7 @@ const Pre = styled.pre`
 
 const Line = styled.div`
   display: table-row;
+  font-size: ${({ theme }) => theme.fontSizes.s};
 `;
 
 const LineNo = styled.span`
@@ -60,4 +61,5 @@ const LineNo = styled.span`
 
 const LineContent = styled.span`
   display: table-cell;
+  font-size: ${({ theme }) => theme.fontSizes.s};
 `;

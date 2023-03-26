@@ -56,6 +56,7 @@ const GlobalStyle = createGlobalStyle`
   .giscus {
     max-width: 760px;
     margin: auto auto 80px;
+    padding: 0 0.5rem;
   }
 `;
 

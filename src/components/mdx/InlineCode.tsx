@@ -5,4 +5,5 @@ export default styled.code`
   padding: 0.2rem 0.3rem;
   font-size: ${({ theme }) => theme.fontSizes.s};
   border-radius: 3px;
+  word-break: break-word;
 `;
