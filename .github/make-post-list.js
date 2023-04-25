@@ -80,6 +80,8 @@ const postCount = 5;
 
 (async () => {
   const paths = await getAllFilePath(getPostPath(""));
+  console.log(getPostPath(""));
+  console.log(paths);
   const fileStats = await Promise.all(
     paths.map(async (filePath) => ({
       filePath,
