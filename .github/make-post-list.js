@@ -63,6 +63,7 @@ const getAllFilePath = async (dirPath) => {
 
 const getFileMeta = async (filePath) => {
   const fileContents = await readFile(filePath);
+  console.log(fileContents.toString());
   return JSON.parse(
     fileContents
       .toString()
@@ -91,6 +92,7 @@ const postCount = 5;
   const filtered = fileStats
     .sort(({ stat: a }, { stat: b }) => b.birthtimeMs - a.birthtimeMs)
     .slice(0, postCount);
+  console.log(filtered);
   const metas = await Promise.all(
     filtered.map(({ filePath }) => getFileMeta(getPostPath(filePath)))
   );
