@@ -98,5 +98,5 @@ const postCount = 5;
       birthtime,
     };
   });
-  core.setOutput("posts", JSON.stringify(posts));
+  core.setOutput("posts", JSON.stringify(JSON.stringify(posts)));
 })();
