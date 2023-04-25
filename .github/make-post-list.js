@@ -63,26 +63,22 @@ const getAllFilePath = async (dirPath) => {
 
 const getFileMeta = async (filePath) => {
   const fileContents = await readFile(filePath);
-  console.log(fileContents.toString());
-  return JSON.parse(
-    fileContents
-      .toString()
-      .match(/export const meta = PostUtil\.createPostMeta\(\{(.|\n)*}\);/g)[0]
-      .match("{(.|\n)*}")[0]
-      .replace(/    (\w*):/g, (_, key) => {
-        return `"${key}":`;
-      })
-      .replace(/'/g, '"')
-      .replace(/,(}|\n)*$/, "}")
-  );
+  const replaced = fileContents
+    .toString()
+    .match(/createPostMeta\(\{(.|\n)*}\);/g)[0]
+    .match("{(.|\n)*}")[0]
+    .replace(/    (\w*):/g, (_, key) => {
+      return `"${key}":`;
+    })
+    .replace(/'([^'\n]*)'/g, (_, contents) => `"${contents}"`)
+    .replace(/,(}|\n)*$/, "}");
+  return JSON.parse(replaced);
 };
 
 const postCount = 5;
 
 (async () => {
   const paths = await getAllFilePath(getPostPath(""));
-  console.log(getPostPath(""));
-  console.log(paths);
   const fileStats = await Promise.all(
     paths.map(async (filePath) => ({
       filePath,
@@ -92,7 +88,6 @@ const postCount = 5;
   const filtered = fileStats
     .sort(({ stat: a }, { stat: b }) => b.birthtimeMs - a.birthtimeMs)
     .slice(0, postCount);
-  console.log(filtered);
   const metas = await Promise.all(
     filtered.map(({ filePath }) => getFileMeta(getPostPath(filePath)))
   );
