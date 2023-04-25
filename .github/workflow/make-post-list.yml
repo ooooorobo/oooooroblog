@@ -1,0 +1,36 @@
+name: make recent post list
+on: push
+jobs:
+  make:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - uses: actions/cache@v3
+        id: cache
+        with:
+          path: node_modules
+          key: npm-packages-${{ hashFiles('**/package-lock.json') }}
+
+      - name: install
+        if: steps.cache.outputs.cache-hit !== 'true'
+        run: npm ci
+
+      - name: set birthtime
+        run: |-
+          git ls-tree -r --name-only HEAD | while read filename; do
+            unixtime=$(git log -1 --format="%at" -- "${filename}")
+            touchtime=$(date -r ${unixtime} +'%Y%m%d%H%M.%S')
+            touch -t ${touchtime} "${filename}"
+            done
+
+      - name: make post list
+        id: posts
+        uses: ./.github/make-post-list
+
+      - run:
+          echo "${{ steps.posts.outputs.posts }}"
