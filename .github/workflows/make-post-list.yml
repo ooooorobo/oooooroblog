@@ -21,7 +21,7 @@ jobs:
         run: yarn
 
       - name: set birthtime
-        run: sudo .github/set-birthtime.sh
+        run: chmod +x ./.github/set-birthtime.sh && ./.github/set-birthtime.sh
 
       - name: make post list
         id: posts
