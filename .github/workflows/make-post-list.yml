@@ -30,7 +30,7 @@ jobs:
 
       - name: make post list
         id: posts
-        uses: ./.github/make-post-list.js
+        uses: node .github/make-post-list.js
 
       - run:
           echo "${{ steps.posts.outputs.posts }}"
