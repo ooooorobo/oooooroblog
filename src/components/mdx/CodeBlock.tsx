@@ -40,7 +40,7 @@ export default function CodeBlock(props: any) {
 
 const Pre = styled.pre`
   text-align: left;
-  margin: 1em 0;
+  margin: 2em 0;
   padding: 0.5em;
   overflow: auto;
   font-size: ${({ theme }) => theme.fontSizes.s};

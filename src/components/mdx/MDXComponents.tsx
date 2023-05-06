@@ -21,7 +21,7 @@ const Img = styled.img`
   max-width: 100%;
   height: auto;
   display: block;
-  margin: 0 auto;
+  margin: 3rem auto;
   cursor: pointer;
 `;
 
