@@ -18,7 +18,6 @@ export default function Profile() {
       </Link>
       <div>
         <h3>조예진</h3>
-        <p>웹 프론트엔드 개발자</p>
         <ContactIconList />
       </div>
     </Wrapper>
@@ -31,6 +30,7 @@ const Wrapper = styled.div`
   position: relative;
 
   h3 {
+    height: 100%;
     margin: 5px 0;
   }
   p {

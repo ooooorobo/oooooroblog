@@ -15,13 +15,20 @@ const components: MDXComponents = {
       <Img src={props.src} />
     </a>
   ),
+  h1: (props) => <Heading as={"h1"}>{props.children}</Heading>,
+  h2: (props) => <Heading as={"h2"}>{props.children}</Heading>,
+  h3: (props) => <Heading as={"h3"}>{props.children}</Heading>,
 };
+
+const Heading = styled.h1`
+  border-bottom: 1px solid ${(props) => props.theme.colors.text.secondary};
+`;
 
 const Img = styled.img`
   max-width: 100%;
   height: auto;
   display: block;
-  margin: 3rem auto;
+  margin: 1rem auto;
   cursor: pointer;
 `;
 

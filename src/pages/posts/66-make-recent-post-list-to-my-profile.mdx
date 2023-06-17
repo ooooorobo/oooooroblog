@@ -52,7 +52,7 @@ import PostLayout from "../../components/post/PostLayout"; import WavyLine from 
 
 즉, 만약 내 프로필을 변경하고 싶다면, 프로필 레포지토리의 파일을 수정하는 게 아니라 블로그 레포지토리의 `profile-readme-template.md` 파일을 수정해줘야 한다. 프로필 레포지토리의 `readme.md` 파일은 블로그 레포지토리에 push가 일어나면 덮어씌워질 파일이기 때문이다.
 
-이렇게 프로필 레포지토리에서 자신의 `README.md` 파일이 어떻게 변경될지 모르는 구조는 유지보수하기 어려워 적절하지 않다. 
+이렇게 프로필 레포지토리에서 자신의 `README.md` 파일이 어떻게 변경될지 모르는 구조는 유지보수하기 어려워 적절하지 않다.
 
 <br/>
 
@@ -62,7 +62,7 @@ import PostLayout from "../../components/post/PostLayout"; import WavyLine from 
 
 이렇게 하면 프로필을 변경하기 위해 블로그 레포지토리의 파일을 변경해야 하는 문제는 해결할 수 있다.
 
-그렇지만 애초에 블로그 레포지토리에서 프로필 레포지토리의 파일을 변경한다는 것 자체가 이상하다. 프로필 레포지토리는 언제 어떻게 변경이 일어날 지도 모르는 채 파일이 변경되는 것이다. 
+그렇지만 애초에 블로그 레포지토리에서 프로필 레포지토리의 파일을 변경한다는 것 자체가 이상하다. 프로필 레포지토리는 언제 어떻게 변경이 일어날 지도 모르는 채 파일이 변경되는 것이다.
 
 블로그 레포지토리도 여전히 프로필 레포지토리가 가지고 있는 파일에 대해 알아야 한다. `profile-readme-template.md`의 파일 내용 중에서 어느 부분에 최신 포스트 목록에 대해 작성해 줄 지 알아야 하기 때문이다.
 
@@ -132,61 +132,9 @@ curl 커맨드를 실행하면, repository_dispatch 이벤트가 트리거되어
 
 ![Untitled](/image/66/dispatch-test-echo.png)
 
-# [act](https://github.com/nektos/act) - 로컬에서 액션 실행하기
-
-깃허브 액션 워크플로우 작성은 한 번만에 성공하는 법이 없는 것 같다. 그렇다고 액션을 테스트하려고 마구 커밋을 날리다 보면…
-
-![Untitled](/image/66/commit-list.png)
-
-![Untitled](/image/66/action-list.png)
-
-정신을 차리고 보면 커밋 목록과 액션 실행 목록이 이렇게 돼버린다. 이런 사태를 방지하려면 [act](https://github.com/nektos/act)를 사용해 로컬에서 액션을 충분히 테스트하는 게 좋다.
-
-<WavyLine size="4"/>
-
-act는 [링크](https://github.com/nektos/act#installation-through-package-managers)를 참고해서 환경에 따라 설치하면 된다. act는 도커를 사용하기 때문에, 도커도 설치해줘야 한다. ([도커 설치 링크](https://www.docker.com/)) 
-
-설치가 완료되면, 액션을 실행할 레포지토리 루트에서 `act` 커맨드를 실행하면 된다. 
-
-실행 가능한 액션 목록은 `act -l` 커맨드로 확인할 수 있다.
-
-```bash
-➜  ooooorobo git:(master) ✗ act -l
-WARN  ⚠ You are using Apple M-series chip and you have not specified container architecture, you might encounter issues while running act. If so, try running it with '--container-architecture linux/amd64'. ⚠
-Stage  Job ID             Job name           Workflow name          Workflow file          Events
-0      make_recent_posts  make_recent_posts  make-recent-posts.yml  make-recent-posts.yml  repository_dispatch
-```
-
-이 중에서 실행을 원하는 액션을 `act -j [job_name]` 커맨드로 실행하면 된다.
-
-<br/>
-
-그런데 `repository_dispatch` 웹훅을 통해 실행되는 액션의 경우, 추가로 필요한 데이터를 받아와야 한다. 이럴 경우 `—-event_path` 옵션으로 데이터를 넘겨줄 수 있다.
-
-먼저, 데이터를 담는 json 파일을 작성한다. 이 데이터는 curl 커맨드의 -d 옵션 값에 주는 데이터를 그대로 넣어주면 된다.
-
-```json
-// event-data.json
-{
-  "client_payload": {
-    "posts": "[...]"
-  }
-}
-```
-
-그리고 액션을 실행할 때, `-e, --event_path` 옵션을 사용한다.
-
-```bash
-act -j make_recent_posts -e event-data.json
-```
-
-이 값은 github actions workflow에서와 마찬가지로, `github.event` 값을 통해 접근할 수 있다.
-
-![Untitled](/image/66/run-act.png)
-
 # 최근 포스트 가져오는 액션 만들기
 
-우선, node로 파일을 가져오는 코드를 만들었다. 전체 코드는 [여기](https://github.com/ooooorobo/ooooorobo.github.io/blob/main/.github/make-post-list.js)에서 볼 수 있다. 
+우선, node로 파일을 가져오는 코드를 만들었다. 전체 코드는 [여기](https://github.com/ooooorobo/ooooorobo.github.io/blob/main/.github/make-post-list.js)에서 볼 수 있다.
 
 이 자바스크립트 코드는 블로그 포스트가 있는 디렉토리의 파일을 모두 불러온 다음, 최근에 생성된 5개 파일의 메타 데이터를 뽑아내 반환하는 코드이다.
 
@@ -254,7 +202,7 @@ done
 
 <br/>
 
-우선, 어떤 파일의 생성 시점이 언제인가를 알기 위해 `git log` 커맨드를 사용한다. 
+우선, 어떤 파일의 생성 시점이 언제인가를 알기 위해 `git log` 커맨드를 사용한다.
 
 ```bash
 git log --follow --format=%at ${filename}
@@ -285,9 +233,9 @@ git log --follow --format=%at ${filename}
 
 <br/>
 
-`touch` 명령어의 `-t` 옵션을 사용해서 특정 파일의 타임스탬프를 변경할 수 있다. 이때 타임스탬프는 `[[CC]YY]MMDDhhmm[.SS]` 형식을 사용해야 한다. 
+`touch` 명령어의 `-t` 옵션을 사용해서 특정 파일의 타임스탬프를 변경할 수 있다. 이때 타임스탬프는 `[[CC]YY]MMDDhhmm[.SS]` 형식을 사용해야 한다.
 
-위의 UNIX 형식의 타임스탬프를 원하는 형식으로 변경하려면 date 커맨드를 사용하면 된다. 
+위의 UNIX 형식의 타임스탬프를 원하는 형식으로 변경하려면 date 커맨드를 사용하면 된다.
 
 ```bash
 date -r ${unixtime} +'%Y%m%d%H%M.%S'
