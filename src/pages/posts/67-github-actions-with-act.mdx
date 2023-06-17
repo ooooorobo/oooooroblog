@@ -8,7 +8,7 @@ GitHub Actions는 GitHub에서 제공하는 CI/CD 서비스이다. GitHub 레포
 ![Untitled](/image/66/action-list.png)
 </div>
 
-워크플로우가 잘 작동하는지 확인하기 위해 커밋을 자꾸 푸시하다 보면, 위와 같이 커밋 목록이 너무 지저분해진다. 이럴 때는 로컬에서 워크플로우를 실행해보는 것이 좋다.
+워크플로우가 잘 작동하는지 확인하기 위해 커밋을 자꾸 푸시하다 보면, 위와 같이 커밋 목록이 너무 지저분해진다. 이럴 때는 로컬에서 워크플로우를 실행해보면 좋다.
 
 [act](https://github.com/nektos/act)를 사용하면 깃허브 액션 워크플로우의 작업을 로컬에서 실행시켜 볼 수 있다. GitHub Actions를 통해 실행되는 것과 거의 흡사하게 동작하기 때문에 yaml 문법 오류 등 웬만한 오류는 미리 잡아낼 수 있다.
 
@@ -50,10 +50,8 @@ Stage  Job ID              Job name            Workflow name           Workflow 
 [update-cache.yml/update-cache]   ☁  git clone 'https://github.com/actions/cache' # ref=v3
 [update-cache.yml/update-cache]   ☁  git clone 'https://github.com/actions/setup-node' # ref=v3
 [update-cache.yml/update-cache] ⭐ Run Main checkout
-[update-cache.yml/update-cache]   🐳  docker cp src=/Users/miridih/project/ooooorobo.github.io/. dst=/Users/miridih/project/ooooorobo.github.io
 [update-cache.yml/update-cache]   ✅  Success - Main checkout
 [update-cache.yml/update-cache] ⭐ Run Main cache
-[update-cache.yml/update-cache]   🐳  docker cp src=/Users/miridih/.cache/act/actions-cache@v3/ dst=/var/run/act/actions/actions-cache@v3/
 [update-cache.yml/update-cache]   🐳  docker exec cmd=[node /var/run/act/actions/actions-cache@v3/dist/restore/index.js] user= workdir=
 [update-cache.yml/update-cache]   💬  ::debug::Resolved Keys:
 [update-cache.yml/update-cache]   💬  ::debug::["yarn-9cc36377e528932831996b38128b0fdc6877c9ca79b68cc3d5662350b35f01ca"]
@@ -67,7 +65,6 @@ Stage  Job ID              Job name            Workflow name           Workflow 
 [update-cache.yml/update-cache]   💬  ::debug::Archive Path: /tmp/04d57fde-08fb-4a24-b454-0f5810184ed4/cache.tzst
 (생략)
 | Cache Size: ~50 MB (52189089 B)
-| [command]/usr/bin/tar -xf /tmp/04d57fde-08fb-4a24-b454-0f5810184ed4/cache.tzst -P -C /Users/miridih/project/ooooorobo.github.io --use-compress-program unzstd
 | Cache restored successfully
 | Cache restored from key: yarn-9cc36377e528932831996b38128b0fdc6877c9ca79b68cc3d5662350b35f01ca
 [update-cache.yml/update-cache]   ✅  Success - Main cache
