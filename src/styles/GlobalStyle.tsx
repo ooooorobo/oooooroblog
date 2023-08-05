@@ -9,7 +9,7 @@ const GlobalStyle = createGlobalStyle`
   
   * {
     box-sizing: border-box;
-    font-family: 'IBM Plex Sans KR', sans-serif;
+    font-family: 'Noto Sans KR', sans-serif;;
   }
 
   html {
