@@ -14,7 +14,18 @@ import components from "@src/components/mdx/MDXComponents";
 import GlobalStyle from "@src/styles/GlobalStyle";
 
 function MyApp({Component, pageProps}: AppProps) {
-    const [queryClient] = useState(() => new QueryClient());
+    const [queryClient] = useState(() => new QueryClient({
+        defaultOptions: {
+            queries: {
+                refetchOnWindowFocus: false,
+                refetchOnMount: false,
+                refetchOnReconnect: false,
+                refetchInterval: false,
+                keepPreviousData: true
+            }
+        }
+
+    }));
     useEffect(() => {
         console.log(
             `
