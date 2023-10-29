@@ -3,7 +3,7 @@ import PostListElementComponent from "./PostListElement";
 
 interface PostListProps {
   posts: PostListElement[];
-  onClickPost: () => void;
+  onClickPost?: () => void;
 }
 
 export default function PostList({ posts, onClickPost }: PostListProps) {
