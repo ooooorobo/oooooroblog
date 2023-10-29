@@ -33,7 +33,7 @@ const Home: NextPage<HomeProps> = ({tags, posts}: HomeProps) => {
     const {data, fetchNextPage, isLoading, hasNextPage} = useInfiniteQuery(
         [QueryKey.POST_LIST, selectedTag],
         ({pageParam}) =>
-            fetchPostList({page: pageParam ?? 1, postCount: POST_COUNT, selectedTag}),
+            fetchPostList({page: pageParam, postCount: POST_COUNT, selectedTag}),
         {
             getNextPageParam: (lastPage, allPages) =>
                 lastPage.length === POST_COUNT ? allPages.length : undefined,
