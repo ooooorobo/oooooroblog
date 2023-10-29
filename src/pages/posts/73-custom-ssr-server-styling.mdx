@@ -1,0 +1,208 @@
+import PostUtil from "../../utils/postUtil"; import PostLayout from "../../components/post/PostLayout";
+import Image from "next/image";
+import ImageWrapper from "../../components/post/ImageWrapper";
+import WavyLine from "../../components/WavyLine";
+
+레이아웃에 스타일을 입혀주기 위해 다양한 방법을 사용할 수 있다.
+
+- **인라인 스타일**: 레이아웃과 스타일이 혼합되기 때문에 선호하지 않는다. 렌더링이 여러 번 발생할 경우, 인라인 스타일로 전달되는 객체가 불필요하게 여러 번 생성될 가능성이 있다.
+- **Tailwind**: 마찬가지로 레이아웃과 스타일이 혼합되어 선호하지 않는다. 스타일링을 위해 Tailwind만의 키워드를 사용해야 하는데, 이 키워드를 확인하기 위해 매번 공식 문서를 찾아봐야 하는 게 귀찮다.
+- **CSS / SCSS**: 자바스크립트와 별개로 스타일시트 파일을 관리해야 하는 게 귀찮다.
+- **styled-components / emotion**: 레이아웃과 스타일이 분리되지만 하나의 JS 안에서 함께 관리 가능하다는 점에서 CSS-in-JS 방식을 선호한다. 하지만 런타임에서 자바스크립트 코드로 존재하면서 그때그때 CSS를 추가해 주는 방식이고, 전달된 prop이 바뀔 때마다 새로운 CSS를 생성한다는 점이 별로다.
+
+현재까지 이 프로젝트의 클라이언트 측에서는 자바스크립트 코드를 전혀 실행하지 않고 있는데 스타일링을 위해 자바스크립트 코드를 추가하고 싶지 않았다.
+
+그래서 Linaria를 이번 프로젝트에 사용해 보기로 했다.
+
+<br/>
+
+Linaria는 CSS-in-JS 방식의 스타일링 라이브러리이다. 가장 큰 특징은 빌드된 후에 자바스크립트를 전혀 남기지 않고 모두 CSS로 변환되는, zero-runtime CSS in JS 라이브러리라는 점이다.
+
+Linaria가 번들링되어 HTML에서 사용되기까지의 플로우를 간략히 살펴보면 아래와 같다.
+
+1. 웹팩에 설정된 loader 중 `@linaria/webpack-loader` 가 tsx 파일에서 linaria 코드를 만나면, 이 코드로 css를 만든다.
+2. 웹팩에 설정된 loader 중 `css-loader`가 linaria가 만든 css를 자바스크립트로 불러올 수 있게 해준다.
+3. 웹팩에 설정된 plugin 중 `MiniCssExtractPlugin`은 css 파일을 JS 청크에서 분리해 별도의 파일로 존재할 수 있게 해준다.
+4. 빌드 후 별도의 파일로 존재하는 css를 koa 서버에서 static 파일로 서빙해준다.
+5. 응답 HTML이 koa가 서빙하는 css를 불러올 수 있도록, link 태그를 추가한다.
+
+<WavyLine size="8"/>
+
+Linaria는 styled-components에서 스타일을 적용하는 방식과 유사한 방식으로 스타일을 작성한다.
+
+```tsx
+export const Page = (props: AppProps) => {
+  return (
+    <DefaultContainer {...props}>
+      <div className={container}>
+        <WarningTemplate
+          iconName={'warning'}
+          title={'존재하지 않는 페이지에요'}
+          iconSize={53}
+        />
+      </div>
+    </DefaultContainer>
+  );
+};
+
+// 스타일 작성
+const container = css`
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
+```
+
+빌드 과정에서 위에서 작성한 스타일 코드는 아래와 같이 css 파일에 작성된다. 이 때, 클래스 이름도 자동으로 생성된다.
+
+```css
+.c1cfv1dx{height:100dvh;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;}
+```
+
+자바스크립트 번들에는 스타일 관련 코드는 전혀 남지 않고, 자동 생성된 CSS 클래스 이름이 컴포넌트의 className으로 들어간다.
+
+```js
+/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_template_WarningTemplate__WEBPACK_IMPORTED_MODULE_1__.WarningTemplate, {
+    iconName: 'warning',
+    title: '존재하지 않는 페이지에요',
+    iconSize: 53
+  })));
+};
+var container = "c1cfv1dx";
+```
+
+이처럼 Linaria는 빌드 타임에 단 한 번만 스타일을 생성하고, 그 이후에는 <b>스타일 관련 코드를 전혀 실행하지 않게 된다.</b>
+
+<WavyLine size="8" />
+
+Webpack 설정에 loader와 plugin을 추가해서 Linaria를 사용할 수 있게 설정해 보려고 한다.
+
+linaria의 core 패키지와, linaria가 생성한 css를 처리해줄 css loader, plugin이 필요하다.
+
+```
+npm i -D @linaria/core @linaria/webpack-loader css-loader mini-css-extract-plugin
+```
+
+linaria는 아래와 같이 사용할 수 있다.
+
+```tsx
+import React from 'react';
+import { css } from '@linaria/core';
+
+export const App = ({ bandalartKey }: { bandalartKey: string }) => {
+  return <div className={containerStyle}>{bandalartKey}</div>;
+};
+
+const containerStyle = css`
+  background-color: red;
+`;
+```
+
+웹팩 설정에 loader와 plugin을 아래와 같이 추가한다.
+
+```js
+// webpack.config.js
+module.exports = {
+  mode: isDev ? 'development' : 'production',
+  target: 'node',
+  entry: './src/index.ts',
+  // linaria가 만든 css 파일을 추출하기 위해 MiniCssExtractPlugin 플러그인이 필요하다
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'public/styles.css',
+    })
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+          },
+            // tsx 파일을 만나면 linaria의 webpack-loader를 실행시킨다
+          {
+            loader: '@linaria/webpack-loader',
+          },
+        ],
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: isDev,
+            },
+          },
+        ],
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
+  },
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+};
+```
+
+![](/image/73/img.png)
+![](/image/73/img_1.png)
+
+빌드에 성공하면 위와 같이 `public/styles.css` 경로로 css 파일이 생성된다.
+
+이 css 파일을 서버에서 서빙해주기 위해 `koa-static`이 필요하다.
+
+```ts
+// server.ts
+import koa from 'koa';
+import serve from 'koa-static';
+
+// ...
+
+app.use(serve(__dirname + '/public'));
+
+// ...
+```
+
+이렇게 하면 public 하위 경로의 파일을 정적으로 서빙할 수 있게 된다.
+
+마지막으로, HTML의 head 부분에 위 css 파일을 가져오게 해주는 link 태그를 추가한다.
+
+```tsx
+const assetPath = process.env.ASSET_PATH ?? '';
+const router = new Router();
+
+const createHtml = (content: string) => `
+  <!DOCTYPE html>
+	<html lang="ko">
+	  <head>
+        <link rel="stylesheet" href="${assetPath}/styles.css" />
+	    <title>반다라트</title>
+	  </head>
+	  <body>
+	    <div id="root">${content}</div>
+	  </body>
+	</html>
+`;
+```
+
+export const meta = PostUtil.createPostMeta({
+    index: 73,
+    title: "SSR 서버 만들기 (3) - Linaria로 CSS-in-JS 적용하기",
+    description: "",
+    category: '',
+    series: "",
+    tags: ["React","Linaria","Webpack"],
+    postedAt: '2023.10.29.',
+});
+export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>;
