@@ -33,7 +33,7 @@ const Home: NextPage<HomeProps> = ({tags, posts}: HomeProps) => {
     const {data, fetchNextPage, isLoading, hasNextPage} = useInfiniteQuery(
         [QueryKey.POST_LIST, selectedTag],
         ({pageParam}) =>
-            fetchPostList({page: pageParam, postCount: POST_COUNT, selectedTag}),
+            fetchPostList({page: pageParam ?? 1, postCount: POST_COUNT, selectedTag}),
         {
             getNextPageParam: (lastPage, allPages) =>
                 lastPage.length === POST_COUNT ? allPages.length : undefined,
@@ -53,6 +53,15 @@ const Home: NextPage<HomeProps> = ({tags, posts}: HomeProps) => {
     );
 
     useEffect(() => {
+        const scroll = parseInt(sessionStorage.getItem('mainscroll') ?? '0');
+        window.scrollTo({top: scroll, behavior: 'auto'})
+    }, []);
+
+    const onClickPost = () => {
+        sessionStorage.setItem('mainscroll', window.scrollY.toString());
+    }
+
+    useEffect(() => {
         if (!observerEntry.current || !hasNextPage) return;
         const observer = new IntersectionObserver(
             () => {
@@ -61,6 +70,7 @@ const Home: NextPage<HomeProps> = ({tags, posts}: HomeProps) => {
             {threshold: 0}
         );
         observer.observe(observerEntry.current);
+        return () => observer.disconnect();
     }, [observerEntry, hasNextPage]);
 
     return (
@@ -85,7 +95,7 @@ const Home: NextPage<HomeProps> = ({tags, posts}: HomeProps) => {
             />
             <div>
                 {(data ? data.pages : [posts]).map((posts, i) => (
-                    <PostList key={i} posts={posts}/>
+                    <PostList key={i} posts={posts} onClickPost={onClickPost}/>
                 ))}
                 <div ref={observerEntry}/>
             </div>
