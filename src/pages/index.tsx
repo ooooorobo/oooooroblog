@@ -5,20 +5,23 @@ import styled from "styled-components";
 import { compareDesc } from "date-fns";
 import { allPosts } from "contentlayer/generated";
 
-import { PostListElement } from "@src/model/post";
+import { PostListElement } from "@src/types/post";
 import Profile from "@src/components/main/Profile";
 import PostList from "@src/components/main/PostList";
+import { StorageKey } from "@src/constants/constants";
 
 type HomeProps = { posts: PostListElement[] };
 
 const Home: NextPage<HomeProps> = ({ posts }: HomeProps) => {
   useEffect(() => {
-    const scroll = parseInt(sessionStorage.getItem("mainscroll") ?? "0");
+    const scroll = parseInt(
+      sessionStorage.getItem(StorageKey.MAIN_SCROLL_Y) ?? "0"
+    );
     window.scrollTo({ top: scroll, behavior: "auto" });
   }, []);
 
   const onClickPost = () => {
-    sessionStorage.setItem("mainscroll", window.scrollY.toString());
+    sessionStorage.setItem(StorageKey.MAIN_SCROLL_Y, window.scrollY.toString());
   };
 
   return (

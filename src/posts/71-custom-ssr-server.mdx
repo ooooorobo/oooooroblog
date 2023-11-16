@@ -1,13 +1,12 @@
 ---
 id: 71
 title: SSR 서버 만들기 (1) - React Tree를 렌더링해 응답하는 서버 만들기
-description: 
+description:
 tags: React,Node.js,SSR
 date: 2023-10-09
 ---
-import PostUtil from "../utils/postUtil"; import PostLayout from "../components/post/PostLayout";
-import Image from "next/image";
-import ImageWrapper from "../components/post/ImageWrapper";
+
+
 import WavyLine from "../components/WavyLine";
 
 서버 사이드 렌더링(SSR)은 서버에서 먼저 렌더링을 수행하여 HTML을 구성해서 클라이언트에게 보내주는 렌더링 방식이다. 이렇게 하면 빈 HTML만 보내주고 클라이언트 측에서 자바스크립트를 실행해 나머지를 렌더링하도록 하는 클라이언트 사이드 렌더링(CSR) 방식보다 더 빠르게 첫 화면을 그려줄 수 있다. Next.js, Remix와 같은 리액트 기반 프레임워크에서도 SSR을 지원해주고 있다.
@@ -200,7 +199,7 @@ count: 와 123이 주석으로 분리되는 이유는 두 값은 서로 다른 e
         ref: null,
         props: { children: ['count: ', 123] },
         _owner: null,
-        _store: {},
+        _store: {}
       },
       {
         type: 'button',
@@ -208,12 +207,12 @@ count: 와 123이 주석으로 분리되는 이유는 두 값은 서로 다른 e
         ref: null,
         props: { children: 'add' },
         _owner: null,
-        _store: {},
-      },
-    ],
+        _store: {}
+      }
+    ]
   },
   _owner: null,
-  _store: {},
+  _store: {}
 };
 ```
 

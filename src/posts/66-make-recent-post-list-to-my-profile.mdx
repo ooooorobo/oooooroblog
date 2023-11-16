@@ -5,9 +5,9 @@ description: Github Actions를 활용해, 내 블로그에 올라온 최신 글 
 tags: Github Actions
 date: 2023-05-06
 ---
-import PostUtil from "../utils/postUtil";
-import PostLayout from "../components/post/PostLayout"; import WavyLine from "../components/WavyLine"; import Aside
-    from "../components/mdx/Aside";
+
+
+import WavyLine from "../components/WavyLine"; import Aside from "../components/mdx/Aside";
 
 ### 이 포스트에서 다루는 내용
 
@@ -216,7 +216,7 @@ git log --follow --format=%at ${filename}
 ```
 
 - `--follow`: 특정 파일의 기록을 모두 추적한다. 예를 들어, 파일의 이름이 변경됐을 경우 파일의 이름이 변경되기 이전 기록도 가져온다.
-  - 참고: [Use —follow option in git log to view a file’s history](https://kgrz.io/use-git-log-follow-for-file-history.html)
+- 참고: [Use —follow option in git log to view a file’s history](https://kgrz.io/use-git-log-follow-for-file-history.html)
 - `--format=%at` : 로그 출력 시, author date 값만 가져온다. UNIX 타임스탬프를 사용한다.
 
 그러면 아래와 같은 타임스탬프가 출력된다.

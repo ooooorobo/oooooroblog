@@ -5,8 +5,8 @@ description: 서버와 클라이언트의 도메인이 다를 때 쿠키를 설�
 tags: Cookie,CORS
 date: 2021-11-01
 ---
-import PostLayout from "../components/post/PostLayout";
-import PostUtil from "../utils/postUtil";
+
+
 
 이번 프로젝트에서는 인증 방식으로 JWT 토큰 베이스 인증을 사용하기로 했고, 이를 위해 refresh-token과 access-token 두 가지를 사용하기로 했다. refresh-token은 쿠키에 http-only로 담고, access-token은 요청 헤더에 담기 위해 local storage 등 브라우저 저장소에 담기로 했다.
 

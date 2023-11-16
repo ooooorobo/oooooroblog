@@ -5,8 +5,8 @@ description: 함수를 모킹하고, fake timer를 활용해 비동기 함수의
 tags: jest,test,글또
 date: 2023-03-26
 ---
-import PostLayout from "../components/post/PostLayout";
-import PostUtil from "../utils/postUtil";
+
+
 
 아래와 같은 코드가 있다고 해보겠습니다.
 
@@ -299,7 +299,9 @@ test("비동기 작업이 완료되기 이전에는 onBeforeExecute는 실행되
 2. 이때 `await fetchList`를 만나면, WebAPI가 setTimeout의 처리를 맡게 되고 콜 스택에서 execute는 빠져나옵니다.
 3. 주도권이 테스트로 넘어옵니다.
 4. <span
-    style={{color: "gray"}}>(여기까지 동일)</span> `jest.advanceTimersByTime`으로 3.1초가 흐르고, execute는 태스크 큐로 이동해 실행 대기 상태가 됩니다.
+style = {{
+    color: "gray"
+}}>(여기까지 동일)</span> `jest.advanceTimersByTime`으로 3.1초가 흐르고, execute는 태스크 큐로 이동해 실행 대기 상태가 됩니다.
 5. `await flushPromises()` 처리로 인해, 테스트도 콜 스택에서 빠져나와 태스크 큐로 이동합니다.
 6. 콜 스택이 비었기 때문에, 태스크 큐에서 더 앞에 있던 `execute`가 콜 스택으로 들어가 마저 실행됩니다. 이 시점에 `onAfterExecute`가 실행됩니다.
 7. execute 실행이 모두 끝나면, 다시 테스트를 실행합니다. 이때는 `expect(onAfterExecute).toHaveBeenCalledTimes(1);`를 통과할 수 있습니다.

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import styled from "styled-components";
 
-import { PostListElement } from "@src/model/post";
+import { PostListElement } from "@src/types/post";
 import Tag from "@src/components/Tag";
 import { format } from "date-fns";
 

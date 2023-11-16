@@ -5,8 +5,8 @@ description: TCP - 전송 제어 프로토콜(Transmission Control Protocol) →
 tags: Network
 date: 2022-02-13
 ---
-import PostLayout from "../components/post/PostLayout";
-import PostUtil from "../utils/postUtil";
+
+
 
 >
 # TCP?
@@ -20,16 +20,16 @@ import PostUtil from "../utils/postUtil";
 ## 특징
 
 - 3단계 통신
-  1. 연결 수립 (Connection Establish)
-  2. 데이터 전송 (Data Transfer)
-  3. 연결 종료 (Connection Termination)
+1. 연결 수립 (Connection Establish)
+2. 데이터 전송 (Data Transfer)
+3. 연결 종료 (Connection Termination)
 - 서버 - 클라이언트 간 긍정 확인응답 방식 (Positive ACK Mechanism)
 
 **긍정 확인응답**: **ACK** 신호, 수신 측에서 메시지를 에러 없이 정상적으로 수신했다 / 송신해도 된다는 것을 송신 측에 알리는 신호
 **부정 확인응답**: **NACK** 혹은 **NAK** 신호, 정상적으로 수신되지 않았음을 송신측에 알림 → 잘 쓰이지 않는다
 
 - Packet Switching 방식
-  - *Circuit Switching vs Datagram Packet Switching*
+- *Circuit Switching vs Datagram Packet Switching*
 
 **Circuit Switching**
 
@@ -54,7 +54,7 @@ import PostUtil from "../utils/postUtil";
 ## 제공하는 기능
 
 - **Connection-oriented (연결 지향 프로토콜)**
-  - 데이터가 전송되기 전에 통신 세션 또는 반영구적 연결이 설정되어 데이터가 올바른 순서로 네트워크에 전달되는지 확인
+- 데이터가 전송되기 전에 통신 세션 또는 반영구적 연결이 설정되어 데이터가 올바른 순서로 네트워크에 전달되는지 확인
 - 믿을 수 있고 순서가 보장됨
 - **point-to-point** → 송신자와 수신자가 일대일 연결됨
 - **full duplex service** → 쌍방향 통신, 데이터 송수신을 위해 독립된 회선을 사용 (동시에 송수신 가능)
@@ -65,7 +65,7 @@ import PostUtil from "../utils/postUtil";
 
 
 - **flow controlled** → 흐름 제어, 송신측의 속도를 조절하여 너무 많은 패킷이 전송되지 않게 한다
-  - *Sliding Window*
+- *Sliding Window*
 
 <img width="622" alt="스크린샷_2021-09-09_오후_5 37 33"
      src="https://user-images.githubusercontent.com/40057032/133558620-1f2762e3-05f5-4b6c-b6b6-4f8e28dbb5a9.png"/>
