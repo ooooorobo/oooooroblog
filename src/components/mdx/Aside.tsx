@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
 
-export default ({ children, ...rest }: PropsWithChildren) => (
-  <aside {...rest}>{children}</aside>
-);
+export default function Aside({ children, ...rest }: PropsWithChildren) {
+  return <aside {...rest}>{children}</aside>;
+}

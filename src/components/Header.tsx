@@ -15,9 +15,6 @@ export default function Header() {
           </Link>
         </div>
         <div>
-          <Link href={"/about"}>
-            <a>About</a>
-          </Link>
           <button onClick={toggleDarkMode}>
             {isDarkMode ? (
               <i className="bi bi-moon-fill" />

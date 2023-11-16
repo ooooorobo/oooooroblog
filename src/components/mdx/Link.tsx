@@ -1,7 +1,9 @@
 import { PropsWithChildren } from "react";
 
-export default ({ children, ...rest }: PropsWithChildren) => (
-  <a className={"link"} {...rest}>
-    {children}
-  </a>
-);
+export default function Link({ children, ...rest }: PropsWithChildren) {
+  return (
+    <a className={"link"} {...rest}>
+      {children}
+    </a>
+  );
+}

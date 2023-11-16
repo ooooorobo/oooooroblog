@@ -29,8 +29,8 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     (post) => post._raw.flattenedPath === context.params?.slug
   );
   const post = allPosts[postIdx];
-  const prevPost = allPosts[postIdx - 1],
-    nextPost = allPosts[postIdx + 1];
+  const prevPost = allPosts[postIdx - 1] ?? null,
+    nextPost = allPosts[postIdx + 1] ?? null;
 
   // Return notFound if the post does not exist.
   if (!post) return { notFound: true };
