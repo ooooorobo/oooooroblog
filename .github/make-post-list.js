@@ -79,6 +79,7 @@ const getFileMeta = async (filePath) => {
         metadataJson[key] = value;
       }
     });
+    metadataJson.filePath = filePath;
 
     return metadataJson;
   } else {
@@ -96,19 +97,18 @@ const postCount = 5;
       stat: await getFileStat(path.join(process.cwd(), postBasePath, filePath)),
     }))
   );
-  const filtered = fileStats
-    .sort(({ stat: a }, { stat: b }) => b.birthtimeMs - a.birthtimeMs)
-    .slice(0, postCount);
   const metas = await Promise.all(
-    filtered
+    fileStats
       .map(({ filePath }) => getFileMeta(getPostPath(filePath)))
       .filter(Boolean)
   );
-  const posts = filtered.map(({ filePath, stat: { birthtime } }, index) => {
+  const filtered = metas
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, postCount);
+  const posts = filtered.map(({ filePath, index }) => {
     return {
       path: `${blogPath}/posts${filePath.replace(".mdx", "")}`,
       meta: metas[index],
-      birthtime,
     };
   });
   core.setOutput("posts", JSON.stringify(JSON.stringify(posts)));
