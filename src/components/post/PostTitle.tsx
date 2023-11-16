@@ -1,22 +1,31 @@
-import { PostMeta } from "@src/model/post";
 import styled from "styled-components";
 import Tag from "../Tag";
+import { format } from "date-fns";
 
 interface PostTitleProps {
-  meta: PostMeta;
+  title: string;
+  description?: string;
+  postedAt: string;
+  tags?: string[];
 }
 
-export default function PostTitle({ meta }: PostTitleProps) {
+export default function PostTitle({
+  title,
+  description = "",
+  postedAt,
+  tags = [],
+}: PostTitleProps) {
+  const formattedPostedAt = format(new Date(postedAt), "yyyy-MM-dd");
   return (
     <Wrapper>
       <div>
-        {meta.tags.map((tag) => (
+        {tags.map((tag) => (
           <Tag key={tag} name={tag} />
         ))}
       </div>
-      <Title>{meta.title}</Title>
-      <Description>{meta.description}</Description>
-      <Info>{meta.postedAt}에 씀</Info>
+      <Title>{title}</Title>
+      <Description>{description}</Description>
+      <Info>{formattedPostedAt}에 씀</Info>
     </Wrapper>
   );
 }

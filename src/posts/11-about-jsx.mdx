@@ -1,0 +1,56 @@
+---
+id: 11
+title: JSX란?
+description: JSX는 JavaScript를 확장한 문법으로, React에서 엘리먼트의 UI가 어떻게 생겨야 할 지를 나타내기 위해 사용된다.
+tags: React,JSX,Babel
+date: 2021-12-27
+---
+import PostLayout from "../components/post/PostLayout";
+import PostUtil from "../utils/postUtil";
+
+🤵 JSX는 순수 자바스크립트 문법이 아닙니다. 그런데 어떻게 브라우저 상에서 동작이 가능할까요?
+
+👩 ...
+
+## JSX란?
+
+JSX는 JavaScript를 확장한 문법으로, 순수 자바스크립트 문법이 아니다. React에서 컴포넌트의 UI가 어떻게 생겨야 할 지를 나타내기 위해 사용되는 문법으로, 마크업과 로직이 합쳐진 형태를 하고 있다.
+
+```jsx
+const name = "ooo";
+const element = <div>Hello! {name}</div>; // 이것이 JSX
+```
+
+위의 코드처럼 마크업 속에 중괄호를 통해 JavaScript 표현식을 넣을 수 있다. JSX 문법 또한 표현식으로 인식되며, 그 값은 자바스크립트 객체이다.
+
+JSX가 마크업을 사용하기는 하지만 자바스크립트 내에서 사용되고, 따라서 자바스크립트와 가깝다고 보기 때문에, HTML 마크업에서의 요소들과는 차이가 있다. 예를 들어 `class` 어트리뷰트는 `className`이 된다.
+
+JSX는 XSS 공격을 방지하기 위해서 삽입된 모든 값을 렌더링 전에 이스케이프한다. 단, 문자열 리터럴은 HTML 이스케이프 처리가 되지 않는다.
+
+Babel은 자바스크립트 트랜스컴파일러로, 작성된 자바스크립트 코드가 다른 버전의 자바스크립트 버전과 호환되도록 자바스크립트 문법을 변환해준다. JSX는 Babel을 거쳐서 React Element 객체를 생성하는 문으로 컴파일된다. 그러면 React는 React Element 객체를 읽어서 DOM을 구성하고, 최신 상태로 유지하는 데 사용한다. 그래서 React 공식 문서에서는 JSX를 [`React.createElement(...)` 함수의 문법적 설탕이라고 설명한다.](https://ko.reactjs.org/docs/jsx-in-depth.html)
+
+1. 이렇게 작성된 JSX 코드가 있다면,
+```jsx
+const element = <div className="hi">Hello World</div>;
+ReactDOM.render(element, document.getElementById('root'));
+```
+
+2. 바벨을 거치면 이런 식으로 컴파일된다.
+```js
+const element = React.createElement(
+  "div",
+  {className: "hi"},
+  "Hello World"
+);
+ReactDOM.render(element, document.getElementById('root'));
+```
+
+3. 결과적으로 이렇게 렌더링된다.
+```html
+<div id="root">
+  <div>Hello World</div>
+</div>
+```
+
+바벨 컴파일은 [여기](https://babeljs.io/repl/#?browsers=defaults%2C%20not%20ie%2011%2C%20not%20ie_mob%2011&build=&builtIns=false&corejs=3.6&spec=false&loose=false&code_lz=MYewdgzgLgBApgGzgWzmWBeGAeAJgSwDcZgEBDCCAOTNQwCIALfegPgAlEEQYB1EAE4Jc2APQFCrANwAoAEpwywKABEA8gFkAdALS44AgBSIUaKABoYuEMACuqdFoDmcKAFEkDqACEAngElcQwByARAQKGCASiipIA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=react&prettier=false&targets=&version=7.16.6&externalPlugins=&assumptions=%7B%7D)에서 테스트해 볼 수 있다.
+

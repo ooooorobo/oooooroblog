@@ -74,7 +74,8 @@ export default class PostService {
     tag: string
   ): Promise<PostListElement[]> {
     const [start, end] = [page * count, (page + 1) * count];
-    return (await this.getAllPostMeta())
+    return [];
+    (await this.getAllPostMeta())
       .filter((p) => p.meta.tags.includes(tag))
       .slice(start, end);
   }
@@ -105,7 +106,7 @@ export default class PostService {
 
   public async getAllPostSlugs(): Promise<string[]> {
     const allPosts = await this.getAllPostMeta();
-    const allSlugs = allPosts.map(meta => meta.slug);
+    const allSlugs = allPosts.map((meta) => meta.slug);
     return allSlugs;
   }
 }

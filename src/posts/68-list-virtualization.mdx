@@ -1,0 +1,258 @@
+---
+id: 68
+title: 리스트 가상화로 대형 리스트 성능 최적화하기
+description: 리스트 가상화 기법은 화면을 그리기 위해 필요한 최소한의 컨텐츠만 DOM에 남겨두는 최적화 기법이다. 가상화를 적용한 리스트와 일반 리스트의 성능 차이를 비교해보았다.
+tags: HTML,React
+date: 2023-07-02
+---
+import PostUtil from "../utils/postUtil"; import PostLayout
+    from "../components/post/PostLayout"; import ImageWrapper from "../components/post/ImageWrapper";
+
+많은 컨텐츠를 끊임없이 보여주기 위해, 종종 무한 스크롤 방식을 활용한다. 무한 스크롤은 사용자가 페이지의 끝까지 스크롤을 내리기 직전에 추가 컨텐츠를 불러오는 기법을 말한다. 이때 사용자가 스크롤을 내리면 내릴수록 DOM에 더 많은 element가 추가된다.
+
+사용자가 몇천 개의 컨텐츠를 불러올 만큼 스크롤을 내렸다고 해보자. 이 서비스는 "모두 선택"이라는 기능을 제공하는데, 이를 이용하면 사용자는 존재하는 모든 컨텐츠를 선택할 수 있다. 선택된 컨텐츠는 외곽선의 색상이 변경되며, 체크박스 표시가 추가된다.
+
+![](/image/68/intro-1.gif)
+
+브라우저는 새로운 컨텐츠를 추가하거나 스타일을 업데이트하기 위해 repaint와 reflow 과정을 거쳐야 한다. 그런데 DOM 내의 수천 개의 element에 대해 이런 작업이 빈번하게 일어나야 한다면 어떨까? 브라우저 메모리는 한정된 자원이기 때문에 버벅임 현상이 발생하거나 렌더링 속도가 느려질 수 있다.
+
+그런데 생각해 보면, 화면에 보이지 않는 요소들은 굳이 업데이트하거나 렌더링할 필요가 없다. 이 요소들은 사용자에게 보이지 않기 때문에, 애초에 DOM에 포함될 필요가 없다.
+
+이런 문제를 해결하기 위한 기법이 리스트 가상화이다. 리스트 가상화는 사용자에게 보여지는 것만 렌더링하는 최적화 기법을 의미한다. 이를 통해 불필요한 렌더링 과정을 줄이고, 브라우저의 성능을 향상시킬 수 있다.
+
+![](https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/dKuKVjP02xWxO9LPoOuc.jpg?auto=format&w=1428)
+
+많은 컨텐츠를 보여주기 위해선 그만큼 많은 DOM 노드가 필요하다. DOM 자체는 느리지 않다. 그러나 렌더링을 느리게 만드는 것은 레이아웃과 스타일을 계산하는 과정이다. 이 계산이 필요한 노드의 개수가 많으면 많을수록 렌더링 속도가 느려진다.
+
+그런데, 화면에 보이지 않는 요소들의 레이아웃과 스타일은 계산할 필요가 없다. 이들은 화면에 나타나지 않을 요소이기 때문에 DOM에 포함되지 않아도 된다.
+
+리스트 가상화 기법은 화면을 그리기 위해 필요한 최소한의 컨텐츠만 DOM에 남겨두는 방식으로, 레이아웃과 스타일 계산도 최소한으로 일어날 수 있게 해준다. 이를 통해 브라우저 렌더링 성능을 향상시킬 수 있다.
+
+## 가상화된 리스트 VS 일반 리스트 성능 비교
+
+리스트를 가상화하면 성능에 어느 정도의 영향을 줄까?
+
+이미지를 3열 그리드 형식의 무한 스크롤 리스트로 보여준다고 했을 때, 단순히 모두 그리는 방식과, 화면에 보이는 항목만 그리는 리스트 가상화 방식으로 구현해서 성능을 비교해봤다. 리스트 가상화는 `react-window` 라이브러리로 구현했고, 성능 비교에는 크롬 개발자 도구의 Performance Monitor 기능을 사용했다.
+
+### 단순 스크롤
+
+<table style={{margin: 'auto'}}>
+    <tr>
+        <th>
+            일반 리스트
+        </th>
+        <th>
+            가상화된 리스트
+        </th>
+    </tr>
+    <tr>
+        <td>
+            ![](/image/68/1.png)
+        </td>
+        <td>
+            ![](/image/68/2.png)
+        </td>
+    </tr>
+</table>
+
+스크롤만 내리는 경우에는 가상화 리스트에서 CPU를 더 많이 사용하고, style이나 Layout 계산이 더 많이 일어난다.
+가상화 리스트는 사용자의 스크롤 위치가 변할 때마다 리스트의 요소를 DOM에 포함시킬지, translateY 값을 얼마로 설정할지를 계산하기 때문에
+DOM에 있는 것을 그대로 그리는 단순 리스트보다 자바스크립트 연산량이 많기 때문이다.
+
+### 모든 element의 스타일 변경
+
+리스트에 포함된 모든 요소의 외곽선 색상을 변경시켜서 repaint를 발생시켰다.
+
+<table style={{margin: 'auto'}}>
+    <tr>
+        <th>
+            일반 리스트
+        </th>
+        <th>
+            가상화된 리스트
+        </th>
+    </tr>
+    <tr>
+        <td>
+            ![](/image/68/3.png)
+        </td>
+        <td>
+            ![](/image/68/4.png)
+        </td>
+    </tr>
+</table>
+
+단순 리스트가 가상화 리스트보다 CPU 사용량이 10배 높은 것을 확인할 수 있다.
+
+### 전체 컨텐츠 변경
+
+리스트에 포함된 짝수번째 요소들을 제외하고 렌더링하도록 해서 DOM 전체적으로 변화를 만들었다.
+
+<table style={{margin: 'auto'}}>
+    <tr>
+        <th>
+            일반 리스트
+        </th>
+        <th>
+            가상화된 리스트
+        </th>
+    </tr>
+    <tr>
+        <td>
+            ![](/image/68/5.png)
+        </td>
+        <td>
+            ![](/image/68/6.png)
+        </td>
+    </tr>
+</table>
+
+단순 리스트의 경우가 CPU 사용량과 JS heap 사용량이 훨씬 높다. (4~5배)
+
+### window resize
+
+창 자체의 크기를 늘렸다 줄이면서 성능을 측정했다. window resize가 발생하면 reflow가 발생한다.
+
+<table style={{margin: 'auto'}}>
+    <tr>
+        <th>
+            일반 리스트
+        </th>
+        <th>
+            가상화된 리스트
+        </th>
+    </tr>
+    <tr>
+        <td>
+            ![](/image/68/resize1.png)
+        </td>
+        <td>
+            <ImageWrapper width={'180px'}>
+                ![](/image/68/resize2.png)
+            </ImageWrapper>
+        </td>
+    </tr>
+</table>
+
+단순 리스트는 CPU 사용량이 100%까지 도달하는 반면, 가상화된 리스트는 최대 60% 정도로 측정됐다. resize가 반영되는 속도도 가상화된 리스트가 훨씬 빠르다.
+
+### 전체 퍼포먼스 측정
+
+모든 element 스타일 변경 2회 → 짝수번째 요소만 표시 2회 → window resize 2회를 수행하는 시간을 측정했다.
+
+<table style={{margin: 'auto'}}>
+    <tr>
+        <th>
+            일반 리스트
+        </th>
+        <th>
+            가상화된 리스트
+        </th>
+    </tr>
+    <tr>
+        <td>
+            ![](/image/68/perf1.png)
+        </td>
+        <td>
+            ![](/image/68/perf2.png)
+        </td>
+    </tr>
+</table>
+
+전체적으로 가상화 리스트가 훨씬 빨랐고, 특히 렌더링이 20배, 스크립팅이 5배 정도의 차이를 보였다.
+
+결론적으로 reflow, repaint가 자주 일어날 수 있는 상황이라면 가상화된 리스트가 성능 면에서 훨씬 유리하다.
+
+## 리스트 가상화 라이브러리 비교
+
+### [react-window](https://github.com/bvaughn/react-window)
+
+react-window는 리스트 가상화를 위한 컴포넌트를 제공하는 라이브러리다. 이 라이브러리를 이용하면, 리스트 내의 각 요소를 render prop 방식을 통해 그릴 수 있다.
+
+```jsx
+import { FixedSizeList as List } from 'react-window';
+
+const Example = () => (
+  <List
+    height={150}
+    itemCount={1000}
+    itemSize={35}
+    width={300}
+  >
+    {({ index, style }) => (
+        <div style={style}>Row {index}</div>
+    )}
+  </List>
+);
+```
+
+이 라이브러리를 사용하면서 느낀 아쉬운 점들이 있었다. 먼저 이 라이브러리는 컴포넌트 형태로 제공되기 때문에 사용자의 개별적인 요구사항에 맞게 커스터마이징하기가 어렵다. 그리고 render prop 방식이 많이 활용되어 있는데, 이로 인해 라이브러리를 처음 사용하는 사용자들에게는 이해하기가 약간 복잡하다. 마지막으로, 행의 높이 값이 변경될 때 이를 반영하지 못하는 경우가 있다. 따라서 행의 높이가 빈번하게 변하는 경우에는 이 라이브러리의 활용이 제한적일 수 있다.
+
+### [tanstack/virtual](https://github.com/tanstack/virtual)
+
+virtual은 Headless 라이브러리로서, 리스트 가상화를 위한 계산값을 제공하는 훅을 사용자에게 제공한다.
+
+```jsx
+function RowVirtualizerFixed() {
+  const parentRef = React.useRef()
+
+  const rowVirtualizer = useVirtualizer({
+    count: 10000,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 35,
+    overscan: 5,
+  })
+
+  return (
+    <>
+      <div
+        ref={parentRef}
+        className="List"
+        style={{
+          height: `200px`,
+          width: `400px`,
+          overflow: 'auto',
+        }}
+      >
+        <div
+          style={{
+            height: `${rowVirtualizer.getTotalSize()}px`,
+            width: '100%',
+            position: 'relative',
+          }}
+        >
+          {rowVirtualizer.getVirtualItems().map((virtualRow) => (
+            <div
+              key={virtualRow.index}
+              className={virtualRow.index % 2 ? 'ListItemOdd' : 'ListItemEven'}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: `${virtualRow.size}px`,
+                transform: `translateY(${virtualRow.start}px)`,
+              }}
+            >
+              Row {virtualRow.index}
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  )
+}
+```
+
+Headless 라이브러리 특성 상 좀 더 직관적이라는 느낌을 받았고, 커스텀 스크롤 뷰 컴포넌트를 만들어 사용하던 우리 프로젝트에 사용하기 적합했다.
+
+특히 우리 프로젝트에서는 스크롤 뷰 내에 가상화된 리스트 컨텐츠 위에 다른 컨텐츠를 표시해야 하는 요구사항이 있었는데, virtual 라이브러리는 이를 지원하는 padding 옵션을 제공하고 있다. 이 옵션을 통해 스크롤의 특정 위치부터 가상화 리스트가 시작되도록 설정할 수 있었다.
+
+## 참고자료
+
+- [react-window로 대형 리스트 가상화](https://web.dev/i18n/ko/virtualize-long-lists-react-window/) - web.dev
+- [List Virtualization](https://patterns-dev-kr.github.io/performance-patterns/list-virtualization/) - patterns.dev
+- [Rendering large lists with React Virtualized](https://blog.logrocket.com/rendering-large-lists-react-virtualized/) - LogRocket
+- [Rendering long lists using virtualization with React](https://wanago.io/2022/06/27/long-lists-react-virtualization/) - wanago.io
+
+

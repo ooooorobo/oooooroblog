@@ -1,12 +1,12 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
-  @media screen and (max-device-width: 480px){
-    body{
+  @media screen and (max-device-width: 480px) {
+    body {
       -webkit-text-size-adjust: none;
     }
   }
-  
+
   * {
     box-sizing: border-box;
     font-family: 'Noto Sans KR', sans-serif;;
@@ -63,6 +63,58 @@ const GlobalStyle = createGlobalStyle`
     max-width: 760px;
     margin: auto auto 80px;
     padding: 0 0.5rem;
+  }
+
+  div.wavyline {
+    ${({ theme }) =>
+      theme.media.desktop(`
+    text-align: center;
+  `)};
+    height: 20px;
+
+    &:after {
+      overflow: hidden;
+      content: 'mmmmmmmm';
+    }
+
+    color: transparent;
+    position: relative;
+    top: -10px;
+    font-size: 1rem;
+
+    text-decoration-style: wavy !important;
+    text-decoration: ${({ theme }) => theme.colors.primary};
+    text-decoration-line: underline;
+  }
+
+  p.caption {
+    font-size: ${({ theme }) => theme.fontSizes.s};
+    color: ${({ theme }) => theme.colors.text.secondary};
+    text-align: center;
+    margin-top: 0;
+  }
+
+  aside {
+    background-color: ${({ theme }) => theme.colors.bg.secondary};
+    padding: 14px;
+    border-radius: 10px;
+    margin: 20px 0;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  a.link {
+    color: ${({ theme }) => theme.colors.primary};
+    text-decoration-line: underline;
+    text-decoration-style: dashed;
+    text-underline-offset: 0.25rem;
+    word-break: break-all;
+
+    &:hover {
+      color: ${({ theme }) => theme.colors.primaryLight};
+    }
   }
 `;
 

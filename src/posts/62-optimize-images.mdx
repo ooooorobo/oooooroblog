@@ -1,0 +1,284 @@
+---
+id: 62
+title: 이미지 많은 사이트 최적화하기
+description: 용량이 큰 이미지는 다운로드 받는 시간도 오래 걸리기 때문에 웹 페이지가 전부 표시되기까지의 시간이 매우 길어지게 됩니다. CDN을 활용해 이미지의 용량을 줄이고, 레이지 로딩과 LQIP를 활용해 더 나은 사용자 경험을 제공하는 방법을 알아봅니다.
+tags: 최적화,글또
+date: 2023-03-12
+---
+import PostUtil from "../utils/postUtil";
+import PostLayout from "../components/post/PostLayout"; import Caption from "../components/mdx/Caption";
+
+![느리게 로딩되는 이미지](/image/62/1.gif)
+
+웹 페이지 대부분의 용량을 차지하는 것은 이미지입니다. 용량이 큰 이미지를 많이 사용하게 되면 페이지 전체가 로드되는 속도가 느려지고, 사용자가 보고 싶은 컨텐츠를 빠르게 전달하지 못해 사용자 경험을 해치게 됩니다. 이럴 경우 사용자의 페이지 이탈로 이어질 수도 있습니다.
+
+이런 상황을 막기 위해 이미지를 적절히 처리해 줘야 합니다. 이 글에서는 이미지의 용량을 줄여 빠르게 이미지를 로드해 오는 방법과, 고용량의 이미지를 사용할 경우 사용자 경험을 위해 placeholder 이미지를 사용하는 방법과 필요할 때 이미지를 요청하는 Lazy Loading 기법을 소개합니다.
+
+# 이미지 CDN 활용하기
+
+CDN(Content delivery network)은 인터넷 콘텐츠를 빠르게 로드하기 위해 사용되는 기술입니다. HTML 페이지, 자바스크립트, 스타일시트, 이미지, 동영상 등의 정적 에셋을 빠르게 전달하기 위해 사용됩니다.
+
+CDN 서버는 주로 세계 곳곳에 데이터 센터를 배치해 두고 있기 때문에, 사용자는 자신과 물리적으로 가까운 서버에서 데이터를 전달받을 수 있습니다. 그렇기 때문에 지구 반대편에 서버를 두고 있는 사이트에서도 콘텐츠를 빠르게 불러올 수 있는 것입니다.
+
+이미지 CDN은 여기서 더 나아가 이미지의 변환이나 최적화 기능도 제공합니다. 이미지의 크기를 변경하거나, 포맷을 변경하거나, 특정 부분을 크롭해서 사용할 수도 있습니다. 블러 처리나 이미지 블렌딩, 사진 내에 얼굴을 감지해 크롭하는 기능도 제공해서 편리하게 이미지를 처리할 수 있습니다.
+
+무료로 사용 가능한 이미지 CDN에서도 위 기능을 대부분 제공하니 활용해 보세요.
+
+- [https://imgix.com/](https://imgix.com/)
+- [https://cloudinary.com/](https://cloudinary.com/)
+
+## 최신 이미지 형식 사용하기
+
+기존에 사용하던 이미지 형식보다 압축률을 높이면서도 품질도 높은 이미지를 제공하기 위해 새로운 이미지 파일 형식이 개발되었습니다. 새로운 이미지 파일 형식에는 [AOS Media](https://aomedia.org/)가 출시한 AVIF, Google에서 출시한 WebP가 있습니
+
+자주 사용되는 이미지 포맷인 PNG, JPEG와 최신 이미지 형식인 WebP, AVIF를 비교하면 아래 표와 같습니다.
+
+<br/>
+
+<table>
+    <thead>
+    <tr>
+        <th>포맷</th>
+        <th>압축 방식</th>
+        <th>특징</th>
+        <th>브라우저 지원</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>JPEG</td>
+        <td>손실 압축</td>
+        <td>대용량 이미지 관리에 용이</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>PNG</td>
+        <td>무손실 압축</td>
+        <td>투명 배경 지원</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>WebP</td>
+        <td>손실 및 무손실 압축</td>
+        <td>- PNG 대비 26%, JPEG 대비 25~34% 더 작음<br/>- 투명성 지원</td>
+        <td>can-i-use 기준 전세계 96%</td>
+    </tr>
+    <tr>
+        <td>AVIF</td>
+        <td>손실 및 무손실 압축</td>
+        <td>- 비슷한 품질의 JPEG 대비 파일 크기 최대 50% 절약<br/>- 애니메이션, 라이브 사진 등을 지원</td>
+        <td>can-i-use 기준 전세계 83%</td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+
+아래 codepen에서 JPEG, WebP, AVIF 포맷을 비교해 보세요.
+
+<iframe src="https://codepen.io/smashingmag/embed/GREzWpN?default-tab=result"
+        style={{"width": "100%", height: '500px', border: 0, borderRadius: '4px', overflow: 'hidden'}}
+        title="useRef-test"
+        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
+<br/>
+<br/>
+
+imgix의 경우, 이미지 CDN 상에서 이미지에 접근할 수 있는 url 뒤에 query string으로 이미지 옵션을 붙여 가공된 이미지를 얻을 수 있습니다. 포맷을 바꾸기 위해서는, 아래와 같이 fm 옵션을 붙여 주면 됩니다.
+
+```
+// 기존 이미지 url
+https://jjinn-nolsa.imgix.net/230218/230218_00.png
+
+// 이미지 포맷을 변경시킨 url
+https://jjinn-nolsa.imgix.net/230218/230218_00.png?fm=webp
+```
+
+저희 프로젝트의 메인 페이지에는 약 70장 정도의 이미지가 사용됩니다. 이 이미지를 모두 로드하기 위해 다운받은 리소스 용량을 이미지 포맷에 따라 비교해 보겠습니다.
+
+- PNG 사용 시 - 330MB
+<div style={{display: "flex"}}>
+    <div style={{marginRight: "20px"}}>
+        ![png 사용 시 네트워크 탭](/image/62/png-nw.png)
+    </div>
+    <div>
+        ![png 사용 시 라이트하우스](/image/62/png-lh.png)
+    </div>
+</div>
+<Caption>png 포맷 사용 시. 이미지만 330MB를 불러왔다.</Caption>
+
+- JPEG 사용 시 - 47MB
+<div style={{display: "flex"}}>
+    <div style={{marginRight: "20px"}}>
+        ![jpg 사용 시 네트워크 탭](/image/62/jpg-nw.png)
+    </div>
+    <div>
+        ![jpg 사용 시 라이트하우스](/image/62/jpg-lh.png)
+    </div>
+</div>
+<Caption>jpeg 포맷 사용 시. 이미지 총 용량은 47MB이다. png에 비해 14% 정도의 용량.</Caption>
+
+- WEBP 사용 시 - 27MB
+<div style={{display: "flex", alignItems: "center"}}>
+    <div style={{marginRight: "20px"}}>
+        ![webp 사용 시 네트워크 탭](/image/62/wp-nw.png)
+    </div>
+    <div>
+        ![webp 사용 시 라이트하우스 1](/image/62/wp-lh1.png)
+        ![webp 사용 시 라이트하우스 2](/image/62/wp-lh2.png)
+    </div>
+</div>
+<Caption>webp 사용 시. 이미지 용량은 27MB로, png 대비 8%, jpg 대비 57%</Caption>
+
+<br/>
+
+이미지 포맷만 바꿨을 뿐인데 PNG 대비 8%의 용량으로 줄어들었고, 라이트하우스 성능 점수도 70점에서 82점으로 아주 높아졌습니다. 이미지가 로드되는 속도도 1.5분에서 20초로 기존 대비 20% 속도로 빨라졌습니다.
+
+그런데 라이트하우스 경고 중에 <i>이미지 크기 적절하게 설정하기</i>가 있네요.
+
+## 적절한 사이즈 사용하기
+
+![](/image/62/preper-size.png)
+
+캡쳐에서 하이라이트된 영역은 600x600 픽셀의 사각형 사이즈의 사진만 표현해 주면 되는 상황입니다. 그런데 1278x828 사이즈의 이미지를 600x600 사이즈에 맞게 조절한 후 크롭해서 사용하고 있네요.
+
+이미지 CDN을 사용하면 사용할 만큼만 크롭해서 가져오는 것이 가능합니다. 아래와 같이 이미지를 사용할 width, height 값을 옵션으로 지정하고 fit=crop 옵션도 주었습니다.
+
+`https://raw.githubusercontent.com/Nexters/who-really-wants-to-play/images/images/230218/230218_00.webp?fm=webp&w=600&h=600&fit=crop`
+
+다른 이미지들도 적절한 width, height 옵션을 주었습니다. 그러니 기존 WebP 포맷을 사용해 리소스를 로드해올 때 대비 20% 정도의 용량인 6MB 정도만 로드해오게 되었습니다. 라이트하우스 성능 점수도 90점으로, 8점이나 올랐습니다.
+
+<div style={{display: "flex", alignItems: "center"}}>
+    <div style={{marginRight: "20px"}}>
+        ![webp 사용 시 + width, height 설정 시 네트워크 탭](/image/62/wpwh-nw.png)
+    </div>
+    <div>
+        ![webp 사용 시 + width, height 설정 시 라이트하우스 1](/image/62/wpwh-lh1.png)
+        ![webp 사용 시 + width, height 설정 시 라이트하우스 2](/image/62/wpwh-lh2.png)
+    </div>
+</div>
+<Caption>적절한 이미지 사이즈를 주었더니 이미지 총 용량이 6.8MB로, png 대비 2%, jpeg 대비 25%</Caption>
+
+
+# 필요할 때 이미지 불러오기
+
+## LQIP - Low Quality Image Placeholders
+
+그렇지만 낮은 용량의 이미지를 사용하게 되면 이미지의 퀄리티도 낮아질 수밖에 없습니다. 그래서 때때로 높은 용량의 이미지를 사용해야 하는 경우도 있는데, 그럴때 아주 낮은 퀄리티의 가벼운 이미지를 고용량 이미지 대신 미리 보여줄 수 있습니다.
+
+낮은 퀄리티의 대체 이미지를 **LQIP, Low Quality Image Placeholders**라고 부릅니다. 낮은 퀄리티의 이미지는 블러 처리를 하거나, 이미지에 사용되는 색이나 픽셀 수를 적게 사용하게 해서 만들 수 있습니다.
+
+데이터를 불러오는 동안 스켈레톤 UI를 보여주듯이, 이미지를 불러오는 동안 LQIP 이미지를 보여준다면 사용자도 답답함을 덜 느끼게 될 것입니다.
+
+![](/image/62/lqip.gif)
+
+<iframe src="https://codesandbox.io/embed/cranky-bose-v0i072?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+        style={{"width": "100%", height: '500px', border: 0, borderRadius: '4px', overflow: 'hidden'}}
+        title="cranky-bose-v0i072"
+        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
+<Caption>이미 이미지가 로드되어 있다면 코드샌드박스의 새로고침 버튼을 눌러보세요!</Caption>
+
+위 예시에서, 블러 처리된 placeholder 이미지는 9KB, 원본 이미지는 235KB 입니다. 블러 이미지는 40밀리초, 원본 이미지는 997밀리초로 20배 정도의 속도 차이가 납니다.
+
+아래와 같이 훅으로도 사용할 수 있습니다.
+
+```jsx
+import { useEffect, useState } from "react";
+
+const useLqip = (src, ref) => {
+  const [currentSrc, setCurrentSrc] = useState(src + "&blur=500");
+
+  useEffect(() => {
+    if (!ref || !ref.current) return;
+    const onLoad = () => {
+      setCurrentSrc(src);
+    };
+    ref.current.addEventListener("load", onLoad);
+    return () => ref.current.removeEventListener("load", onLoad);
+  }, []);
+
+  return { currentSrc };
+};
+
+const ImageWithPlaceholder = ({ src }) => {
+  const ref = useRef(null);
+  const { currentSrc } = useLqip(src, ref);
+
+  return <img src={currentSrc} ref={ref} alt="예시 이미지" />;
+};
+
+// jsx
+      <ImageWithPlaceholder
+        src="https://images.unsplash.com/photo-1675629172984-adaffe2ad47e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&1678625163595"
+      />
+```
+
+## Image Lazy Loading
+
+![](/image/62/2.png)
+
+스크린샷에서는 스크롤이 사이트의 맨 위에 위치하고 있는데, 69건의 이미지 요청이 전송되어 3.8MB의 리소스를 받아왔습니다. 만약 이 사용자가 사이트의 맨 아래까지 확인하지 않는다면, 사용자는 불필요한 리소스를 3MB 가까이 다운로드 받게 된 것입니다.
+
+스크롤 위치에 따라 필요한 리소스만 다운로드 받게 하기 위해, IntersectionObserver를 사용해 스크롤과 가까운 위치의 이미지만 로드하도록 만들 수 있습니다.
+
+<iframe src="https://codesandbox.io/embed/lazy-load-xueseo?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+        style={{"width": "100%", height: '500px', border: 0, borderRadius: '4px', overflow: 'hidden'}}
+        title="lazy-load"
+        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
+위의 예제는 LQIP와 함께 Lazy Loading을 적용한 것입니다. 스크롤을 내려 보면, 블러 처리된 이미지가 먼저 보이고, 잠시 뒤에 원본 이미지가 로드되기 시작할 것입니다.
+
+IntersectionObserver를 아래와 같이 훅으로 감싸서 사용할 수 있습니다.
+
+```jsx
+const useIntersect = (ref, onIntersect) => {
+  useEffect(() => {
+    if (!ref.current) return;
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        onIntersect(entry);
+        observer.unobserve(entry.target);
+      });
+    });
+    observer.observe(ref.current);
+    return () => observer.unobserve(ref.current);
+  }, []);
+};
+
+const LazyLoadImage = ({ src }) => {
+  const ref = useRef(null);
+  const { currentSrc, startLoadOriginal } = useLqip(src, ref);
+
+  const onIntersect = () => {
+    startLoadOriginal();
+  };
+
+  useIntersect(ref, onIntersect);
+
+  return <img src={currentSrc} ref={ref} alt="예시 이미지" />;
+};
+
+// jsx
+      <LazyLoadImage
+        src="https://images.unsplash.com/photo-1675629172984-adaffe2ad47e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&1678625163595"
+      />
+```
+
+# 참고
+
+- [CDN이란 무엇입니까? | CDN은 어떻게 작동합니까? - cloudflare](https://www.cloudflare.com/learning/cdn/what-is-a-cdn/)
+- [이미지 CDN을 사용하여 이미지 최적화 - web.dev](https://web.dev/image-cdns/)
+- [Introducing LQIP – Low Quality Image Placeholders 0 Guy's Pod](https://www.guypo.com/introducing-lqip-low-quality-image-placeholders)
+- [웹용 이미지 형식 - Google Developers](https://developers.google.com/speed/webp?hl=ko)
+- [Using Modern Image Formats: AVIF And WebP - Addy Osmani](https://www.smashingmagazine.com/2021/09/modern-image-formats-avif-webp/)
+- [웹용 브라우저 수준 이미지 지연 로딩 - web.dev](https://web.dev/i18n/ko/browser-level-image-lazy-loading/)
+- [How to Lazy Load Images With Intersection Observer - Webtips](https://www.webtips.dev/how-to-lazy-load-images-with-intersection-observer)
+

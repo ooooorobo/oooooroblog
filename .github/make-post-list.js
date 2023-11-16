@@ -2,7 +2,7 @@ const core = require("@actions/core");
 const fs = require("fs");
 const path = require("path");
 
-const postBasePath = "/src/pages/posts";
+const postBasePath = "/src/posts";
 const blogPath = "https://www.oooooroblog.com";
 const getPostPath = (filePath) =>
   path.join(process.cwd(), postBasePath, filePath);
@@ -63,16 +63,27 @@ const getAllFilePath = async (dirPath) => {
 
 const getFileMeta = async (filePath) => {
   const fileContents = await readFile(filePath);
-  const replaced = fileContents
-    .toString()
-    .match(/createPostMeta\(\{(.|\n)*}\);/g)[0]
-    .match("{(.|\n)*}")[0]
-    .replace(/    (\w*):/g, (_, key) => {
-      return `"${key}":`;
-    })
-    .replace(/'([^'\n]*)'/g, (_, contents) => `"${contents}"`)
-    .replace(/,(}|\n)*$/, "}");
-  return JSON.parse(replaced);
+  const metadataRegex = /---\n([\s\S]*?)\n---/;
+  const match = fileContents.toString().match(metadataRegex);
+
+  if (match && match[1]) {
+    // 메타데이터 문자열 분리
+    const metadataStr = match[1];
+    const metadataLines = metadataStr.split("\n");
+
+    // 메타데이터를 JSON 객체로 변환
+    const metadataJson = {};
+    metadataLines.forEach((line) => {
+      const [key, value] = line.split(":").map((s) => s.trim());
+      if (key && value) {
+        metadataJson[key] = value;
+      }
+    });
+
+    return metadataJson;
+  } else {
+    console.log("No metadata found in the file.");
+  }
 };
 
 const postCount = 5;
@@ -89,7 +100,9 @@ const postCount = 5;
     .sort(({ stat: a }, { stat: b }) => b.birthtimeMs - a.birthtimeMs)
     .slice(0, postCount);
   const metas = await Promise.all(
-    filtered.map(({ filePath }) => getFileMeta(getPostPath(filePath)))
+    filtered
+      .map(({ filePath }) => getFileMeta(getPostPath(filePath)))
+      .filter(Boolean)
   );
   const posts = filtered.map(({ filePath, stat: { birthtime } }, index) => {
     return {

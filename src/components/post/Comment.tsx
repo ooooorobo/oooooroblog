@@ -2,7 +2,6 @@ import Script from "next/script";
 
 /**
  * Giscus comment
- * 스타일은 {@link GlobalStyle}
  */
 export default function Comment() {
   return (

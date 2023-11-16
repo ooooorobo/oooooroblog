@@ -1,13 +1,7 @@
-import styled from "styled-components";
+import { PropsWithChildren } from "react";
 
-export default styled.a`
-  color: ${({ theme }) => theme.colors.primary};
-  text-decoration-line: underline;
-  text-decoration-style: dashed;
-  text-underline-offset: 0.25rem;
-  word-break: break-all;
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.primaryLight};
-  }
-`;
+export default ({ children, ...rest }: PropsWithChildren) => (
+  <a className={"link"} {...rest}>
+    {children}
+  </a>
+);
