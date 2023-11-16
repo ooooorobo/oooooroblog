@@ -22,7 +22,7 @@ export default function PostListElementComponent({
           <Tag key={tag} name={tag} />
         ))}
       </div>
-      <Link href={post.slug}>
+      <Link href={"/" + post.slug}>
         <a onClick={onClickPost}>
           <Title>{post.meta.title}</Title>
           <Description>{post.meta.description}</Description>
