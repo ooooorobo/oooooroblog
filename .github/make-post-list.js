@@ -105,7 +105,7 @@ const postCount = 5;
   const filtered = metas
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, postCount);
-  const posts = filtered.map(({ filePath, index }) => {
+  const posts = filtered.map(({ filePath }, index) => {
     return {
       path: `${blogPath}/posts${filePath.replace(".mdx", "")}`,
       meta: metas[index],
