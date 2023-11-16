@@ -1,34 +1,39 @@
-import { SidePosts } from "../../service/postService";
 import Link from "next/link";
-import { PostListElement } from "@src/model/post";
 import styled from "styled-components";
 import SmallTitle from "@src/components/SmallTitle";
+import { type Post } from "contentlayer/generated";
 
-const Post = ({ post }: { post: PostListElement }) => {
+const Post = ({ title, url }: { title: string; url: string }) => {
   return (
-    <Link href={`/posts/${post.slug}`}>
+    <Link href={"/" + url}>
       <a>
-        <PostTitle>{post.meta.title}</PostTitle>
+        <PostTitle>{title}</PostTitle>
       </a>
     </Link>
   );
 };
-export default function SidePost({ sidePosts }: { sidePosts: SidePosts }) {
+export default function SidePost({
+  prevPost,
+  nextPost,
+}: {
+  prevPost?: Post;
+  nextPost?: Post;
+}) {
   return (
     <Wrapper>
       <PostWrapper align={"left"}>
-        {sidePosts.prev && (
+        {prevPost && (
           <>
             <SmallTitle>이전 포스트</SmallTitle>
-            <Post post={sidePosts.prev} />
+            <Post title={prevPost.title} url={prevPost.url} />
           </>
         )}
       </PostWrapper>
       <PostWrapper align={"right"}>
-        {sidePosts.next && (
+        {nextPost && (
           <>
             <SmallTitle>다음 포스트</SmallTitle>
-            <Post post={sidePosts.next} />
+            <Post title={nextPost.title} url={nextPost.url} />
           </>
         )}
       </PostWrapper>

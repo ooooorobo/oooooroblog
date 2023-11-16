@@ -12,6 +12,7 @@ import PostTitle from "@src/components/post/PostTitle";
 import Profile from "@src/components/main/Profile";
 import Comment from "@src/components/post/Comment";
 import { FadeIn } from "@src/styles/animation";
+import SidePost from "@src/components/post/SidePost";
 
 export async function getStaticPaths() {
   // Get a list of valid post paths.
@@ -24,15 +25,18 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(context: GetStaticPropsContext) {
   // Find the post for the current page.
-  const post = allPosts.find(
+  const postIdx = allPosts.findIndex(
     (post) => post._raw.flattenedPath === context.params?.slug
   );
+  const post = allPosts[postIdx];
+  const prevPost = allPosts[postIdx - 1],
+    nextPost = allPosts[postIdx + 1];
 
   // Return notFound if the post does not exist.
   if (!post) return { notFound: true };
 
   // Return the post as page props.
-  return { props: { post } };
+  return { props: { post, prevPost, nextPost } };
 }
 
 const codePrefix = `
@@ -41,7 +45,15 @@ if (typeof process === 'undefined') {
 }
 `;
 
-export default function Page({ post }: { post: Post }) {
+export default function Page({
+  post,
+  prevPost,
+  nextPost,
+}: {
+  post: Post;
+  prevPost: Post;
+  nextPost: Post;
+}) {
   // Parse the MDX file via the useMDXComponent hook.
   const MDXContent = useMDXComponent(codePrefix + post.body.code);
   const router = useRouter();
@@ -79,7 +91,7 @@ export default function Page({ post }: { post: Post }) {
         <Profile />
         <WavyLine />
       </ProfileWrapper>
-      {/*{sidePosts && <SidePost sidePosts={sidePosts} />}*/}
+      <SidePost prevPost={prevPost} nextPost={nextPost} />
       <div>
         <Comment />
       </div>
