@@ -1,5 +1,4 @@
 import { css, CSSProp, DefaultTheme } from "styled-components";
-import { CSSProperties } from "react";
 
 declare module "styled-components" {
   export interface DefaultTheme {
@@ -122,20 +121,3 @@ interface ColorPreset {
   primaryLight: string;
   secondary: string;
 }
-
-const theme = {
-  light: lightTheme,
-  dark: darkTheme,
-};
-
-export const theming = (cb: (theme: DefaultTheme) => CSSProperties) =>
-  Object.keys(theme).reduce(
-    (acc, name) =>
-      Object.assign(acc, { [`.theme-${name} &`]: cb(darkTheme[name]) }),
-    {},
-  );
-
-export const media = {
-  mobile: `@media only screen and (max-width: 800px)`,
-  desktop: `@media only screen and (min-width: 800px)`,
-};

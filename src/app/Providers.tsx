@@ -27,12 +27,12 @@ export const Providers = ({ children }: { children: ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <DarkModeProvider>
-        <ThemeProvider>
-          <StyledComponentsRegistry>
+        <StyledComponentsRegistry>
+          <ThemeProvider>
             <GlobalStyle />
             <MDXProvider components={components}>{children}</MDXProvider>
-          </StyledComponentsRegistry>
-        </ThemeProvider>
+          </ThemeProvider>
+        </StyledComponentsRegistry>
       </DarkModeProvider>
     </QueryClientProvider>
   );

@@ -13,6 +13,12 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   manifest: "/site.webmanifest",
+  openGraph: {
+    type: "website",
+    url: "https://www.oooooroblog.com",
+    title: "oooooroblog",
+    description: "웹 프론트엔드 개발 블로그",
+  },
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {
