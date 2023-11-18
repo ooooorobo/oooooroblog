@@ -1,7 +1,8 @@
 import { Highlight, themes } from "prism-react-renderer";
 import styled from "styled-components";
+import { ReactElement } from "react";
 
-export default function CodeBlock(props: any) {
+export default function CodeBlock(props: { children: ReactElement }) {
   const className = props.children.props.className || "";
   const matches = className.match(/language-(?<lang>.*)/);
   return (
@@ -20,11 +21,11 @@ export default function CodeBlock(props: any) {
             (line, i) =>
               // 마지막 줄은 무조건 \n만 있음
               i < tokens.length - 1 && (
-                <Line key={i} {...getLineProps({ line, key: i })}>
+                <Line key={i} {...getLineProps({ line })}>
                   <LineNo>{i + 1}</LineNo>
                   <LineContent>
                     {line.map((token, key) => (
-                      <span key={key} {...getTokenProps({ token, key })} />
+                      <span key={key} {...getTokenProps({ token })} />
                     ))}
                   </LineContent>
                 </Line>
