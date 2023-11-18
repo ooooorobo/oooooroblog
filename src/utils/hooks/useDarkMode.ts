@@ -1,5 +1,5 @@
-import { StorageKey, Theme } from "@src/constants/constants";
 import { useEffect, useState } from "react";
+import { StorageKey, Theme } from "@src/constants/constants";
 
 export const useDarkMode = () => {
   const [isDarkMode, setIsDark] = useState<boolean>(true);

@@ -2,8 +2,8 @@ import { GetStaticPropsContext } from "next";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 import styled from "styled-components";
-import { allPosts, type Post } from "contentlayer/generated";
 import { useMDXComponent } from "next-contentlayer/hooks";
+import { allPosts, type Post } from "contentlayer/generated";
 
 import components from "@src/components/mdx/MDXComponents";
 import WavyLine from "@src/components/WavyLine";
@@ -92,9 +92,7 @@ export default function Page({
         <WavyLine />
       </ProfileWrapper>
       <SidePost prevPost={prevPost} nextPost={nextPost} />
-      <div>
-        <Comment />
-      </div>
+      <Comment />
     </>
   );
 }

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
+import { useEffect, useState } from "react";
 import { MDXProvider } from "@mdx-js/react";
 import {
   Hydrate,
@@ -38,10 +38,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             refetchOnMount: false,
             refetchOnReconnect: false,
             refetchInterval: false,
-            keepPreviousData: true,
           },
         },
-      })
+      }),
   );
   useEffect(() => {
     console.log(
@@ -67,7 +66,7 @@ function MyApp({ Component, pageProps }: AppProps) {
        |___/                                                       
   
 방문해 주셔서 감사합니다 :>`,
-      "color: #fe5000"
+      "color: #fe5000",
     );
   }, []);
   return (
@@ -75,17 +74,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Hydrate state={pageProps.dehydratedState}>
         <DarkModeProvider>
           <ThemeProvider>
-            <>
+            <main className={`${defaultFont.variable} ${codingFont.variable}`}>
               <GlobalStyle />
               <Header />
               <MDXProvider components={components}>
-                <main
-                  className={`${defaultFont.variable} ${codingFont.variable}`}
-                >
-                  <Component {...pageProps} />
-                </main>
+                <Component {...pageProps} />
               </MDXProvider>
-            </>
+            </main>
           </ThemeProvider>
         </DarkModeProvider>
       </Hydrate>

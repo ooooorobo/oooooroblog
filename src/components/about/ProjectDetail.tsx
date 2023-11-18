@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import Tag from "@src/components/Tag";
 import Link from "next/link";
-import LinkStyle from "@src/components/mdx/Link";
 import { ReactNode } from "react";
+import Tag from "@src/components/Tag";
+import LinkStyle from "@src/components/mdx/Link";
 
 interface ProjectDetailProps {
   period: string;

@@ -2,6 +2,7 @@ import Document, {
   DocumentContext,
   DocumentInitialProps,
   Head,
+  Html,
   Main,
   NextScript,
 } from "next/document";
@@ -39,7 +40,7 @@ export default class MyDocument extends Document {
 
   render() {
     return (
-      <html lang={"ko"}>
+      <Html lang={"ko"}>
         <Head title={"oooooroblog"}>
           <link
             rel="apple-touch-icon"
@@ -82,7 +83,7 @@ export default class MyDocument extends Document {
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }
