@@ -1,4 +1,5 @@
-import { DefaultTheme, css, CSSProp } from "styled-components";
+import { css, CSSProp, DefaultTheme } from "styled-components";
+import { CSSProperties } from "react";
 
 declare module "styled-components" {
   export interface DefaultTheme {
@@ -90,18 +91,16 @@ const defaultTheme: Omit<DefaultTheme, "colors"> = {
     code: 1.6,
   },
   media: {
-    mobile: (...args) =>
-      css`
-        @media only screen and (max-width: 800px) {
-          ${args}
-        }
-      `,
-    desktop: (...args) =>
-      css`
-        @media only screen and (min-width: 800px) {
-          ${args}
-        }
-      `,
+    mobile: (...args) => css`
+      @media only screen and (max-width: 800px) {
+        ${args}
+      }
+    `,
+    desktop: (...args) => css`
+      @media only screen and (min-width: 800px) {
+        ${args}
+      }
+    `,
   },
 };
 
@@ -123,3 +122,20 @@ interface ColorPreset {
   primaryLight: string;
   secondary: string;
 }
+
+const theme = {
+  light: lightTheme,
+  dark: darkTheme,
+};
+
+export const theming = (cb: (theme: DefaultTheme) => CSSProperties) =>
+  Object.keys(theme).reduce(
+    (acc, name) =>
+      Object.assign(acc, { [`.theme-${name} &`]: cb(darkTheme[name]) }),
+    {},
+  );
+
+export const media = {
+  mobile: `@media only screen and (max-width: 800px)`,
+  desktop: `@media only screen and (min-width: 800px)`,
+};

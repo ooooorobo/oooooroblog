@@ -1,5 +1,4 @@
-import Highlight, { defaultProps } from "prism-react-renderer";
-import theme from "prism-react-renderer/themes/oceanicNext";
+import { Highlight, themes } from "prism-react-renderer";
 import styled from "styled-components";
 
 export default function CodeBlock(props: any) {
@@ -7,14 +6,13 @@ export default function CodeBlock(props: any) {
   const matches = className.match(/language-(?<lang>.*)/);
   return (
     <Highlight
-      {...defaultProps}
+      theme={themes.oceanicNext}
       code={props.children.props.children}
       language={
         matches && matches.groups && matches.groups.lang
           ? matches.groups.lang
           : ""
       }
-      theme={theme}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <Pre className={className} style={style}>
@@ -30,7 +28,7 @@ export default function CodeBlock(props: any) {
                     ))}
                   </LineContent>
                 </Line>
-              )
+              ),
           )}
         </Pre>
       )}
