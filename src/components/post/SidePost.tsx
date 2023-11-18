@@ -5,11 +5,9 @@ import { type Post } from "contentlayer/generated";
 
 const Post = ({ title, url }: { title: string; url: string }) => {
   return (
-    (<Link href={"/" + url}>
-
+    <Link href={"/" + url}>
       <PostTitle>{title}</PostTitle>
-
-    </Link>)
+    </Link>
   );
 };
 export default function SidePost({
@@ -21,7 +19,7 @@ export default function SidePost({
 }) {
   return (
     <Wrapper>
-      <PostWrapper align={"left"}>
+      <PostWrapper $align={"left"}>
         {prevPost && (
           <>
             <SmallTitle>이전 포스트</SmallTitle>
@@ -29,7 +27,7 @@ export default function SidePost({
           </>
         )}
       </PostWrapper>
-      <PostWrapper align={"right"}>
+      <PostWrapper $align={"right"}>
         {nextPost && (
           <>
             <SmallTitle>다음 포스트</SmallTitle>
@@ -54,9 +52,9 @@ const Wrapper = styled.div`
   `)}
 `;
 
-const PostWrapper = styled.div<{ align: string }>`
+const PostWrapper = styled.div<{ $align: string }>`
   width: 50%;
-  text-align: ${({ align }) => align};
+  text-align: ${({ $align }) => $align};
   ${({ theme }) =>
     theme.media.mobile(`
     width: auto;  

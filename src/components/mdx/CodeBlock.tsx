@@ -1,20 +1,19 @@
-import Highlight, { defaultProps } from "prism-react-renderer";
-import theme from "prism-react-renderer/themes/oceanicNext";
+import {Highlight, themes} from "prism-react-renderer";
 import styled from "styled-components";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function CodeBlock(props: any) {
-  const className = props.children.props.className || "";
+  const className = props.children?.props.className || "";
   const matches = className.match(/language-(?<lang>.*)/);
   return (
     <Highlight
-      {...defaultProps}
-      code={props.children.props.children}
+      theme={themes.oceanicNext}
+      code={props.children?.props.children}
       language={
         matches && matches.groups && matches.groups.lang
           ? matches.groups.lang
           : ""
       }
-      theme={theme}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <Pre className={className} style={style}>
@@ -22,15 +21,15 @@ export default function CodeBlock(props: any) {
             (line, i) =>
               // 마지막 줄은 무조건 \n만 있음
               i < tokens.length - 1 && (
-                <Line key={i} {...getLineProps({ line, key: i })}>
+                <Line key={i} {...getLineProps({ line })}>
                   <LineNo>{i + 1}</LineNo>
                   <LineContent>
                     {line.map((token, key) => (
-                      <span key={key} {...getTokenProps({ token, key })} />
+                      <span key={key} {...getTokenProps({ token })} />
                     ))}
                   </LineContent>
                 </Line>
-              )
+              ),
           )}
         </Pre>
       )}

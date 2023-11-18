@@ -1,34 +1,20 @@
+"use client";
 import styled from "styled-components";
 import Link from "next/link";
-import { useContext } from "react";
-import { DarkModeContext } from "@src/utils/context/DarkModeContext";
+import { ThemeToggleButton } from "@src/components/header/ThemeToggleButton";
 
 export default function Header() {
-  const { isDarkMode, toggleDarkMode } = useContext(DarkModeContext);
-
   return (
     <Background>
       <Wrapper>
-        <div>
-          <Link href={"/"}>
-            ooooorobo
-          </Link>
-        </div>
-        <div>
-          <button onClick={toggleDarkMode}>
-            {isDarkMode ? (
-              <i className="bi bi-moon-fill" />
-            ) : (
-              <i className="bi bi-sun-fill" />
-            )}
-          </button>
-        </div>
+        <Link href={"/"}>ooooorobo</Link>
+        <ThemeToggleButton />
       </Wrapper>
     </Background>
   );
 }
 
-const Background = styled.div`
+const Background = styled.nav`
   background-color: ${(props) => props.theme.colors.bg.secondary};
 `;
 

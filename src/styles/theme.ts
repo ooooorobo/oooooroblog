@@ -1,4 +1,4 @@
-import { DefaultTheme, css, CSSProp } from "styled-components";
+import { css, CSSProp, DefaultTheme, RuleSet } from "styled-components";
 
 declare module "styled-components" {
   export interface DefaultTheme {
@@ -66,7 +66,7 @@ const dark: ColorPreset = {
   ...primary,
 };
 
-const defaultTheme: Omit<DefaultTheme, "colors"> = {
+const defaultTheme = {
   fontSizes: {
     tiny: "12px",
     s: "14px",
@@ -90,18 +90,16 @@ const defaultTheme: Omit<DefaultTheme, "colors"> = {
     code: 1.6,
   },
   media: {
-    mobile: (...args) =>
-      css`
-        @media only screen and (max-width: 800px) {
-          ${args}
-        }
-      `,
-    desktop: (...args) =>
-      css`
-        @media only screen and (min-width: 800px) {
-          ${args}
-        }
-      `,
+    mobile: (...args: RuleSet<object>) => css`
+      @media only screen and (max-width: 800px) {
+        ${args}
+      }
+    `,
+    desktop: (...args: RuleSet<object>) => css`
+      @media only screen and (min-width: 800px) {
+        ${args}
+      }
+    `,
   },
 };
 
