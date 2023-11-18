@@ -50,7 +50,7 @@ export default function ProjectDetail({
           <ul>
             {posts.map((info, idx) => (
               <li key={idx}>
-                <Link href={info.link} passHref={true}>
+                <Link href={info.link} passHref={true} legacyBehavior>
                   <LinkStyle>{info.title}</LinkStyle>
                 </Link>
               </li>

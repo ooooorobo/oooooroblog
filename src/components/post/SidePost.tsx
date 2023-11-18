@@ -5,11 +5,11 @@ import { type Post } from "contentlayer/generated";
 
 const Post = ({ title, url }: { title: string; url: string }) => {
   return (
-    <Link href={"/" + url}>
-      <a>
-        <PostTitle>{title}</PostTitle>
-      </a>
-    </Link>
+    (<Link href={"/" + url}>
+
+      <PostTitle>{title}</PostTitle>
+
+    </Link>)
   );
 };
 export default function SidePost({

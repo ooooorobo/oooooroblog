@@ -11,7 +11,7 @@ export default function Header() {
       <Wrapper>
         <div>
           <Link href={"/"}>
-            <a>ooooorobo</a>
+            ooooorobo
           </Link>
         </div>
         <div>
