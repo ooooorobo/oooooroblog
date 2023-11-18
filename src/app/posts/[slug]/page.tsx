@@ -20,8 +20,8 @@ if (typeof process === 'undefined') {
 
 export default function PostPage({ params: { slug } }: PostPageProps) {
   const { postIdx, detail: post } = getPostDetail(slug);
-  const prevPost = getPostMeta(postIdx - 1),
-    nextPost = getPostMeta(postIdx + 1);
+  const prevPost = getPostMeta(postIdx + 1),
+    nextPost = getPostMeta(postIdx - 1);
 
   const MDXContent = useMDXComponent(codePrefix + post.body.code);
 
