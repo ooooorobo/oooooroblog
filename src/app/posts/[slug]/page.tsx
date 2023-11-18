@@ -12,6 +12,7 @@ import { getPostDetail, getPostMeta } from "@src/business/post";
 import { FadeIn } from "@src/styles/animation";
 
 export type PostPageProps = { params: { slug: string } };
+
 const codePrefix = `
 if (typeof process === 'undefined') {
   globalThis.process = { env: {} }

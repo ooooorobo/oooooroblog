@@ -5,7 +5,7 @@ export const runtime = "edge";
 
 export async function GET(request: Request) {
   const fontData = await fetch(
-    new URL("../../../../assets/EASTARJET-Medium.ttf", import.meta.url),
+    "https://github.com/ooooorobo/oooooroblog/raw/main/assets/EASTARJET-Medium.ttf",
   ).then((res) => res.arrayBuffer());
   const { searchParams } = new URL(request.url);
 
