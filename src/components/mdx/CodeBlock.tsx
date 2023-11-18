@@ -1,14 +1,14 @@
-import { Highlight, themes } from "prism-react-renderer";
+import {Highlight, themes} from "prism-react-renderer";
 import styled from "styled-components";
-import { ReactElement } from "react";
 
-export default function CodeBlock(props: { children: ReactElement }) {
-  const className = props.children.props.className || "";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function CodeBlock(props: any) {
+  const className = props.children?.props.className || "";
   const matches = className.match(/language-(?<lang>.*)/);
   return (
     <Highlight
       theme={themes.oceanicNext}
-      code={props.children.props.children}
+      code={props.children?.props.children}
       language={
         matches && matches.groups && matches.groups.lang
           ? matches.groups.lang
