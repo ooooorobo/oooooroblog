@@ -10,6 +10,9 @@ export function generateMetadata({
   return {
     title: post.title,
     description: post.description,
+    openGraph: {
+      images: [`/api/og?slug=${slug}`],
+    },
   };
 }
 
