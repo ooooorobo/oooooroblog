@@ -29,14 +29,13 @@ export async function GET(request: Request) {
           alignItems: "center",
         }}
       >
-        ✍️ {post?.detail.title}
+        {post?.detail.title}
       </div>
     ),
     {
       width: 1200,
       height: 630,
       fonts: [{ name: "Easterjet", data: fontData, style: "normal" }],
-      emoji: "twemoji",
     },
   );
 }
