@@ -2,11 +2,11 @@ import Document, {
   DocumentContext,
   DocumentInitialProps,
   Head,
-  Html,
   Main,
   NextScript,
 } from "next/document";
 import { ServerStyleSheet } from "styled-components";
+import Script from "next/script";
 
 export default class MyDocument extends Document {
   static async getInitialProps(
@@ -39,43 +39,42 @@ export default class MyDocument extends Document {
 
   render() {
     return (
-      <Html>
-        <Head>
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <html lang={"ko"}>
+        <Head title={"oooooroblog"}>
           <link
-            rel="preconnect"
-            href="https://fonts.gstatic.com"
-            crossOrigin="true"
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
           />
           <link
-            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap"
-            rel="stylesheet"
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
           />
           <link
-            href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&display=swap"
-            rel="stylesheet"
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
           />
+          <link rel="manifest" href="/site.webmanifest" />
           <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css"
           />
           {process.env.NODE_ENV === "production" && (
             <>
-              <script
-                async
-                src="https://www.googletagmanager.com/gtag/js?id=G-W8WNQ2WC88"
-              />
-              <script
-                dangerouslySetInnerHTML={{
-                  __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-            
-              gtag('config', 'G-W8WNQ2WC88');
-          `,
-                }}
-              />
+              <Script src="https://www.googletagmanager.com/gtag/js?id=G-W8WNQ2WC88" />
+              <Script id={"google-analytics"}>
+                {`
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                
+                  gtag('config', 'G-W8WNQ2WC88');
+                `}
+              </Script>
             </>
           )}
         </Head>
@@ -83,7 +82,7 @@ export default class MyDocument extends Document {
           <Main />
           <NextScript />
         </body>
-      </Html>
+      </html>
     );
   }
 }

@@ -9,7 +9,7 @@ const GlobalStyle = createGlobalStyle`
 
   * {
     box-sizing: border-box;
-    font-family: 'Noto Sans KR', sans-serif;;
+    font-family: --font-default, sans-serif;;
   }
 
   html {
@@ -54,7 +54,7 @@ const GlobalStyle = createGlobalStyle`
 
   pre, code {
     &, * {
-      font-family: 'Nanum Gothic Coding', monospace;
+      font-family: --font-coding, monospace;
       line-height: ${({ theme }) => theme.lineHeights.code};
     }
   }

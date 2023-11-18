@@ -1,34 +1,51 @@
-import {useEffect, useState} from "react";
-import Head from "next/head";
-import type {AppProps} from "next/app";
-import {MDXProvider} from "@mdx-js/react";
-import {Hydrate, QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import type { AppProps } from "next/app";
+import { MDXProvider } from "@mdx-js/react";
+import {
+  Hydrate,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import { Nanum_Gothic_Coding, Noto_Sans_KR } from "next/font/google";
 
-// context
 import ThemeProvider from "@src/utils/context/ThemeProvider";
 import DarkModeProvider from "@src/utils/context/DarkModeContext";
-// components
 import Header from "@src/components/Header";
 import components from "@src/components/mdx/MDXComponents";
-// styles
 import GlobalStyle from "@src/styles/GlobalStyle";
 
-function MyApp({Component, pageProps}: AppProps) {
-    const [queryClient] = useState(() => new QueryClient({
-        defaultOptions: {
-            queries: {
-                refetchOnWindowFocus: false,
-                refetchOnMount: false,
-                refetchOnReconnect: false,
-                refetchInterval: false,
-                keepPreviousData: true
-            }
-        }
+const defaultFont = Noto_Sans_KR({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["300", "400", "700"],
+  variable: "--font-default",
+});
 
-    }));
-    useEffect(() => {
-        console.log(
-            `
+const codingFont = Nanum_Gothic_Coding({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "700"],
+  variable: "--font-coding",
+});
+
+function MyApp({ Component, pageProps }: AppProps) {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+            refetchOnMount: false,
+            refetchOnReconnect: false,
+            refetchInterval: false,
+            keepPreviousData: true,
+          },
+        },
+      })
+  );
+  useEffect(() => {
+    console.log(
+      `
 %c
                                          _     _             
                                         | |   | |            
@@ -39,7 +56,7 @@ function MyApp({Component, pageProps}: AppProps) {
                                                         __/ |
                                                        |___/ 
 ` +
-            `
+        `
  _                                                     _           
 | |                                                   | |          
 | |__  _   _    ___   ___   ___   ___   ___  _ __ ___ | |__   ___  
@@ -50,49 +67,30 @@ function MyApp({Component, pageProps}: AppProps) {
        |___/                                                       
   
 방문해 주셔서 감사합니다 :>`,
-            "color: #fe5000"
-        );
-    }, []);
-    return (
-        <>
-            <Head>
-                <title>oooooroblog</title>
-                <link
-                    rel="apple-touch-icon"
-                    sizes="180x180"
-                    href="/apple-touch-icon.png"
-                />
-                <link
-                    rel="icon"
-                    type="image/png"
-                    sizes="32x32"
-                    href="/favicon-32x32.png"
-                />
-                <link
-                    rel="icon"
-                    type="image/png"
-                    sizes="16x16"
-                    href="/favicon-16x16.png"
-                />
-                <link rel="manifest" href="/site.webmanifest"/>
-            </Head>
-            <QueryClientProvider client={queryClient}>
-                <Hydrate state={pageProps.dehydratedState}>
-                    <DarkModeProvider>
-                        <ThemeProvider>
-                            <>
-                                <GlobalStyle/>
-                                <Header/>
-                                <MDXProvider components={components}>
-                                    <Component {...pageProps} />
-                                </MDXProvider>
-                            </>
-                        </ThemeProvider>
-                    </DarkModeProvider>
-                </Hydrate>
-            </QueryClientProvider>
-        </>
+      "color: #fe5000"
     );
+  }, []);
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Hydrate state={pageProps.dehydratedState}>
+        <DarkModeProvider>
+          <ThemeProvider>
+            <>
+              <GlobalStyle />
+              <Header />
+              <MDXProvider components={components}>
+                <main
+                  className={`${defaultFont.variable} ${codingFont.variable}`}
+                >
+                  <Component {...pageProps} />
+                </main>
+              </MDXProvider>
+            </>
+          </ThemeProvider>
+        </DarkModeProvider>
+      </Hydrate>
+    </QueryClientProvider>
+  );
 }
 
 export default MyApp;

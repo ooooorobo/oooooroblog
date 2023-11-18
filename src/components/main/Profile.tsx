@@ -8,8 +8,8 @@ export default function Profile() {
       <ProfileImageWrapper>
         <Image
           src={"/profile.png"}
-          width={"100px"}
-          height={"100px"}
+          width={100}
+          height={100}
           alt={"프로필 사진"}
         />
       </ProfileImageWrapper>
