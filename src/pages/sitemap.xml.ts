@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext } from "next";
-import PostService from "@src/service/postService";
+import { allPosts } from "contentlayer/generated";
 
 const genDate = new Date().toISOString();
 const domain = "https://www.oooooroblog.com";
@@ -41,7 +41,7 @@ export default function SiteMap() {
 }
 
 export async function getServerSideProps({ res }: GetServerSidePropsContext) {
-  const slugs = await PostService.instance.getAllPostSlugs();
+  const slugs = allPosts.map((post) => post.url.replace("posts/", ""));
   const sitemap = generateSiteMap(slugs);
 
   res.setHeader("Content-Type", "text/xml");
