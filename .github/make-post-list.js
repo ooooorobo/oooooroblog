@@ -54,7 +54,7 @@ const getAllFilePath = async (dirPath) => {
         ...(await readFromDirectory(joined)).map((foundName) => [
           [dir, name].join("/"),
           foundName,
-        ])
+        ]),
       );
     }
   }
@@ -95,19 +95,21 @@ const postCount = 5;
     paths.map(async (filePath) => ({
       filePath,
       stat: await getFileStat(path.join(process.cwd(), postBasePath, filePath)),
-    }))
+    })),
   );
   const metas = await Promise.all(
     fileStats
       .map(({ filePath }) => getFileMeta(getPostPath(filePath)))
-      .filter(Boolean)
+      .filter(Boolean),
   );
   const filtered = metas
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, postCount);
   const posts = filtered.map(({ filePath }, index) => {
+    const lastSlashIndex = filePath.lastIndexOf("/");
+    const fileName = filePath.substring(lastSlashIndex + 1);
     return {
-      path: `${blogPath}/posts${filePath.replace(".mdx", "")}`,
+      path: `${blogPath}/posts/${fileName.replace(".mdx", "")}`,
       meta: metas[index],
     };
   });
