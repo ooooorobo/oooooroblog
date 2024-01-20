@@ -49,9 +49,9 @@ export default function PostPage({ params: { slug } }: PostPageProps) {
         <WavyLine />
       </ProfileWrapper>
       <SidePost prevPost={prevPost} nextPost={nextPost} />
-      <div>
+      <CommentWrapper>
         <Comment />
-      </div>
+      </CommentWrapper>
     </>
   );
 }
@@ -79,4 +79,10 @@ const ProfileWrapper = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 5px;
+`;
+
+const CommentWrapper = styled.div`
+  max-width: 760px;
+  margin: auto;
+  padding: 0 1rem;
 `;

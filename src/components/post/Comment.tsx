@@ -6,7 +6,7 @@ import Giscus from "@giscus/react";
 export default function Comment() {
   return (
     <Giscus
-      repo="ooooorobo/ooooorobo.github.io"
+      repo="ooooorobo/oooooroblog"
       repoId="R_kgDOHhuadg"
       category="Comments"
       categoryId="DIC_kwDOHhuads4CVJrG"
