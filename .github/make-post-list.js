@@ -2,7 +2,7 @@ const core = require("@actions/core");
 const fs = require("fs");
 const path = require("path");
 
-const postBasePath = "/src/posts";
+const postBasePath = "/";
 const blogPath = "https://www.oooooroblog.com";
 const getPostPath = (filePath) =>
   path.join(process.cwd(), postBasePath, filePath);
@@ -54,7 +54,7 @@ const getAllFilePath = async (dirPath) => {
         ...(await readFromDirectory(joined)).map((foundName) => [
           [dir, name].join("/"),
           foundName,
-        ]),
+        ])
       );
     }
   }
@@ -95,12 +95,12 @@ const postCount = 5;
     paths.map(async (filePath) => ({
       filePath,
       stat: await getFileStat(path.join(process.cwd(), postBasePath, filePath)),
-    })),
+    }))
   );
   const metas = await Promise.all(
     fileStats
       .map(({ filePath }) => getFileMeta(getPostPath(filePath)))
-      .filter(Boolean),
+      .filter(Boolean)
   );
   const filtered = metas
     .sort((a, b) => new Date(b.date) - new Date(a.date))
