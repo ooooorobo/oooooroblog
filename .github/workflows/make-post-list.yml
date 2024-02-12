@@ -1,5 +1,4 @@
 name: make recent post list
-on: push
 jobs:
   make:
     runs-on: macos-latest
