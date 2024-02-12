@@ -4,6 +4,7 @@ title: Storybook Interaction Test를 활용한 바텀시트 시각적 테스트
 description: 시각적 요소가 포함된 기능은 어떻게 테스트할 수 있을까요? 어떤 기능을 어떻게 테스트해 볼 수 있을지, 바텀시트 높이 조절 테스트 사례를 통해 소개합니다.
 tags: Test
 date: 2023-12-24
+seriesId: web-frontend-test
 ---
 
 ## 👀 문제 상황
@@ -26,45 +27,54 @@ date: 2023-12-24
 먼저, 바텀시트 컴포넌트에서 제공하는 기능을 리스팅했다.
 
 <table>
-    <colgroup>
-        <col style={{width: "200px"}}/>
-        <col/>
-    </colgroup>
-    <thead>
+  <colgroup>
+    <col style={{ width: "200px" }} />
+    <col />
+  </colgroup>
+  <thead>
     <tr>
-        <th>Context</th>
-        <th>It</th>
+      <th>Context</th>
+      <th>It</th>
     </tr>
-    </thead>
-    <tbody>
+  </thead>
+  <tbody>
     <tr>
-        <td rowspan="2">heightType = hug일 경우</td>
-        <td>바텀시트의 높이는 바텀시트 컨텐츠 높이가 된다</td>
-    </tr>
-    <tr>
-        <td>핸들을 50px 아래로 당기면 바텀시트를 닫을 수 있다</td>
+      <td rowspan="2">heightType = hug일 경우</td>
+      <td>바텀시트의 높이는 바텀시트 컨텐츠 높이가 된다</td>
     </tr>
     <tr>
-        <td rowspan="5">heightType = fixed일 경우, snapPoints = [100px, 200px, 500px, 600px]</td>
-        <td>바텀시트의 높이는 snapPoints 중 가장 작은 값이 된다 (100px)</td>
+      <td>핸들을 50px 아래로 당기면 바텀시트를 닫을 수 있다</td>
     </tr>
     <tr>
-        <td >핸들을 50px 위로 당기면 한 단계 큰 snapPoint로 높이가 조정된다 (200px)</td>
+      <td rowspan="5">
+        heightType = fixed일 경우, snapPoints = [100px, 200px, 500px, 600px]
+      </td>
+      <td>바텀시트의 높이는 snapPoints 중 가장 작은 값이 된다 (100px)</td>
     </tr>
     <tr>
-        <td >핸들을 600px 위치로 당기면 바텀시트 높이가 600px이 된다</td>
+      <td>
+        핸들을 50px 위로 당기면 한 단계 큰 snapPoint로 높이가 조정된다 (200px)
+      </td>
     </tr>
     <tr>
-        <td >핸들을 50px 아래로 당기면 한 단계 낮은 snapPoint로 높이가 조정된다 (500px)</td>
+      <td>핸들을 600px 위치로 당기면 바텀시트 높이가 600px이 된다</td>
     </tr>
     <tr>
-        <td >핸들을 가장 작은 snapPoints보다 50px 낮게 내리면 바텀시트가 닫힌다</td>
+      <td>
+        핸들을 50px 아래로 당기면 한 단계 낮은 snapPoint로 높이가 조정된다
+        (500px)
+      </td>
     </tr>
     <tr>
-        <td >heightType = fullPage일 경우,</td>
-        <td >바텀시트의 높이는 스크린의 높이와 같다</td>
+      <td>
+        핸들을 가장 작은 snapPoints보다 50px 낮게 내리면 바텀시트가 닫힌다
+      </td>
     </tr>
-    </tbody>
+    <tr>
+      <td>heightType = fullPage일 경우,</td>
+      <td>바텀시트의 높이는 스크린의 높이와 같다</td>
+    </tr>
+  </tbody>
 </table>
 
 ### 🤔 React Testing Library로 할 수 없을까?
@@ -77,40 +87,53 @@ date: 2023-12-24
 바텀시트 컴포넌트를 테스트하기 위해, RTL을 사용해 테스트를 작성해 두고, 기능을 개발하려고 했다. 처음 작성한 테스트는 아래와 같다.
 
 ```tsx
-describe('bottom sheet', () => {
-  describe('heightType: fixed일 때', () => {
-    const TestBottomSheet = ({ snapPoints }: { snapPoints: BottomSheetHeightValue[] }) => {
+describe("bottom sheet", () => {
+  describe("heightType: fixed일 때", () => {
+    const TestBottomSheet = ({
+      snapPoints,
+    }: {
+      snapPoints: BottomSheetHeightValue[];
+    }) => {
       const [open, setOpen] = useState(true);
       return (
-        <BottomSheet isOpened={open} heightType={'fixed'} snapPoints={snapPoints}>
-          <BottomSheet.Header data-testid={'header'}>header</BottomSheet.Header>
+        <BottomSheet
+          isOpened={open}
+          heightType={"fixed"}
+          snapPoints={snapPoints}
+        >
+          <BottomSheet.Header data-testid={"header"}>header</BottomSheet.Header>
         </BottomSheet>
       );
     };
 
-    const snapPoints: BottomSheetHeightValue[] = ['100px', '200px', '500px', '600px'];
+    const snapPoints: BottomSheetHeightValue[] = [
+      "100px",
+      "200px",
+      "500px",
+      "600px",
+    ];
 
-    test('snap points 중 작은 값으로 열려야 한다', async () => {
+    test("snap points 중 작은 값으로 열려야 한다", async () => {
       const wrapper = createWrapper();
 
       render(<TestBottomSheet snapPoints={snapPoints} />, { wrapper });
 
-      const bottomSheet = await screen.findByRole('dialog');
+      const bottomSheet = await screen.findByRole("dialog");
       expect(bottomSheet.getBoundingClientRect().height).toBeCloseTo(200);
     });
 
-    test('헤더를 잡고 마우스를 놓은 위치가 300이면 바텀시트의 높이가 200px이 된다', async () => {
+    test("헤더를 잡고 마우스를 놓은 위치가 300이면 바텀시트의 높이가 200px이 된다", async () => {
       const wrapper = createWrapper();
 
       render(<TestBottomSheet snapPoints={snapPoints} />, { wrapper });
 
-      const header = screen.getByTestId('header');
+      const header = screen.getByTestId("header");
 
       fireEvent.pointerDown(header);
       fireEvent.pointerMove(header, { clientY: header.clientTop + 200 - 300 });
       fireEvent.pointerUp(header);
 
-      const bottomSheet = await screen.findByRole('dialog');
+      const bottomSheet = await screen.findByRole("dialog");
       expect(bottomSheet.getBoundingClientRect().height).toBeCloseTo(200);
     });
   });
@@ -145,7 +168,7 @@ describe('bottom sheet', () => {
 이를 우회하기 위해 `getComputedStyle` 을 사용할 수도 있다.
 
 ```tsx
-expect(getComputedStyle(bottomSheet).getPropertyValue('height')).toBe('200px');
+expect(getComputedStyle(bottomSheet).getPropertyValue("height")).toBe("200px");
 ```
 
 하지만, getComputedStyle은 계산된 CSS를 반환하는 것이지 실제로 렌더링되는 값과는 차이가 발생할 수도 있다. 뷰포트 상에 렌더링된 정확한 값을 검증하려면 `getBoundingClientRect`를 사용하는 게 더 낫다.
@@ -188,13 +211,13 @@ npm install @storybook/testing-library @storybook/jest @storybook/addon-interact
 
 ```tsx
 // .storybook/main.ts
-import type { StorybookConfig } from '@storybook/your-framework';
+import type { StorybookConfig } from "@storybook/your-framework";
 
 const config: StorybookConfig = {
   // ...
   addons: [
     // Other Storybook addons
-    '@storybook/addon-interactions', // 👈 여기 애드온 추가
+    "@storybook/addon-interactions", // 👈 여기 애드온 추가
   ],
 };
 
@@ -216,17 +239,21 @@ export const HugBotomSheet: StoryObj = {
   render: () => {
     const [open, setOpen] = useState(true);
     return (
-      <BottomSheet open={open} onClose={() => setOpen(false)} heightType={'hug'}>
-        <BottomSheet.Body style={{ height: '350px', flexShrink: 0 }} />
+      <BottomSheet
+        open={open}
+        onClose={() => setOpen(false)}
+        heightType={"hug"}
+      >
+        <BottomSheet.Body style={{ height: "350px", flexShrink: 0 }} />
       </BottomSheet>
     );
   },
   play: async ({ canvasElement, step }) => {
-    await step('바텀시트 높이는 바텀시트 컨텐츠의 높이이다', async () => {
+    await step("바텀시트 높이는 바텀시트 컨텐츠의 높이이다", async () => {
       // 여기에 테스트 작성하기
     });
 
-    await step('핸들을 50px 아래로 당기면 바텀시트가 닫힌다', async () => {
+    await step("핸들을 50px 아래로 당기면 바텀시트가 닫힌다", async () => {
       // 여기에 테스트 작성하기
     });
   },
