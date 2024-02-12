@@ -19,9 +19,3 @@ export interface PostMeta {
   keywords: string[];
   postedAt: string;
 }
-
-export const CategoryType = {
-  DEVELOP: "개발",
-  REVIEW: "리뷰",
-  BOOK: "서평",
-};
