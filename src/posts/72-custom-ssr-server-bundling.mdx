@@ -4,9 +4,8 @@ title: SSR 서버 만들기 (2) - 번들링과 트랜스파일
 description:
 tags: Babel,Webpack
 date: 2023-10-10
+seriesId: custom-ssr-server
 ---
-
-
 
 현재는 서버를 `ts-node`를 사용해 실행하고 있다. 서버를 프로덕션 환경에 배포하기 위해서는 TypeScript 파일과 JSX 문법이 적용된 파일을 순수 자바스크립트 문법으로 변환하는 과정을 거쳐야 한다.
 
@@ -55,29 +54,28 @@ npm i -D webpack webpack-cli babel-loader
 현재는 아래와 같이 간단한 webpack 설정으로 코드를 번들링할 수 있다.
 
 ```jsx
-const path = require('path');
+const path = require("path");
 
 module.exports = {
-  mode: 'development',
-  target: 'node', // node.js 서버를 번들링하고 있음
-  entry: './src/index.ts', // ./src/index.ts 파일로부터 의존성 트리를 만들고, 이 의존성 트리를 하나의 파일로 번들링한다.
+  mode: "development",
+  target: "node", // node.js 서버를 번들링하고 있음
+  entry: "./src/index.ts", // ./src/index.ts 파일로부터 의존성 트리를 만들고, 이 의존성 트리를 하나의 파일로 번들링한다.
   module: {
     rules: [
       {
         test: /\.tsx?$/, // 번들링 도중 .ts 혹은 .tsx 파일을 만나면 babel을 실행해 트랜스파일링한다.
-  // 바벨은 .babelrc에 정의된대로 트랜스파일링을 수행한다.
+        // 바벨은 .babelrc에 정의된대로 트랜스파일링을 수행한다.
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        loader: "babel-loader",
       },
     ],
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
+    extensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
   },
   output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'), // 번들링 결과물을 dist 폴더에 bundle.js란 이름으로 저장한다.
+    filename: "bundle.js",
+    path: path.resolve(__dirname, "dist"), // 번들링 결과물을 dist 폴더에 bundle.js란 이름으로 저장한다.
   },
 };
 ```
-

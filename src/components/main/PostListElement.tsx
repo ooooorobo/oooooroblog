@@ -23,11 +23,9 @@ export default function PostListElementComponent({
         ))}
       </div>
       <Link href={"/" + post.slug} onClick={onClickPost}>
-
         <Title>{post.meta.title}</Title>
         <Description>{post.meta.description}</Description>
         <Info>{postedAt}</Info>
-
       </Link>
     </Wrapper>
   );

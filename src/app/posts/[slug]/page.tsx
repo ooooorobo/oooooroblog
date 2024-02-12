@@ -8,8 +8,8 @@ import components from "@src/components/mdx/MDXComponents";
 import Profile from "@src/components/main/Profile";
 import SidePost from "@src/components/post/SidePost";
 import Comment from "@src/components/post/Comment";
-import { getPostDetail, getPostMeta } from "@src/business/post";
-import { FadeIn } from "@src/styles/animation";
+import { getPostDetail, getPostMeta } from "@src/entities/post";
+import { SeriesPostTitleList } from "@src/components/series/SeriesPostTitleList";
 
 export type PostPageProps = { params: { slug: string } };
 
@@ -41,9 +41,26 @@ export default function PostPage({ params: { slug } }: PostPageProps) {
         />
         <WavyLine />
       </PostHeader>
+      {post.seriesId && (
+        <CommentWrapper>
+          <SeriesPostTitleList
+            seriesId={post.seriesId}
+            currentPostId={post.id}
+          />
+        </CommentWrapper>
+      )}
       <Article>
         <MDXContent components={components} />
       </Article>
+      {post.seriesId && (
+        <CommentWrapper>
+          <SeriesPostTitleList
+            seriesId={post.seriesId}
+            currentPostId={post.id}
+            defaultOpen={true}
+          />
+        </CommentWrapper>
+      )}
       <ProfileWrapper>
         <Profile />
         <WavyLine />
@@ -57,16 +74,12 @@ export default function PostPage({ params: { slug } }: PostPageProps) {
 }
 
 const PostHeader = styled.div`
-  animation: ${FadeIn("0%")} 1.4s;
-
   padding: 0 1rem;
   margin-top: 10rem;
   margin-bottom: 3rem;
 `;
 
 const Article = styled.article`
-  animation: ${FadeIn("0%")} 1.4s;
-
   max-width: 760px;
   margin: 0 auto 5rem auto;
   padding: 0 1rem;
@@ -84,5 +97,5 @@ const ProfileWrapper = styled.div`
 const CommentWrapper = styled.div`
   max-width: 760px;
   margin: auto;
-  padding: 0 1rem;
+  padding: 0 1rem 1.5rem 1rem;
 `;

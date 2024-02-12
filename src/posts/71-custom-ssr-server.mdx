@@ -4,8 +4,8 @@ title: SSR 서버 만들기 (1) - React Tree를 렌더링해 응답하는 서버
 description:
 tags: React,Node.js,SSR
 date: 2023-10-09
+seriesId: custom-ssr-server
 ---
-
 
 import WavyLine from "../components/WavyLine";
 
@@ -13,7 +13,7 @@ import WavyLine from "../components/WavyLine";
 
 이번 프로젝트에서는 SSR을 지원해주는 프레임워크를 전혀 사용하지 않고, Node 서버와 React만을 가지고 SSR 서버를 구성해보기로 했다.
 
-<WavyLine size={8}/>
+<WavyLine size={8} />
 
 우리 서비스는 목표 관리 기법 중 하나인 만다라트 기법을 간소화한 ‘반다라트’ 서비스이다. 반다라트 표는 휴대폰 앱으로 만들 수 있고, 내가 만든 표를 웹 공유 링크를 통해 공유할 수 있다.
 
@@ -28,7 +28,6 @@ import WavyLine from "../components/WavyLine";
 이때, Next.js와 같은 서버 사이드 렌더링 프레임워크는 사용하지 않기로 했다.
 
 Next.js나 Remix는 서버 사이드 렌더링만 제공하진 않는다. 그 외에 이미지 최적화나 파일 시스템 기반 라우팅 등 다양한 부가기능도 제공하는데, 우리 서비스는 이런 부가기능을 전혀 사용하지 않아도 되는 상황이어서 오히려 이런 프레임워크는 불필요하게 무겁다고 판단했다.
-
 
 ## 기술 선택
 
@@ -68,8 +67,8 @@ Linaria는 css-in-js 방식을 제공하면서 스타일을 빌드 타임에 생
 
 ```tsx
 // server.ts
-import koa from 'koa';
-import { configDotenv } from 'dotenv';
+import koa from "koa";
+import { configDotenv } from "dotenv";
 
 configDotenv();
 
@@ -89,11 +88,11 @@ app.listen(PORT, () => {
 
 ```tsx
 // router.ts
-import Router from '@koa/router';
+import Router from "@koa/router";
 
 const router = new Router();
 
-router.get('/share/:key', (ctx) => {
+router.get("/share/:key", (ctx) => {
   const key = ctx.params.key;
   ctx.response.body = key;
 });
@@ -123,8 +122,8 @@ JSX 문법을 통해 편리하게 UI를 구성하기 위해 복잡하고 가변�
 import React from "react";
 
 export const App = () => {
-    return <div>hello world</div>
-}
+  return <div>hello world</div>;
+};
 ```
 
 그리고 이 React 컴포넌트가 그려질 빈 HTML을 작성했다.
@@ -155,13 +154,13 @@ App 컴포넌트 내에서 리액트 훅을 사용하게 만들었다.
 
 ```tsx
 export const App = () => {
-    const [count, setCount] = useState(123)
-    return (
-        <div>
-            <div>count: {count}</div>
-            <button onClick={() => setCount(prev => prev + 1)}>add</button>
-        </div>
-    );
+  const [count, setCount] = useState(123);
+  return (
+    <div>
+      <div>count: {count}</div>
+      <button onClick={() => setCount((prev) => prev + 1)}>add</button>
+    </div>
+  );
 };
 ```
 
@@ -182,6 +181,7 @@ export const App = () => {
 
         `renderToStaticMarkup`
     </div>
+
 </div>
 
 count: 와 123이 주석으로 분리되는 이유는 두 값은 서로 다른 element로 생성되기 때문이다. `renderToString` 실행 시 리액트는 hydration 과정에서 이들을 다르게 처리하기 위해 둘을 주석으로 분리해 두었다.
@@ -225,11 +225,11 @@ count: 와 123이 주석으로 분리되는 이유는 두 값은 서로 다른 e
 import React from "react";
 
 export const App = ({ bandalartKey }: { bandalartKey: string }) => {
-    return <div>{bandalartKey}</div>
-}
+  return <div>{bandalartKey}</div>;
+};
 
 // router.tsx
-router.get('/share/:key', (ctx) => {
+router.get("/share/:key", (ctx) => {
   const key = ctx.params.key;
   const content = renderToStaticMarkup(<App bandalartKey={key} />);
   ctx.response.body = createHtml(content);
@@ -241,4 +241,3 @@ router.get('/share/:key', (ctx) => {
 ![스크린샷 2023-10-08 오후 5.49.54.png](/image/71/image3-1.png)
 
 ![Untitled](/image/71/image3-2.png)
-

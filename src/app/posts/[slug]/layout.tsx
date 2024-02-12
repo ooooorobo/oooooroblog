@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 import { Metadata } from "next";
-import { getPostDetail } from "@src/business/post";
+import { getPostDetail } from "@src/entities/post";
 import { PostPageProps } from "@src/app/posts/[slug]/page";
 
 export function generateMetadata({

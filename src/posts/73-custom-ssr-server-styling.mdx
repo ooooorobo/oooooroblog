@@ -4,8 +4,8 @@ title: SSR 서버 만들기 (3) - Linaria로 CSS-in-JS 적용하기
 description:
 tags: React,Linaria,Webpack
 date: 2023-10-29
+seriesId: custom-ssr-server
 ---
-
 
 import WavyLine from "../components/WavyLine";
 
@@ -20,7 +20,7 @@ import WavyLine from "../components/WavyLine";
 
 그래서 Linaria를 이번 프로젝트에 사용해 보기로 했다.
 
-<br/>
+<br />
 
 Linaria는 CSS-in-JS 방식의 스타일링 라이브러리이다. 가장 큰 특징은 빌드된 후에 자바스크립트를 전혀 남기지 않고 모두 CSS로 변환되는, zero-runtime CSS in JS 라이브러리라는 점이다.
 
@@ -32,7 +32,7 @@ Linaria가 번들링되어 HTML에서 사용되기까지의 플로우를 간략�
 4. 빌드 후 별도의 파일로 존재하는 css를 koa 서버에서 static 파일로 서빙해준다.
 5. 응답 HTML이 koa가 서빙하는 css를 불러올 수 있도록, link 태그를 추가한다.
 
-<WavyLine size="8"/>
+<WavyLine size="8" />
 
 Linaria는 styled-components에서 스타일을 적용하는 방식과 유사한 방식으로 스타일을 작성한다.
 
@@ -42,8 +42,8 @@ export const Page = (props: AppProps) => {
     <DefaultContainer {...props}>
       <div className={container}>
         <WarningTemplate
-          iconName={'warning'}
-          title={'존재하지 않는 페이지에요'}
+          iconName={"warning"}
+          title={"존재하지 않는 페이지에요"}
           iconSize={53}
         />
       </div>
@@ -53,18 +53,35 @@ export const Page = (props: AppProps) => {
 
 // 스타일 작성
 const container = css`
-    height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 ```
 
 빌드 과정에서 위에서 작성한 스타일 코드는 아래와 같이 css 파일에 작성된다. 이 때, 클래스 이름도 자동으로 생성된다.
 
 ```css
-.c1cfv1dx{height:100dvh;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;}
+.c1cfv1dx {
+  height: 100dvh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
 ```
 
 자바스크립트 번들에는 스타일 관련 코드는 전혀 남지 않고, 자동 생성된 CSS 클래스 이름이 컴포넌트의 className으로 들어간다.
@@ -81,7 +98,7 @@ var container = "c1cfv1dx";
 
 이처럼 Linaria는 빌드 타임에 단 한 번만 스타일을 생성하고, 그 이후에는 <b>스타일 관련 코드를 전혀 실행하지 않게 된다.</b>
 
-<WavyLine size="8"/>
+<WavyLine size="8" />
 
 Webpack 설정에 loader와 plugin을 추가해서 Linaria를 사용할 수 있게 설정해 보려고 한다.
 
@@ -94,8 +111,8 @@ npm i -D @linaria/core @linaria/webpack-loader css-loader mini-css-extract-plugi
 linaria는 아래와 같이 사용할 수 있다.
 
 ```tsx
-import React from 'react';
-import { css } from '@linaria/core';
+import React from "react";
+import { css } from "@linaria/core";
 
 export const App = ({ bandalartKey }: { bandalartKey: string }) => {
   return <div className={containerStyle}>{bandalartKey}</div>;
@@ -111,14 +128,14 @@ const containerStyle = css`
 ```js
 // webpack.config.js
 module.exports = {
-  mode: isDev ? 'development' : 'production',
-  target: 'node',
-  entry: './src/index.ts',
+  mode: isDev ? "development" : "production",
+  target: "node",
+  entry: "./src/index.ts",
   // linaria가 만든 css 파일을 추출하기 위해 MiniCssExtractPlugin 플러그인이 필요하다
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'public/styles.css',
-    })
+      filename: "public/styles.css",
+    }),
   ],
   module: {
     rules: [
@@ -127,11 +144,11 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: "babel-loader",
           },
-            // tsx 파일을 만나면 linaria의 webpack-loader를 실행시킨다
+          // tsx 파일을 만나면 linaria의 webpack-loader를 실행시킨다
           {
-            loader: '@linaria/webpack-loader',
+            loader: "@linaria/webpack-loader",
           },
         ],
       },
@@ -142,7 +159,7 @@ module.exports = {
             loader: MiniCssExtractPlugin.loader,
           },
           {
-            loader: 'css-loader',
+            loader: "css-loader",
             options: {
               sourceMap: isDev,
             },
@@ -152,11 +169,11 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
+    extensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
   },
   output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    filename: "bundle.js",
+    path: path.resolve(__dirname, "dist"),
   },
 };
 ```
@@ -170,12 +187,12 @@ module.exports = {
 
 ```ts
 // server.ts
-import koa from 'koa';
-import serve from 'koa-static';
+import koa from "koa";
+import serve from "koa-static";
 
 // ...
 
-app.use(serve(__dirname + '/public'));
+app.use(serve(__dirname + "/public"));
 
 // ...
 ```
@@ -185,7 +202,7 @@ app.use(serve(__dirname + '/public'));
 마지막으로, HTML의 head 부분에 위 css 파일을 가져오게 해주는 link 태그를 추가한다.
 
 ```tsx
-const assetPath = process.env.ASSET_PATH ?? '';
+const assetPath = process.env.ASSET_PATH ?? "";
 const router = new Router();
 
 const createHtml = (content: string) => `
@@ -201,4 +218,3 @@ const createHtml = (content: string) => `
 	</html>
 `;
 ```
-

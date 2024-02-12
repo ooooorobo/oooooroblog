@@ -1,11 +1,11 @@
 import { ImageResponse } from "next/og";
-import { getPostDetail } from "@src/business/post";
+import { getPostDetail } from "@src/entities/post";
 
 export const runtime = "edge";
 
 export async function GET(request: Request) {
   const fontData = await fetch(
-    "https://github.com/ooooorobo/oooooroblog/raw/main/assets/EASTARJET-Medium.ttf",
+    "https://github.com/ooooorobo/oooooroblog/raw/main/assets/EASTARJET-Medium.ttf"
   ).then((res) => res.arrayBuffer());
   const { searchParams } = new URL(request.url);
 
@@ -37,6 +37,6 @@ export async function GET(request: Request) {
       height: 630,
       fonts: [{ name: "Easterjet", data: fontData, style: "normal" }],
       emoji: "twemoji",
-    },
+    }
   );
 }

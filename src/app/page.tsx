@@ -1,7 +1,7 @@
 "use client";
 import styled from "styled-components";
 import { useEffect } from "react";
-import { getAllPostMeta } from "@src/business/post";
+import { getAllPostMeta } from "@src/entities/post";
 import PostList from "@src/components/main/PostList";
 import { StorageKey } from "@src/constants/constants";
 import Profile from "@src/components/main/Profile";
@@ -11,7 +11,7 @@ export default function Page() {
 
   useEffect(() => {
     const scroll = parseInt(
-      sessionStorage.getItem(StorageKey.MAIN_SCROLL_Y) ?? "0",
+      sessionStorage.getItem(StorageKey.MAIN_SCROLL_Y) ?? "0"
     );
     window.scrollTo({ top: scroll, behavior: "auto" });
   }, []);
