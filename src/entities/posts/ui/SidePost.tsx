@@ -1,6 +1,5 @@
 import Link from "next/link";
 import styled from "styled-components";
-import SmallTitle from "@src/components/SmallTitle";
 import { type Post } from "contentlayer/generated";
 
 const Post = ({ title, url }: { title: string; url: string }) => {
@@ -70,4 +69,10 @@ const PostTitle = styled.strong`
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
   overflow: hidden;
+`;
+
+const SmallTitle = styled.div`
+  font-size: ${({ theme }) => theme.fontSizes.s};
+  color: ${({ theme }) => theme.colors.text.secondary};
+  margin-bottom: 0.25rem;
 `;

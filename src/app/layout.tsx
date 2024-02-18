@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 import { Metadata } from "next"; // import "data://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css";
-import Header from "@src/components/Header";
+import Header from "@src/widgets/layout/header/Header";
 import { Providers } from "@src/app/Providers";
 import { AnalyticsScript } from "@src/app/AnalyticsScript";
 

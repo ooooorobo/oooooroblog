@@ -1,9 +1,9 @@
 import { MDXComponents } from "mdx/types";
 import styled from "styled-components";
-import CodeBlock from "@src/components/mdx/CodeBlock";
-import InlineCode from "@src/components/mdx/InlineCode";
-import Link from "@src/components/mdx/Link";
-import BlockQuote from "@src/components/mdx/BlockQuote";
+import CodeBlock from "@src/widgets/mdx/CodeBlock";
+import InlineCode from "@src/widgets/mdx/InlineCode";
+import Link from "@src/widgets/mdx/Link";
+import BlockQuote from "@src/widgets/mdx/BlockQuote";
 
 const components: MDXComponents = {
   blockquote: (props) => <BlockQuote>{props.children}</BlockQuote>,

@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { PostMeta } from "@src/types/post";
+import { PostMeta } from "@src/entities/posts/types/post";
 
 const Meta = ({ title, description, tags = [] }: Partial<PostMeta>) => {
   const browserTitle = `${title} - oooooroblog`;

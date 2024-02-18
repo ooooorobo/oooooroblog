@@ -1,4 +1,4 @@
-import { PostListElement } from "@src/types/post";
+import { PostListElement } from "@src/entities/posts/types/post";
 import PostListElementComponent from "./PostListElement";
 
 interface PostListProps {

@@ -1,6 +1,6 @@
 import { ReactNode, useContext, useEffect, useState } from "react";
 import { ThemeProvider as _ThemeProvider } from "styled-components";
-import { darkTheme, lightTheme } from "@src/styles/theme";
+import { darkTheme, lightTheme } from "@src/shared/styles/theme";
 import { DarkModeContext } from "./DarkModeContext";
 
 const ThemeProvider = ({ children }: { children: ReactNode }) => {

@@ -1,5 +1,5 @@
 import { createContext, ReactElement } from "react";
-import { useDarkMode } from "@src/utils/hooks/useDarkMode";
+import { useDarkMode } from "@src/shared/utils/hooks/useDarkMode";
 
 interface DarkModeContextValue {
   isDarkMode: boolean;

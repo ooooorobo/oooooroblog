@@ -1,8 +1,8 @@
 import { RefObject, useEffect, useState } from "react";
-import { isWindow } from "@src/utils/windowUtil";
+import { isWindow } from "@src/shared/utils/windowUtil";
 
 export default function useIntersectionObserver(
-  elementRef: RefObject<Element>
+  elementRef: RefObject<Element>,
 ) {
   const [entry, setEntry] = useState<IntersectionObserverEntry>();
 
