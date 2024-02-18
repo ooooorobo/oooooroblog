@@ -1,7 +1,7 @@
 "use client";
 import styled from "styled-components";
 import Link from "next/link";
-import { ThemeToggleButton } from "@src/components/header/ThemeToggleButton";
+import { ThemeToggleButton } from "@src/widgets/layout/header/ThemeToggleButton";
 
 export default function Header() {
   return (

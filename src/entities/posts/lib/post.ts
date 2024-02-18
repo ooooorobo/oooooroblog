@@ -1,6 +1,6 @@
 import { compareDesc } from "date-fns";
 import { Post, allPosts } from "contentlayer/generated";
-import { PostListElement } from "@src/types/post";
+import { PostListElement } from "@src/entities/posts/types/post";
 
 const getSortedPosts = (type: "desc" | "asc" = "desc") => {
   return allPosts.sort((a, b) => {

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { format } from "date-fns";
-import Tag from "../Tag";
+import Tag from "@src/widgets/tag/Tag";
 
 interface PostTitleProps {
   title: string;

@@ -2,8 +2,8 @@ import Link from "next/link";
 import styled from "styled-components";
 
 import { format } from "date-fns";
-import { PostListElement } from "@src/types/post";
-import Tag from "@src/components/Tag";
+import { PostListElement } from "@src/entities/posts/types/post";
+import Tag from "@src/widgets/tag/Tag";
 
 interface PostListElementProps {
   post: PostListElement;

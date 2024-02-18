@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { css, styled } from "styled-components";
-import { getPostBySeriesId } from "@src/entities/post";
+import { getPostBySeriesId } from "@src/entities/posts/lib/post";
 import { SeriesMap } from "@src/entities/series/consts/series";
 
 export const SeriesPostTitleList = ({

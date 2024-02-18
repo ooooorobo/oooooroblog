@@ -1,15 +1,15 @@
 "use client";
 import { useMDXComponent } from "next-contentlayer/hooks";
 import styled from "styled-components";
-import Meta from "@src/components/post/Meta";
-import PostTitle from "@src/components/post/PostTitle";
-import WavyLine from "@src/components/WavyLine";
-import components from "@src/components/mdx/MDXComponents";
-import Profile from "@src/components/main/Profile";
-import SidePost from "@src/components/post/SidePost";
-import Comment from "@src/components/post/Comment";
-import { getPostDetail, getPostMeta } from "@src/entities/post";
-import { SeriesPostTitleList } from "@src/components/series/SeriesPostTitleList";
+import Meta from "@src/widgets/post/Meta";
+import PostTitle from "@src/entities/posts/ui/PostTitle";
+import WavyLine from "@src/widgets/common/WavyLine";
+import components from "@src/widgets/mdx/MDXComponents";
+import Profile from "@src/widgets/profile/Profile";
+import SidePost from "@src/entities/posts/ui/SidePost";
+import Comment from "@src/widgets/post/Comment";
+import { getPostDetail, getPostMeta } from "@src/entities/posts/lib/post";
+import { SeriesPostTitleList } from "@src/entities/series/ui/SeriesPostTitleList";
 
 export type PostPageProps = { params: { slug: string } };
 

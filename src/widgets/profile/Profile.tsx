@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styled from "styled-components";
-import ContactIconList from "@src/components/common/ContactIconList";
+import ContactIconList from "@src/widgets/profile/ContactIconList";
 
 export default function Profile() {
   return (
