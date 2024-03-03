@@ -83,15 +83,6 @@ const Article = styled.article`
   max-width: 760px;
   margin: 0 auto 5rem auto;
   padding: 0 1rem;
-  font-size: 1.15rem;
-
-  p {
-    margin: 2em 0;
-  }
-
-  aside p {
-    margin: 0.5em;
-  }
 `;
 
 const ProfileWrapper = styled.div`
