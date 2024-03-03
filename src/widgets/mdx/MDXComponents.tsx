@@ -10,18 +10,19 @@ const components: MDXComponents = {
   pre: CodeBlock,
   code: (props) => <InlineCode>{props.children}</InlineCode>,
   a: Link,
-  img: (props) => (
-    <a href={props.src}>
-      <Img src={props.src} />
-    </a>
-  ),
+  img: (props) => <Img src={props.src} />,
   h1: (props) => <Heading as={"h1"}>{props.children}</Heading>,
   h2: (props) => <Heading as={"h2"}>{props.children}</Heading>,
   h3: (props) => <Heading as={"h3"}>{props.children}</Heading>,
+  li: (props) => <Li {...props} />,
 };
 
 const Heading = styled.h1`
   border-bottom: 1px solid ${(props) => props.theme.colors.text.secondary};
+`;
+
+const Li = styled.li`
+  margin: 0.4rem 0;
 `;
 
 const Img = styled.img`
@@ -29,7 +30,6 @@ const Img = styled.img`
   height: auto;
   display: block;
   margin: 1rem auto;
-  cursor: pointer;
 `;
 
 export default components;
