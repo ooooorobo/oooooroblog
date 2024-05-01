@@ -9,4 +9,5 @@ export const SeriesMap = new Map<Series["id"], Series>([
     "custom-ssr-server",
     { id: "custom-ssr-server", title: "직접 만들어 보는 SSR 서버" },
   ],
+  ["book-review", { id: "book-review", title: "서평" }],
 ]);
