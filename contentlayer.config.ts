@@ -4,7 +4,7 @@ import { makeSource } from "contentlayer/source-remote-files";
 
 export const Post = defineDocumentType(() => ({
   name: "Post",
-  filePathPattern: "*.mdx",
+  filePathPattern: "**/*.mdx",
   contentType: "mdx",
   fields: {
     title: { type: "string", required: true },
@@ -77,5 +77,6 @@ const syncContentFromGit = async (contentDir: string) => {
 export default makeSource({
   syncFiles: syncContentFromGit,
   contentDirPath: "src/posts",
+  contentDirExclude: ["hidden"],
   documentTypes: [Post],
 });
