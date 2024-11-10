@@ -54,6 +54,10 @@ const GlobalStyle = createGlobalStyle`
         font-size: 1.8rem;
         line-height: 1.4;
     }
+    
+    h4 {
+      font-size: 1.13rem;
+    }
 
     pre, code {
         &, * {
